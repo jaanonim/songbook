@@ -1,2 +1,2 @@
-# songbook
+# Songbook
 A songbook app
