@@ -1,0 +1,19 @@
+{
+  "name": "songbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm -w server run dev\" \"npm -w client run dev\""
+  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "private": true,
+  "author": "jaanonim",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
