@@ -3,7 +3,8 @@ import * as React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ColorModeScript } from "@chakra-ui/react";
-import App from "./Pages/App";
+import Home from "./Pages/Home";
+import Selection from "./Pages/Selection";
 import "./index.css";
 import theme from "./theme";
 
@@ -13,7 +14,7 @@ render(
 		<ChakraProvider theme={theme}>
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<App />} />
+					<Route path="/" element={<Selection />} />
 				</Routes>
 			</BrowserRouter>
 		</ChakraProvider>
