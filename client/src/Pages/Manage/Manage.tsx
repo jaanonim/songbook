@@ -1,21 +1,19 @@
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Button, Link, useColorMode } from "@chakra-ui/react";
 import { Link as RLink } from "react-router-dom";
-import "./Home.css";
+import ColorModeButton from "../../Components/ColorModeButton";
 
-function Home() {
+function Manage() {
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	return (
 		<>
-			<Link as={RLink} to="/home">
+			<Link as={RLink} to="/">
 				Home
 			</Link>
-			<Button onClick={toggleColorMode}>
-				{colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-			</Button>
+			<ColorModeButton fixed={true} />
 		</>
 	);
 }
 
-export default Home;
+export default Manage;
