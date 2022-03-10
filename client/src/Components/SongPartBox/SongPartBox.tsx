@@ -9,6 +9,7 @@ import {
 	Spacer,
 	Text,
 } from "@chakra-ui/react";
+import DeleteButton from "../DeleteButton";
 
 interface SongPartBoxInterface {
 	name: string;
@@ -31,15 +32,7 @@ function SongPartBox(props: SongPartBoxInterface) {
 						aria-label="edit"
 						icon={<EditIcon />}
 					></IconButton>
-					<IconButton
-						ml="2"
-						size="sm"
-						aria-label="edit"
-						_hover={{
-							bg: "red.600",
-						}}
-						icon={<DeleteIcon />}
-					></IconButton>
+					<DeleteButton />
 				</Box>
 			</Flex>
 			<Divider />
