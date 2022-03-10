@@ -12,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/songs/", require("./routes/songs"));
+app.use(express.static("../client/dist"));
 
 
 app.listen(PORT, async () => {
