@@ -224,7 +224,9 @@ function Manage() {
 						</Box>
 					</Center>
 					<Center>
-						<Button variant="ghost">Edit other data</Button>
+						<Button variant="ghost" m="2">
+							Edit other data
+						</Button>
 					</Center>
 				</Box>
 			</Flex>
