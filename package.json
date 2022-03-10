@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm -w server run dev\" \"npm -w client run dev\""
+    "dev": "concurrently \"npm -w server run dev\" \"npm -w client run dev\"",
+    "test": "npm run test --workspaces",
+    "start": "npm run start -w server"
   },
   "workspaces": [
     "server",
