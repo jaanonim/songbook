@@ -2,6 +2,7 @@ const auth = require('./auth');
 const user = require('./user');
 const event = require('./event');
 const category = require('./category');
+const song = require('./song');
 
 const authenticate = require('../middlewares/authenticate');
 
@@ -16,4 +17,5 @@ module.exports = app => {
     app.use('/api/user', authenticate, user);
     app.use('/api/event', authenticate, event);
     app.use('/api/category', authenticate, category);
+    app.use('/api/song', song);
 };

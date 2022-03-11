@@ -10,8 +10,8 @@ const router = express.Router();
 
 
 //INDEX
-router.get('/', Song.index);
-
+router.get('/', Song.findAll);
+/*
 //STORE
 router.post('/', [
     check('title').not().isEmpty().withMessage('Song title is required'),
@@ -26,5 +26,5 @@ router.put('/:id', Song.update);
 
 //DELETE
 router.delete('/:id', Song.destroy);
-
+*/
 module.exports = router;
