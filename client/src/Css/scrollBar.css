@@ -1,20 +1,23 @@
 ::-webkit-scrollbar {
+    width: 0.2rem;
+}
+  
+
+::-webkit-scrollbar-track {
+  opacity: 0;
+  margin: 0.5rem 0.2rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--chakra-colors-whiteAlpha-300);
+  border-radius: 0.3rem;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--chakra-colors-whiteAlpha-400);
+}
+  
+::-webkit-scrollbar-thumb:hover > ::-webkit-scrollbar {
     width: 0.7rem;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: var(--chakra-colors-whiteAlpha-300);
-    border-radius: 0.3rem;
-    margin: 0.5rem 0;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: var(--chakra-colors-whiteAlpha-300);
-    border-radius: 0.3rem;
-  
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--chakra-colors-whiteAlpha-500);
-  }
-  
+}
