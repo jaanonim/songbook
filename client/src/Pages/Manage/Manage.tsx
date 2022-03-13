@@ -147,6 +147,11 @@ function Manage() {
 							<Tooltip label="Use # to search by tag 😉">
 								<Input placeholder="Search" />
 							</Tooltip>
+							<IconButton
+								aria-label="Add tag"
+								icon={<AddIcon />}
+								ml="2"
+							/>
 						</Flex>
 					</Box>
 					<Divider />
