@@ -9,22 +9,16 @@ const validate = require('../middlewares/validate');
 const router = express.Router();
 
 
-//INDEX
 router.get('/', Song.findAll);
-/*
-//STORE
+router.get('/:id', Song.findOne);
 router.post('/', [
     check('title').not().isEmpty().withMessage('Song title is required'),
     check('data').not().isEmpty().withMessage('Song data is required')
-], validate, Song.store);
-
-//SHOW
-router.get('/:id', Song.show);
-
-//UPDATE
-router.put('/:id', Song.update);
-
-//DELETE
+], validate, Song.create);
+router.put('/:id', [
+    check('title').not().isEmpty().withMessage('Song title is required'),
+    check('data').not().isEmpty().withMessage('Song data is required')
+], validate, Song.update);
 router.delete('/:id', Song.destroy);
-*/
+
 module.exports = router;

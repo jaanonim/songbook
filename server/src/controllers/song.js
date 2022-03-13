@@ -1,6 +1,4 @@
 const config = require('../config/api');
-const mongoose = require('mongoose');
-
 const Song = require('../models/song');
 
 
@@ -66,4 +64,50 @@ exports.findAll = async (req, res) => {
     const myAggregate = Song.aggregate(aggregate_options);
     const result = await Song.aggregatePaginate(myAggregate, options);
     res.status(200).json(result);
+}
+
+// @route   GET api/song/:id
+// @desc    Get song by id
+// @access  Public
+exports.findOne = async (req, res) => {
+    const song = await Song.findById(req.params.id);
+    if (!song) return res.status(404).json({
+        message: "Song not found"
+    });
+    res.status(200).json(song);
+}
+
+// @route   POST api/song
+// @desc    Create song
+// @access  Public
+exports.create = async (req, res) => {
+    const song = new Song({
+        ...req.body
+    });
+    await song.save();
+    res.status(201).json(song);
+}
+
+// @route   PUT api/song/:id
+// @desc    Update song
+// @access  Public
+exports.update = async (req, res) => {
+    const song = await Song.findOneAndReplace({
+        _id: req.params.id
+    }, req.body);
+    if (!song) return res.status(404).json({
+        message: "Song not found"
+    });
+    res.status(200).json(song);
+}
+
+// @route   DELETE api/song/:id
+// @desc    Delete song
+// @access  Public
+exports.destroy = async (req, res) => {
+    const song = await Song.findByIdAndRemove(req.params.id);
+    if (!song) return res.status(404).json({
+        message: "Song not found"
+    });
+    res.status(200).json(song);
 }
