@@ -8,22 +8,13 @@ const validate = require('../middlewares/validate');
 
 const router = express.Router();
 
-//INDEX
-router.get('/', User.index);
-
-//STORE
+router.get('/', User.findMany);
 router.post('/', [
     check('email').isEmail().withMessage('Enter a valid email address'),
     check('username').not().isEmpty().withMessage('You username is required'),
-], validate, User.store);
-
-//SHOW
-router.get('/:id', User.show);
-
-//UPDATE
+], validate, User.create);
+router.get('/:id', User.findOne);
 router.put('/:id', User.update);
-
-//DELETE
 router.delete('/:id', User.destroy);
 
 module.exports = router;

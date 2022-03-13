@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-
+const config = require('../config/api');
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -69,7 +69,7 @@ UserSchema.methods.generateJWT = function () {
 
 UserSchema.methods.generatePasswordReset = function () {
     this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
-    this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+    this.resetPasswordExpires = Date.now() + 3600000 * config.auth.expirationDate; //expires in an hour
 };
 
 module.exports = mongoose.model('Users', UserSchema);

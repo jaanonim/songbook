@@ -3,7 +3,7 @@ const User = require('../models/user');
 // @route GET admin/user
 // @desc Returns all users
 // @access Public
-exports.index = async function (req, res) {
+exports.findMany = async function (req, res) {
     const users = await User.find({});
     res.status(200).json({
         users
@@ -13,7 +13,7 @@ exports.index = async function (req, res) {
 // @route POST api/user
 // @desc Add a new user
 // @access Public
-exports.store = async (req, res) => {
+exports.create = async (req, res) => {
     try {
         const {
             email
@@ -57,7 +57,7 @@ exports.store = async (req, res) => {
 // @route GET api/user/{id}
 // @desc Returns a specific user
 // @access Public
-exports.show = async function (req, res) {
+exports.findOne = async function (req, res) {
     try {
         const id = req.params.id;
 
@@ -91,27 +91,14 @@ exports.update = async function (req, res) {
             message: "Sorry, you don't have the permission to upd this data."
         });
 
-        const user = await User.findByIdAndUpdate(id, {
-            $set: update
+        const user = await User.findAndUpdate({
+            _id: id
         }, {
-            new: true
+            $set: update
         });
 
-        //if there is no image, return success message
-        if (!req.file) return res.status(200).json({
+        return res.status(200).json({
             user,
-            message: 'User has been updated'
-        });
-
-        //Attempt to upload to cloudinary
-        const user_ = await User.findByIdAndUpdate(id, {
-            $set: update
-        }, {
-            new: true
-        });
-
-        if (!req.file) return res.status(200).json({
-            user: user_,
             message: 'User has been updated'
         });
 
