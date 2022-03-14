@@ -5,7 +5,7 @@ const song = require('./song');
 const authenticate = require('../middlewares/authenticate');
 
 module.exports = app => {
-    app.get('/', (req, res) => {
+    app.get('/api', (req, res) => {
         res.status(200).send({
             message: "Welcome to the SongBook REST API."
         });
