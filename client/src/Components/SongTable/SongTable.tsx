@@ -15,6 +15,10 @@ import {
 	TagLabel,
 	TagCloseButton,
 	Progress,
+	Alert,
+	AlertIcon,
+	AlertDescription,
+	AlertTitle,
 } from "@chakra-ui/react";
 import DeleteButton from "../DeleteButton";
 import { useInfiniteQuery } from "react-query";
@@ -80,7 +84,26 @@ function SongTable() {
 
 			<Box h="calc(100vh - 1px - 6.5rem)" overflowY="scroll">
 				{error ? (
-					<Text>Something went wrong!</Text>
+					<Alert
+						status="error"
+						variant="subtle"
+						flexDirection="column"
+						alignItems="center"
+						justifyContent="center"
+						textAlign="center"
+						minHeight="10rem"
+						width="xl"
+						m="1rem auto"
+						borderRadius={5}
+					>
+						<AlertIcon boxSize="10" mr="0" />
+						<AlertTitle mt={4} mb={1} fontSize="lg">
+							Error:
+						</AlertTitle>
+						<AlertDescription maxWidth="sm">
+							{JSON.stringify(error)}
+						</AlertDescription>
+					</Alert>
 				) : (
 					<Table>
 						<Tbody>
@@ -129,7 +152,7 @@ function SongTable() {
 										fontSize="sm"
 										p="1rem"
 									>
-										{isFetching ? (
+										{isFetching || hasNextPage ? (
 											<Progress
 												size="xs"
 												isIndeterminate

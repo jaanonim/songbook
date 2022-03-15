@@ -26,6 +26,8 @@ import {
 } from "@chakra-ui/react";
 import ColorModeButton from "../../Components/ColorModeButton";
 import SongPartBox from "../../Components/SongPartBox";
+import { AddIcon, EditIcon } from "@chakra-ui/icons";
+import DeleteButton from "../../Components/DeleteButton";
 
 function Manage() {
 	return (
@@ -41,7 +43,7 @@ function Manage() {
 							</Editable>
 						</Heading>
 					</Center>
-					<Center m="4">
+					<Center mt="4">
 						<Text display="inline-block">Author:</Text>
 						<Editable
 							defaultValue="Author"
@@ -51,6 +53,21 @@ function Manage() {
 							<EditablePreview />
 							<EditableInput />
 						</Editable>
+					</Center>
+					<Center m="2">
+						<IconButton
+							m="2"
+							size="sm"
+							aria-label="edit"
+							icon={<EditIcon />}
+						></IconButton>
+						<IconButton
+							m="2"
+							size="sm"
+							aria-label="add part"
+							icon={<AddIcon />}
+						></IconButton>
+						<DeleteButton />
 					</Center>
 					<Center>
 						<Box
@@ -70,11 +87,6 @@ function Manage() {
 								text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi eos ea excepturi incidunt maiores corporis culpa, perspiciatis suscipit aliquam, dolorem itaque. Corporis aliquid minus, dolores natus officia animi voluptatum temporibus."
 							/>
 						</Box>
-					</Center>
-					<Center>
-						<Button variant="ghost" m="2">
-							Edit other data
-						</Button>
 					</Center>
 				</Box>
 			</Flex>
