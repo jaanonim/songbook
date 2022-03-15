@@ -21,15 +21,15 @@ import {
 	AlertTitle,
 } from "@chakra-ui/react";
 import DeleteButton from "../DeleteButton";
-import { useInfiniteQuery } from "react-query";
-import { getSongs } from "../../Services/api";
+import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { delSong, getSongs } from "../../Services/api";
 import React, { ChangeEvent } from "react";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
 import { useDebounce } from "usehooks-ts";
 
 function SongTable() {
 	interface Song {
-		id: string;
+		_id: string;
 		title: string;
 		author: string;
 		tags: string[];
@@ -53,6 +53,14 @@ function SongTable() {
 		target: loadMoreButtonRef,
 		onIntersect: fetchNextPage,
 		enabled: !!hasNextPage,
+	});
+
+	const queryClient = useQueryClient();
+
+	const del = useMutation(delSong, {
+		onSettled: () => {
+			queryClient.invalidateQueries("song");
+		},
 	});
 
 	return (
@@ -110,7 +118,7 @@ function SongTable() {
 							{data?.pages.map((page) => (
 								<React.Fragment key={page.nextPage}>
 									{page.docs.map((element: Song) => (
-										<Tr key={element.id}>
+										<Tr key={element._id}>
 											<Td>
 												{element.title} (
 												{element.author})
@@ -136,7 +144,14 @@ function SongTable() {
 												/>
 											</Td>
 											<Td>
-												<DeleteButton />
+												<DeleteButton
+													onClick={() => {
+														del.mutate({
+															id: element._id,
+														});
+														return true;
+													}}
+												/>
 											</Td>
 										</Tr>
 									))}

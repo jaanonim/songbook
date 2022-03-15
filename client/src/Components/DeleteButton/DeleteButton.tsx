@@ -1,11 +1,14 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import { IconButton } from "@chakra-ui/react";
+import { useState } from "react";
 
-interface DeleteButtonInterface {
-	onClick?: () => void;
+interface DeleteButtonProps {
+	onClick?: () => boolean;
 }
 
-function DeleteButton(props: DeleteButtonInterface) {
+function DeleteButton(props: DeleteButtonProps) {
+	const [loading, setLoading] = useState(false);
+
 	return (
 		<IconButton
 			ml="2"
@@ -15,7 +18,12 @@ function DeleteButton(props: DeleteButtonInterface) {
 			_hover={{
 				bg: "red.600",
 			}}
-			onClick={props.onClick}
+			onClick={() => {
+				if (props.onClick) {
+					setLoading(props.onClick());
+				}
+			}}
+			isLoading={loading}
 			icon={<DeleteIcon />}
 		></IconButton>
 	);

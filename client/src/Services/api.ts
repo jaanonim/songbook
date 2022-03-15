@@ -17,4 +17,15 @@ async function getSongs(args:any) {
       )
 }
 
-export {getSongs};
+async function delSong(args:any) {
+    console.log(args);
+    const id = args.id;
+    const url = `${config.apiUrl}/song/${id}`;
+    return fetch(url, {
+        method: 'DELETE'
+    }).then(res =>
+        res.json()
+      )
+}
+
+export {getSongs,delSong};
