@@ -15,10 +15,7 @@ router.post('/', [
     check('title').not().isEmpty().withMessage('Song title is required'),
     check('data').not().isEmpty().withMessage('Song data is required')
 ], validate, Song.create);
-router.put('/:id', [
-    check('title').not().isEmpty().withMessage('Song title is required'),
-    check('data').not().isEmpty().withMessage('Song data is required')
-], validate, Song.update);
+router.patch('/:id', Song.update);
 router.delete('/:id', Song.destroy);
 
 module.exports = router;

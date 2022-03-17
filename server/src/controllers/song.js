@@ -106,12 +106,12 @@ exports.create = async (req, res) => {
     }
 }
 
-// @route   PUT api/song/:id
+// @route   PATCH api/song/:id
 // @desc    Update song
 // @access  Public
 exports.update = async (req, res) => {
     try {
-        const song = await Song.findOneAndReplace({
+        const song = await Song.findOneAndUpdate({
             _id: req.params.id
         }, req.body);
         if (!song) return res.status(404).json({

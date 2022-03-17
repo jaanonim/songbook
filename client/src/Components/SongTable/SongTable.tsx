@@ -19,22 +19,19 @@ import {
 	AlertIcon,
 	AlertDescription,
 	AlertTitle,
+	useToast,
 } from "@chakra-ui/react";
 import DeleteButton from "../DeleteButton";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
-import { delSong, getSongs } from "../../Services/api";
+import { delSong, getSongs, updateSong } from "../../Services/api";
 import React, { ChangeEvent } from "react";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
 import { useDebounce } from "usehooks-ts";
+import CreateSong from "../CreateSong";
+import SongTableElement from "../SongTableElement";
+import Song from "../../Models/Song";
 
 function SongTable() {
-	interface Song {
-		_id: string;
-		title: string;
-		author: string;
-		tags: string[];
-	}
-
 	const [filter, setFilter] = React.useState<string | undefined>(undefined);
 	const debouncedFilter = useDebounce(filter, 500);
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -55,14 +52,6 @@ function SongTable() {
 		enabled: !!hasNextPage,
 	});
 
-	const queryClient = useQueryClient();
-
-	const del = useMutation(delSong, {
-		onSettled: () => {
-			queryClient.invalidateQueries("song");
-		},
-	});
-
 	return (
 		<Box
 			w="100vw"
@@ -81,11 +70,7 @@ function SongTable() {
 							onChange={handleChange}
 						/>
 					</Tooltip>
-					<IconButton
-						aria-label="Add tag"
-						icon={<AddIcon />}
-						ml="2"
-					/>
+					<CreateSong></CreateSong>
 				</Flex>
 			</Box>
 			<Divider />
@@ -109,7 +94,7 @@ function SongTable() {
 							Error:
 						</AlertTitle>
 						<AlertDescription maxWidth="sm">
-							{JSON.stringify(error)}
+							{(error as Error).message}
 						</AlertDescription>
 					</Alert>
 				) : (
@@ -118,42 +103,7 @@ function SongTable() {
 							{data?.pages.map((page) => (
 								<React.Fragment key={page.nextPage}>
 									{page.docs.map((element: Song) => (
-										<Tr key={element._id}>
-											<Td>
-												{element.title} (
-												{element.author})
-											</Td>
-											<Td>
-												{element.tags.map(
-													(n: string) => (
-														<Tag m="1">
-															<TagLabel>
-																{n}
-															</TagLabel>
-															<TagCloseButton />
-														</Tag>
-													)
-												)}
-
-												<IconButton
-													aria-label="Add tag"
-													icon={<AddIcon />}
-													h="1.5rem"
-													w="1.5rem"
-													m="1"
-												/>
-											</Td>
-											<Td>
-												<DeleteButton
-													onClick={() => {
-														del.mutate({
-															id: element._id,
-														});
-														return true;
-													}}
-												/>
-											</Td>
-										</Tr>
+										<SongTableElement element={element} />
 									))}
 								</React.Fragment>
 							))}
