@@ -18,6 +18,8 @@ import DeleteButton from "../DeleteButton";
 
 interface SongTableElementProps {
 	element: Song;
+	selected: boolean;
+	onDoubleClick?: (e: any) => void;
 }
 
 function SongTableElement(props: SongTableElementProps) {
@@ -73,16 +75,32 @@ function SongTableElement(props: SongTableElementProps) {
 	});
 
 	return (
-		<Tr key={props.element._id}>
+		<Tr
+			className="noselect"
+			backgroundColor={
+				props.selected ? "var(--chakra-colors-blue-800)" : "none"
+			}
+			key={props.element._id}
+			onDoubleClick={props.onDoubleClick}
+			_hover={
+				props.selected
+					? {}
+					: {
+							backgroundColor: "rgba(0,0,0,0.5)",
+					  }
+			}
+			cursor="pointer"
+		>
 			<Td>
 				{props.element.title} ({props.element.author})
 			</Td>
 			<Td>
 				{props.element.tags.map((n: string) => (
-					<Tag m="1">
+					<Tag m="1" key={n}>
 						<TagLabel>{n}</TagLabel>
 						<TagCloseButton
-							onClick={() => {
+							onClick={(e) => {
+								e.preventDefault();
 								update.mutate({
 									id: props.element._id,
 									song: {
@@ -118,13 +136,17 @@ function SongTableElement(props: SongTableElementProps) {
 						h="1.5rem"
 						w="1.5rem"
 						m="1"
-						onClick={() => setEdit(true)}
+						onClick={(e) => {
+							e.preventDefault();
+							setEdit(true);
+						}}
 					/>
 				)}
 			</Td>
 			<Td>
 				<DeleteButton
-					onClick={() => {
+					onClick={(e) => {
+						e.preventDefault();
 						del.mutate({
 							id: props.element._id,
 						});

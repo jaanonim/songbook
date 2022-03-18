@@ -3,7 +3,7 @@ import { IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 
 interface DeleteButtonProps {
-	onClick?: () => boolean;
+	onClick?: (e: any) => boolean;
 }
 
 function DeleteButton(props: DeleteButtonProps) {
@@ -18,9 +18,9 @@ function DeleteButton(props: DeleteButtonProps) {
 			_hover={{
 				bg: "red.600",
 			}}
-			onClick={() => {
+			onClick={(e) => {
 				if (props.onClick) {
-					setLoading(props.onClick());
+					setLoading(props.onClick(e));
 				}
 			}}
 			isLoading={loading}

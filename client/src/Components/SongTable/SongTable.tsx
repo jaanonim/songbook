@@ -1,42 +1,41 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
 	Box,
 	Flex,
 	Tooltip,
 	Input,
-	IconButton,
 	Divider,
 	Table,
 	Tbody,
 	Tr,
 	Td,
-	Text,
-	Tag,
-	TagLabel,
-	TagCloseButton,
 	Progress,
 	Alert,
 	AlertIcon,
 	AlertDescription,
 	AlertTitle,
-	useToast,
+	LinkOverlay,
 } from "@chakra-ui/react";
-import DeleteButton from "../DeleteButton";
-import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
-import { delSong, getSongs, updateSong } from "../../Services/api";
-import React, { ChangeEvent } from "react";
+import { useInfiniteQuery } from "react-query";
+import { getSongs } from "../../Services/api";
+import React, { ChangeEvent, useState } from "react";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
 import { useDebounce } from "usehooks-ts";
 import CreateSong from "../CreateSong";
 import SongTableElement from "../SongTableElement";
 import Song from "../../Models/Song";
 
-function SongTable() {
+interface SongTableProps {
+	onSongClick: (song: Song) => void;
+}
+
+function SongTable(props: SongTableProps) {
 	const [filter, setFilter] = React.useState<string | undefined>(undefined);
 	const debouncedFilter = useDebounce(filter, 500);
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setFilter(event.target.value);
 	};
+
+	const [song, setSong] = useState<Song | null>(null);
 
 	const { status, data, error, isFetching, fetchNextPage, hasNextPage } =
 		useInfiniteQuery(["song", debouncedFilter], getSongs, {
@@ -103,7 +102,17 @@ function SongTable() {
 							{data?.pages.map((page) => (
 								<React.Fragment key={page.nextPage}>
 									{page.docs.map((element: Song) => (
-										<SongTableElement element={element} />
+										<SongTableElement
+											key={element._id}
+											element={element}
+											selected={song?._id === element._id}
+											onDoubleClick={() => {
+												if (song?._id !== element._id) {
+													props.onSongClick(element);
+													setSong(element);
+												}
+											}}
+										/>
 									))}
 								</React.Fragment>
 							))}
