@@ -64,7 +64,7 @@ const CreateSong = () => {
 					<ModalHeader>Create song</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>
-						<FormControl>
+						<FormControl isRequired>
 							<FormLabel>Title</FormLabel>
 							<Input
 								ref={initialRef}
@@ -74,7 +74,7 @@ const CreateSong = () => {
 							/>
 						</FormControl>
 
-						<FormControl mt={4}>
+						<FormControl>
 							<FormLabel>Author</FormLabel>
 							<Input
 								placeholder="Author"

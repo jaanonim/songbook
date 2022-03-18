@@ -30,12 +30,19 @@ function SongTableElement(props: SongTableElementProps) {
 	const saveTag = (str: string) => {
 		setEdit(false);
 		str = processTag(str);
-		if (str.length > 0) {
-			update.mutate({
-				id: props.element._id,
-				song: {
-					tags: [...props.element.tags, str],
-				},
+		if (props.element.tags.filter((t) => t === str).length === 0) {
+			if (str.length > 0) {
+				update.mutate({
+					id: props.element._id,
+					song: {
+						tags: [...props.element.tags, str],
+					},
+				});
+			}
+		} else {
+			toast({
+				title: "This song already has this tag",
+				status: "error",
 			});
 		}
 	};
@@ -49,7 +56,7 @@ function SongTableElement(props: SongTableElementProps) {
 				});
 			} else {
 				toast({
-					title: `Updated song`,
+					title: `Updated ${props.element.title}`,
 					status: "success",
 				});
 				queryClient.invalidateQueries("song");
