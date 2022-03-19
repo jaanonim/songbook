@@ -18,8 +18,18 @@ function Manage() {
 							setSong(s);
 						}, 1);
 					}}
+					onDelete={(s) => {
+						if (s._id == song?._id) {
+							setSong(null);
+						}
+					}}
 				/>
-				<SongEdit song={song}></SongEdit>
+				<SongEdit
+					song={song}
+					onDelete={(s) => {
+						setSong(null);
+					}}
+				></SongEdit>
 			</Flex>
 			<ColorModeButton fixed={true} />
 		</>

@@ -1,37 +1,16 @@
 import { Tr, Td, useToast } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "react-query";
 import Song from "../../Models/Song";
-import { delSong } from "../../Services/api";
-import DeleteButton from "../DeleteButton";
+import DeleteSongButton from "../DeleteSongButton";
 import TagList from "../TagList";
 
 interface SongTableElementProps {
 	song: Song;
 	selected: boolean;
+	onDelete?: (song: Song) => void;
 	onDoubleClick?: (e: any) => void;
 }
 
 function SongTableElement(props: SongTableElementProps) {
-	const queryClient = useQueryClient();
-	const toast = useToast();
-
-	const del = useMutation(delSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Deleted ${props.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
-
 	return (
 		<Tr
 			className="noselect"
@@ -56,15 +35,7 @@ function SongTableElement(props: SongTableElementProps) {
 				<TagList song={props.song} />
 			</Td>
 			<Td>
-				<DeleteButton
-					onClick={(e) => {
-						e.preventDefault();
-						del.mutate({
-							id: props.song._id,
-						});
-						return true;
-					}}
-				/>
+				<DeleteSongButton onDelete={props.onDelete} song={props.song} />
 			</Td>
 		</Tr>
 	);

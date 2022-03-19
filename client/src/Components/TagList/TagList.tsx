@@ -27,10 +27,11 @@ function TagList(props: TagListProps) {
 		str = processTag(str);
 		if (props.song.tags.filter((t) => t === str).length === 0) {
 			if (str.length > 0) {
+				props.song.tags = [...props.song.tags, str];
 				update.mutate({
 					id: props.song._id,
 					song: {
-						tags: [...props.song.tags, str],
+						tags: props.song.tags,
 					},
 				});
 			}
@@ -67,12 +68,13 @@ function TagList(props: TagListProps) {
 					<TagCloseButton
 						onClick={(e) => {
 							e.preventDefault();
+							props.song.tags = props.song.tags.filter(
+								(e) => e !== n
+							);
 							update.mutate({
 								id: props.song._id,
 								song: {
-									tags: props.song.tags.filter(
-										(e) => e !== n
-									),
+									tags: props.song.tags,
 								},
 							});
 						}}

@@ -26,6 +26,7 @@ import Song from "../../Models/Song";
 
 interface SongTableProps {
 	onSongClick: (song: Song) => void;
+	onDelete?: (song: Song) => void;
 }
 
 function SongTable(props: SongTableProps) {
@@ -105,6 +106,7 @@ function SongTable(props: SongTableProps) {
 										<SongTableElement
 											key={element._id}
 											song={element}
+											onDelete={props.onDelete}
 											selected={song?._id === element._id}
 											onDoubleClick={() => {
 												if (song?._id !== element._id) {

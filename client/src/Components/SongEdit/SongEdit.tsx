@@ -3,22 +3,20 @@ import {
 	Box,
 	Center,
 	Heading,
-	Editable,
-	EditablePreview,
-	EditableInput,
 	IconButton,
 	Text,
 	Alert,
 	AlertIcon,
-	useToast,
 } from "@chakra-ui/react";
 import Song from "../../Models/Song";
-import DeleteButton from "../DeleteButton";
+import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
+import TagList from "../TagList";
 
 interface SongEditProps {
 	song: Song | null;
+	onDelete?: (song: Song) => void;
 }
 
 function SongEdit(props: SongEditProps) {
@@ -78,6 +76,9 @@ function SongEdit(props: SongEditProps) {
 						}}
 					/>
 				</Center>
+				<Center mt="2">
+					<TagList song={props.song} />
+				</Center>
 				<Center m="2">
 					<IconButton
 						m="2"
@@ -91,7 +92,10 @@ function SongEdit(props: SongEditProps) {
 						aria-label="add part"
 						icon={<AddIcon />}
 					></IconButton>
-					<DeleteButton />
+					<DeleteSongButton
+						onDelete={props.onDelete}
+						song={props.song}
+					/>
 				</Center>
 				<Center>
 					<Box
