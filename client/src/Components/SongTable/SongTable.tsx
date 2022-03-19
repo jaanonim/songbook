@@ -104,7 +104,7 @@ function SongTable(props: SongTableProps) {
 									{page.docs.map((element: Song) => (
 										<SongTableElement
 											key={element._id}
-											element={element}
+											song={element}
 											selected={song?._id === element._id}
 											onDoubleClick={() => {
 												if (song?._id !== element._id) {
