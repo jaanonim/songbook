@@ -10,9 +10,11 @@ import {
 	Text,
 	Alert,
 	AlertIcon,
+	useToast,
 } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import DeleteButton from "../DeleteButton";
+import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
 
 interface SongEditProps {
@@ -47,22 +49,34 @@ function SongEdit(props: SongEditProps) {
 			<Box w="100vw" h="100vh">
 				<Center>
 					<Heading as="h2" size="xl" mt="5">
-						<Editable defaultValue={props.song.title}>
-							<EditablePreview />
-							<EditableInput textAlign="center" />
-						</Editable>
+						<SongEditableInput
+							id={props.song._id}
+							name="title"
+							value={props.song.title}
+							textAlign="center"
+							getObject={(value) => {
+								return {
+									title: value,
+								};
+							}}
+						/>
 					</Heading>
 				</Center>
 				<Center mt="4">
 					<Text display="inline-block">Author:</Text>
-					<Editable
-						defaultValue={props.song.author}
+					<SongEditableInput
+						id={props.song._id}
+						name="author"
+						value={props.song.author}
+						ml="1"
+						canBeEmpty={true}
 						display="inline-block"
-						ml="1ch"
-					>
-						<EditablePreview />
-						<EditableInput />
-					</Editable>
+						getObject={(value) => {
+							return {
+								author: value,
+							};
+						}}
+					/>
 				</Center>
 				<Center m="2">
 					<IconButton
