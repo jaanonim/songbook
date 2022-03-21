@@ -9,9 +9,12 @@ const SongSchema = new mongoose.Schema({
     author: {
         type: String,
     },
-    data: {
-        type: Map,
+    parts: {
+        type: Array,
         required: true,
+    },
+    other: {
+        type: Map,
     },
     tags: {
         type: [String],

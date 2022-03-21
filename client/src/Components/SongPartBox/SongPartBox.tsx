@@ -8,21 +8,46 @@ import {
 	IconButton,
 	Spacer,
 	Text,
+	toast,
+	useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "react-query";
+import Song from "../../Models/Song";
+import SongPart from "../../Models/SongPart";
+import { updateSong } from "../../Services/api";
 import DeleteButton from "../DeleteButton";
 
 interface SongPartBoxInterface {
-	name: string;
-	text: string;
+	part: SongPart;
+	song: Song;
 }
 
 function SongPartBox(props: SongPartBoxInterface) {
+	const queryClient = useQueryClient();
+	const toast = useToast();
+	const update = useMutation(updateSong, {
+		onSettled: (newItem, error, variables, context) => {
+			if (error) {
+				toast({
+					title: (error as Error).message,
+					status: "error",
+				});
+			} else {
+				toast({
+					title: `Updated ${props.song.title}`,
+					status: "success",
+				});
+				queryClient.invalidateQueries("song");
+			}
+		},
+	});
+
 	return (
 		<Container border="2px" borderRadius="5" mt="4" mb="4">
 			<Flex justify="center" mt="2" mb="2">
 				<Box p="2">
 					<Heading as="h3" size="sm">
-						{props.name}
+						{props.part.type}
 					</Heading>
 				</Box>
 				<Spacer />
@@ -32,12 +57,24 @@ function SongPartBox(props: SongPartBoxInterface) {
 						aria-label="edit"
 						icon={<EditIcon />}
 					></IconButton>
-					<DeleteButton />
+					<DeleteButton
+						onClick={(e) => {
+							update.mutate({
+								id: props.song._id,
+								song: {
+									parts: props.song.parts.filter(
+										(part) => part.id !== props.part.id
+									),
+								},
+							});
+							return true;
+						}}
+					/>
 				</Box>
 			</Flex>
 			<Divider />
-			<Text mt="2" mb="2">
-				{props.text}
+			<Text mt="2" mb="2" whiteSpace="pre">
+				{props.part.lirycs}
 			</Text>
 		</Container>
 	);

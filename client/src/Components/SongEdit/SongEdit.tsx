@@ -7,20 +7,28 @@ import {
 	Text,
 	Alert,
 	AlertIcon,
+	CircularProgress,
 } from "@chakra-ui/react";
+import { useQuery } from "react-query";
 import Song from "../../Models/Song";
+import { getSong } from "../../Services/api";
+import AddSongPart from "../AddSongPart";
 import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
 import TagList from "../TagList";
 
 interface SongEditProps {
-	song: Song | null;
-	onDelete?: (song: Song) => void;
+	id?: string;
 }
 
 function SongEdit(props: SongEditProps) {
-	if (!props.song)
+	const { isLoading, isError, data, error } = useQuery(
+		["song", props.id],
+		getSong
+	);
+
+	if (!props.id)
 		return (
 			<Box
 				w="100vw"
@@ -43,81 +51,117 @@ function SongEdit(props: SongEditProps) {
 			</Box>
 		);
 	else {
-		return (
-			<Box w="100vw" h="100vh">
-				<Center>
-					<Heading as="h2" size="xl" mt="5">
+		if (isLoading) {
+			return (
+				<Center w="100%">
+					<CircularProgress isIndeterminate />
+				</Center>
+			);
+		} else if (isError) {
+			return (
+				<Box
+					w="100vw"
+					h="100vh"
+					display="flex"
+					alignItems="center"
+					flexDirection="row"
+				>
+					<Alert
+						status="error"
+						m={2}
+						borderRadius={5}
+						ml="auto"
+						mr="auto"
+						w="sm"
+					>
+						<AlertIcon />
+						{(error as Error).message}
+					</Alert>
+				</Box>
+			);
+		} else {
+			const song = data as Song;
+			return (
+				<Box w="100vw" h="100vh">
+					<Center>
+						<Heading as="h2" size="xl" mt="5">
+							<SongEditableInput
+								id={song._id}
+								name="title"
+								value={song.title}
+								textAlign="center"
+								getObject={(value) => {
+									return {
+										title: value,
+									};
+								}}
+							/>
+						</Heading>
+					</Center>
+					<Center mt="4">
+						<Text display="inline-block">Author:</Text>
 						<SongEditableInput
-							id={props.song._id}
-							name="title"
-							value={props.song.title}
-							textAlign="center"
+							id={song._id}
+							name="author"
+							value={song.author}
+							ml="1"
+							canBeEmpty={true}
+							display="inline-block"
 							getObject={(value) => {
 								return {
-									title: value,
+									author: value,
 								};
 							}}
 						/>
-					</Heading>
-				</Center>
-				<Center mt="4">
-					<Text display="inline-block">Author:</Text>
-					<SongEditableInput
-						id={props.song._id}
-						name="author"
-						value={props.song.author}
-						ml="1"
-						canBeEmpty={true}
-						display="inline-block"
-						getObject={(value) => {
-							return {
-								author: value,
-							};
-						}}
-					/>
-				</Center>
-				<Center mt="2">
-					<TagList song={props.song} />
-				</Center>
-				<Center m="2">
-					<IconButton
-						m="2"
-						size="sm"
-						aria-label="edit"
-						icon={<EditIcon />}
-					></IconButton>
-					<IconButton
-						m="2"
-						size="sm"
-						aria-label="add part"
-						icon={<AddIcon />}
-					></IconButton>
-					<DeleteSongButton
-						onDelete={props.onDelete}
-						song={props.song}
-					/>
-				</Center>
-				<Center>
-					<Box
-						w="calc(70ch + 1rem)"
-						overflowY="scroll"
-						maxHeight="70vh"
-						borderBottom="1px"
-						borderTop="1px"
-						borderColor="rgba(255,255,255,0.1)"
-					>
-						<SongPartBox
-							name="Chorus"
-							text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi eos ea excepturi incidunt maiores corporis culpa, perspiciatis suscipit aliquam, dolorem itaque. Corporis aliquid minus, dolores natus officia animi voluptatum temporibus."
-						/>
-						<SongPartBox
-							name="Chorus"
-							text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi eos ea excepturi incidunt maiores corporis culpa, perspiciatis suscipit aliquam, dolorem itaque. Corporis aliquid minus, dolores natus officia animi voluptatum temporibus."
-						/>
-					</Box>
-				</Center>
-			</Box>
-		);
+					</Center>
+					<Center mt="2">
+						<TagList song={song} />
+					</Center>
+					<Center m="2">
+						<IconButton
+							m="2"
+							size="sm"
+							aria-label="edit"
+							icon={<EditIcon />}
+						></IconButton>
+						<AddSongPart song={song} />
+						<DeleteSongButton song={song} />
+					</Center>
+					<Center>
+						{song.parts ? (
+							<Box
+								w="calc(70ch + 1rem)"
+								overflowY="scroll"
+								maxHeight="70vh"
+								borderBottom="1px"
+								borderTop="1px"
+								borderColor="rgba(255,255,255,0.1)"
+							>
+								{song.parts.map((part) => (
+									<SongPartBox
+										key={part.id}
+										part={part}
+										song={song}
+									/>
+								))}
+							</Box>
+						) : (
+							<Alert
+								status="info"
+								m={2}
+								borderRadius={5}
+								ml="auto"
+								mr="auto"
+								w="sm"
+							>
+								<AlertIcon />
+								No song parts here.
+							</Alert>
+						)}
+					</Center>
+				</Box>
+			);
+		}
 	}
 }
 

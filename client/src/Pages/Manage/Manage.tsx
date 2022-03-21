@@ -24,12 +24,7 @@ function Manage() {
 						}
 					}}
 				/>
-				<SongEdit
-					song={song}
-					onDelete={(s) => {
-						setSong(null);
-					}}
-				></SongEdit>
+				<SongEdit id={song?._id}></SongEdit>
 			</Flex>
 			<ColorModeButton fixed={true} />
 		</>

@@ -12,8 +12,7 @@ const router = express.Router();
 router.get('/', Song.findAll);
 router.get('/:id', Song.findOne);
 router.post('/', [
-    check('title').not().isEmpty().withMessage('Song title is required'),
-    check('data').not().isEmpty().withMessage('Song data is required')
+    check('title').not().isEmpty().withMessage('Song title is required')
 ], validate, Song.create);
 router.patch('/:id', Song.update);
 router.delete('/:id', Song.destroy);

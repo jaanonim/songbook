@@ -91,7 +91,7 @@ const CreateSong = () => {
 							onClick={() => {
 								onClose();
 								create.mutate({
-									song: { title, author, data: {} },
+									song: { title, author, parts: [] },
 								});
 							}}
 						>

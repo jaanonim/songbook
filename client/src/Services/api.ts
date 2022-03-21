@@ -14,6 +14,11 @@ async function getSongs(args: any) {
 	return processRequest(url);
 }
 
+async function getSong(args: any) {
+	const id = args.queryKey[1];
+	return processRequest(`${config.apiUrl}/song/${id}`);
+}
+
 async function delSong(args: any) {
 	const id = args.id;
 	const url = `${config.apiUrl}/song/${id}`;
@@ -45,4 +50,4 @@ async function updateSong(args: any) {
 	});
 }
 
-export { getSongs, delSong, createSong, updateSong };
+export { getSongs, delSong, createSong, updateSong, getSong };
