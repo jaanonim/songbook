@@ -21,20 +21,25 @@ import React, { RefObject, useRef } from "react";
 import { useQueryClient, useMutation } from "react-query";
 import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
+import SongPart from "../../Models/SongPart";
 import { updateSong } from "../../Services/api";
 
 interface AddSongPartProps {
 	song: Song;
+	part?: SongPart;
+	children: React.ReactNode;
 }
 
 function AddSongPart(props: AddSongPartProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const initialRef = useRef() as RefObject<HTMLInputElement>;
+	const initialRef = useRef() as RefObject<HTMLTextAreaElement>;
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
 	const queryClient = useQueryClient();
 	const toast = useToast();
-	const [value, setValue] = React.useState(PartType.VERSE);
-	let [text, setText] = React.useState("");
+	const [value, setValue] = React.useState(
+		props.part ? props.part.type : PartType.VERSE
+	);
+	let [text, setText] = React.useState(props.part ? props.part.lirycs : "");
 	let handleInputChange = (e: any) => {
 		let inputValue = e.target.value;
 		setText(inputValue);
@@ -63,7 +68,7 @@ function AddSongPart(props: AddSongPartProps) {
 				m="2"
 				size="sm"
 				aria-label="add part"
-				icon={<AddIcon />}
+				icon={<>{props.children}</>}
 				onClick={() => onOpen()}
 			></IconButton>
 			<Modal
@@ -97,6 +102,7 @@ function AddSongPart(props: AddSongPartProps) {
 						</FormControl>
 						<FormControl p={3} display="block">
 							<Textarea
+								ref={initialRef}
 								value={text}
 								onChange={handleInputChange}
 								placeholder="Enter lyrics"
@@ -110,11 +116,22 @@ function AddSongPart(props: AddSongPartProps) {
 							colorScheme="blue"
 							mr={3}
 							onClick={() => {
-								props.song.parts.push({
-									id: props.song.parts.length,
-									type: value,
-									lirycs: text,
-								});
+								if (props.part != undefined) {
+									props.song.parts.map((part) => {
+										if (part.id === props.part?.id) {
+											part.type = value;
+											part.lirycs = text;
+										}
+										return part;
+									});
+								} else {
+									props.song.parts.push({
+										id: props.song.parts.length,
+										type: value,
+										lirycs: text,
+									});
+								}
+
 								update.mutate({
 									id: props.song._id,
 									song: { parts: props.song.parts },
@@ -122,7 +139,7 @@ function AddSongPart(props: AddSongPartProps) {
 								onClose();
 							}}
 						>
-							Create
+							{props.part ? "Update" : "Create"}
 						</Button>
 						<Button onClick={onClose}>Cancel</Button>
 					</ModalFooter>

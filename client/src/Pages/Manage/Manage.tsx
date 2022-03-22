@@ -13,10 +13,7 @@ function Manage() {
 			<Flex>
 				<SongTable
 					onSongClick={(s) => {
-						setSong(null);
-						setTimeout(() => {
-							setSong(s);
-						}, 1);
+						setSong(s);
 					}}
 					onDelete={(s) => {
 						if (s._id == song?._id) {

@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from "react-query";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
 import { updateSong } from "../../Services/api";
+import AddSongPart from "../AddSongPart";
 import DeleteButton from "../DeleteButton";
 
 interface SongPartBoxInterface {
@@ -52,11 +53,9 @@ function SongPartBox(props: SongPartBoxInterface) {
 				</Box>
 				<Spacer />
 				<Box>
-					<IconButton
-						size="sm"
-						aria-label="edit"
-						icon={<EditIcon />}
-					></IconButton>
+					<AddSongPart song={props.song} part={props.part}>
+						<EditIcon />
+					</AddSongPart>
 					<DeleteButton
 						onClick={(e) => {
 							update.mutate({

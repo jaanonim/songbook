@@ -2,7 +2,7 @@ import config from "../Config/config";
 import ProcessSearchstring from "../Utilities/search";
 import processRequest from "../Utilities/api";
 
-async function getSongs(args: any) {
+async function getAllSongs(args: any) {
 	const search = args.queryKey[1];
 	const page = args.pageParam || 0;
 	let url = `${config.apiUrl}/song?page=${page}`;
@@ -50,4 +50,4 @@ async function updateSong(args: any) {
 	});
 }
 
-export { getSongs, delSong, createSong, updateSong, getSong };
+export { getAllSongs as getSongs, delSong, createSong, updateSong, getSong };

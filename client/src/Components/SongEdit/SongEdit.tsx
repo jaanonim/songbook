@@ -124,7 +124,9 @@ function SongEdit(props: SongEditProps) {
 							aria-label="edit"
 							icon={<EditIcon />}
 						></IconButton>
-						<AddSongPart song={song} />
+						<AddSongPart song={song}>
+							<AddIcon />
+						</AddSongPart>
 						<DeleteSongButton song={song} />
 					</Center>
 					<Center>
