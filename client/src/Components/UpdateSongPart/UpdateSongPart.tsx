@@ -23,14 +23,15 @@ import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
 import { updateSong } from "../../Services/api";
+import firstUpper from "../../Utilities/text";
 
-interface AddSongPartProps {
+interface UpdateSongPartProps {
 	song: Song;
 	part?: SongPart;
 	children: React.ReactNode;
 }
 
-function AddSongPart(props: AddSongPartProps) {
+function UpdateSongPart(props: UpdateSongPartProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = useRef() as RefObject<HTMLTextAreaElement>;
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
@@ -76,10 +77,13 @@ function AddSongPart(props: AddSongPartProps) {
 				isOpen={isOpen}
 				onClose={onClose}
 				isCentered
+				size="3xl"
 			>
 				<ModalOverlay backdropFilter="blur(10px)" />
 				<ModalContent>
-					<ModalHeader>Create song part</ModalHeader>
+					<ModalHeader>
+						{props.part ? "Update" : "Create"} song part
+					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>
 						<FormControl p={3} display="block">
@@ -94,7 +98,7 @@ function AddSongPart(props: AddSongPartProps) {
 											value={PartType[key]}
 											name="partType"
 										>
-											{PartType[key]}
+											{firstUpper(PartType[key])}
 										</Radio>
 									))}
 								</Stack>
@@ -108,6 +112,7 @@ function AddSongPart(props: AddSongPartProps) {
 								placeholder="Enter lyrics"
 								size="md"
 								height="50vh"
+								width="100%"
 							/>
 						</FormControl>
 					</ModalBody>
@@ -149,4 +154,4 @@ function AddSongPart(props: AddSongPartProps) {
 	);
 }
 
-export default AddSongPart;
+export default UpdateSongPart;

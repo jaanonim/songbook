@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { useQueryClient, useMutation } from "react-query";
 import { updateSong } from "../../Services/api";
+import firstUpper from "../../Utilities/text";
 
 interface EditableInputProps {
 	id: string;
@@ -63,10 +64,7 @@ function SongEditableInput(props: EditableInputProps) {
 					if (!props.canBeEmpty && v.trim().length === 0) {
 						setValue(valueLast);
 						toast({
-							title: `${
-								props.name.charAt(0).toUpperCase() +
-								props.name.slice(1)
-							} cannot be empty`,
+							title: `${firstUpper(props.name)} cannot be empty`,
 							status: "error",
 						});
 						return;

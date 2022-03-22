@@ -15,8 +15,10 @@ import { useMutation, useQueryClient } from "react-query";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
 import { updateSong } from "../../Services/api";
-import AddSongPart from "../AddSongPart";
+import AddSongPart from "../UpdateSongPart";
 import DeleteButton from "../DeleteButton";
+import processChords from "../../Utilities/chordpro";
+import firstUpper from "../../Utilities/text";
 
 interface SongPartBoxInterface {
 	part: SongPart;
@@ -42,13 +44,14 @@ function SongPartBox(props: SongPartBoxInterface) {
 			}
 		},
 	});
+	console.log(processChords(props.part.lirycs));
 
 	return (
 		<Container border="2px" borderRadius="5" mt="4" mb="4">
 			<Flex justify="center" mt="2" mb="2">
 				<Box p="2">
 					<Heading as="h3" size="sm">
-						{props.part.type}
+						{firstUpper(props.part.type)}
 					</Heading>
 				</Box>
 				<Spacer />
@@ -73,7 +76,7 @@ function SongPartBox(props: SongPartBoxInterface) {
 			</Flex>
 			<Divider />
 			<Text mt="2" mb="2" whiteSpace="pre">
-				{props.part.lirycs}
+				{processChords(props.part.lirycs)}
 			</Text>
 		</Container>
 	);

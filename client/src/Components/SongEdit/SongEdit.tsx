@@ -12,11 +12,12 @@ import {
 import { useQuery } from "react-query";
 import Song from "../../Models/Song";
 import { getSong } from "../../Services/api";
-import AddSongPart from "../AddSongPart";
+import AddSongPart from "../UpdateSongPart";
 import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
 import TagList from "../TagList";
+import EditSongData from "../EditSongData";
 
 interface SongEditProps {
 	id?: string;
@@ -118,12 +119,7 @@ function SongEdit(props: SongEditProps) {
 						<TagList song={song} />
 					</Center>
 					<Center m="2">
-						<IconButton
-							m="2"
-							size="sm"
-							aria-label="edit"
-							icon={<EditIcon />}
-						></IconButton>
+						<EditSongData />
 						<AddSongPart song={song}>
 							<AddIcon />
 						</AddSongPart>
