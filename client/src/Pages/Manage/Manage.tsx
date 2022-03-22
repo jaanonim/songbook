@@ -21,7 +21,7 @@ function Manage() {
 						}
 					}}
 				/>
-				<SongEdit id={song?._id}></SongEdit>
+				<SongEdit key={song?._id} id={song?._id}></SongEdit>
 			</Flex>
 			<ColorModeButton fixed={true} />
 		</>
