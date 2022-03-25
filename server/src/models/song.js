@@ -14,7 +14,7 @@ const SongSchema = new mongoose.Schema({
         required: true,
     },
     other: {
-        type: Map,
+        type: String,
     },
     tags: {
         type: [String],

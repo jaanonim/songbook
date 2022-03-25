@@ -81,7 +81,7 @@ function SongEdit(props: SongEditProps) {
 				</Box>
 			);
 		} else {
-			const song = data as Song;
+			const song = new Song(data);
 			return (
 				<Box w="100vw" h="100vh">
 					<Center>
@@ -119,7 +119,7 @@ function SongEdit(props: SongEditProps) {
 						<TagList song={song} />
 					</Center>
 					<Center m="2">
-						<EditSongData />
+						<EditSongData song={song} />
 						<AddSongPart song={song}>
 							<AddIcon />
 						</AddSongPart>

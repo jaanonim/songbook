@@ -102,20 +102,30 @@ function SongTable(props: SongTableProps) {
 						<Tbody>
 							{data?.pages.map((page) => (
 								<React.Fragment key={page.nextPage}>
-									{page.docs.map((element: Song) => (
-										<SongTableElement
-											key={element._id}
-											song={element}
-											onDelete={props.onDelete}
-											selected={song?._id === element._id}
-											onDoubleClick={() => {
-												if (song?._id !== element._id) {
-													props.onSongClick(element);
-													setSong(element);
+									{page.docs.map((element: Song) => {
+										element = new Song(element);
+										return (
+											<SongTableElement
+												key={element._id}
+												song={element}
+												onDelete={props.onDelete}
+												selected={
+													song?._id === element._id
 												}
-											}}
-										/>
-									))}
+												onDoubleClick={() => {
+													if (
+														song?._id !==
+														element._id
+													) {
+														props.onSongClick(
+															element
+														);
+														setSong(element);
+													}
+												}}
+											/>
+										);
+									})}
 								</React.Fragment>
 							))}
 							<Tr ref={loadMoreButtonRef}>

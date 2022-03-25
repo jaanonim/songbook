@@ -1,4 +1,4 @@
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon, QuestionIcon } from "@chakra-ui/icons";
 import {
 	useDisclosure,
 	useToast,
@@ -24,29 +24,38 @@ import {
 	Flex,
 	Spacer,
 	HStack,
+	Popover,
+	PopoverArrow,
+	PopoverBody,
+	PopoverCloseButton,
+	PopoverContent,
+	PopoverHeader,
+	PopoverTrigger,
 } from "@chakra-ui/react";
 import { useRef, RefObject, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import PartType from "../../Models/PartTypes";
+import Song from "../../Models/Song";
 import { updateSong } from "../../Services/api";
 import firstUpper from "../../Utilities/text";
-import text from "../../Utilities/text";
 
-function EditSongData(props: any) {
+interface SongPartBoxProps {
+	song: Song;
+}
+
+function EditSongData(props: SongPartBoxProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = useRef() as RefObject<HTMLTextAreaElement>;
 	const queryClient = useQueryClient();
 	const toast = useToast();
-	const [value, setValue] = useState(
-		props.part ? props.part.type : PartType.VERSE
-	);
+	const [value, setValue] = useState(PartType.VERSE);
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
 
-	let [text, setText] = useState(props.part ? props.part.lirycs : "");
-	let handleInputChange = (e: any) => {
-		let inputValue = e.target.value;
-		setText(inputValue);
-	};
+	let [lirycs, setLirycs] = useState(props.song.partsToChrodPro());
+
+	let [other, setOther] = useState(props.song.other);
+	console.log(props.song);
+
 	const update = useMutation(updateSong, {
 		onSettled: (newItem, error, variables, context) => {
 			if (error) {
@@ -94,8 +103,10 @@ function EditSongData(props: any) {
 									<FormControl p={3} display="block">
 										<Textarea
 											ref={initialRef}
-											value={text}
-											onChange={handleInputChange}
+											value={lirycs}
+											onChange={(e) =>
+												setLirycs(e.target.value)
+											}
 											placeholder="Enter lyrics"
 											size="md"
 											height="50vh"
@@ -128,15 +139,50 @@ function EditSongData(props: any) {
 											</RadioGroup>
 										</FormControl>
 										<Button>Insert</Button>
+										<Spacer></Spacer>
+										<Popover>
+											<PopoverTrigger>
+												<IconButton
+													size="md"
+													variant="ghost"
+													aria-label="help"
+													icon={<QuestionIcon />}
+												></IconButton>
+											</PopoverTrigger>
+											<PopoverContent>
+												<PopoverArrow />
+												<PopoverCloseButton />
+												<PopoverHeader
+													pt={4}
+													fontWeight="bold"
+													border="0"
+												>
+													Help
+												</PopoverHeader>
+												<PopoverBody>
+													Lorem ipsum dolor, sit amet
+													consectetur adipisicing
+													elit. Assumenda ad
+													praesentium cum nobis.
+													Fugiat provident dolor
+													harum. Inventore magnam
+													consectetur dolorum totam
+													voluptatem. Non odio aliquid
+													totam quae vero consectetur!{" "}
+												</PopoverBody>
+											</PopoverContent>
+										</Popover>
 									</HStack>
 								</TabPanel>
 								<TabPanel>
 									<FormControl p={3} display="block">
 										<Textarea
 											ref={initialRef}
-											value={text}
-											onChange={handleInputChange}
-											placeholder="Enter lyrics"
+											value={other}
+											onChange={(e) =>
+												setOther(e.target.value)
+											}
+											placeholder="Enter other song data"
 											size="md"
 											height="50vh"
 											width="100%"
@@ -147,7 +193,22 @@ function EditSongData(props: any) {
 						</Tabs>
 					</ModalBody>
 					<ModalFooter>
-						<Button colorScheme="blue" mr={3}>
+						<Button
+							colorScheme="blue"
+							mr={3}
+							onClick={() => {
+								onClose();
+								update.mutate({
+									id: props.song._id,
+									song: {
+										other: other,
+										parts: props.song.setPartsFromChrodPro(
+											lirycs
+										),
+									},
+								});
+							}}
+						>
 							Save
 						</Button>
 						<Button onClick={onClose}>Cancel</Button>

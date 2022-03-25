@@ -11,8 +11,6 @@ function DeleteButton(props: DeleteButtonProps) {
 
 	return (
 		<IconButton
-			ml="2"
-			mr="2"
 			size="sm"
 			aria-label="delete"
 			_hover={{

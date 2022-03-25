@@ -130,11 +130,13 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 										return part;
 									});
 								} else {
-									props.song.parts.push({
-										id: props.song.parts.length,
-										type: value,
-										lirycs: text,
-									});
+									props.song.parts.push(
+										new SongPart({
+											id: props.song.parts.length,
+											type: value,
+											lirycs: text,
+										})
+									);
 								}
 
 								update.mutate({

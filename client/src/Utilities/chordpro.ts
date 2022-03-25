@@ -1,21 +1,115 @@
-import ChordSheetJS from "chordsheetjs";
+import PartType from "../Models/PartTypes";
+import SongPart from "../Models/SongPart";
 
-function parseChords(text: string) {
-	const parser = new ChordSheetJS.ChordProParser();
-	const song = parser.parse(text);
-	return song;
+function typeToDirective(type: PartType): [string, string] {
+	switch (type) {
+		case PartType.CHORUS:
+			return ["{sov}", "{eov}"];
+		case PartType.BRIDGE:
+			return ["{sob}", "{eob}"];
+		case PartType.VERSE:
+			return ["{soc}", "{eoc}"];
+		default:
+			return ["", ""];
+	}
 }
 
-function displayChords(song: ChordSheetJS.Song) {
-	const formatter = new ChordSheetJS.TextFormatter();
-	const disp = formatter.format(song);
-	return disp;
+function lexer(text: string) {
+	let data = [];
+	let current = "";
+	let i = 0;
+	while (true) {
+		if (text[i] === "{") {
+			if (current.length > 0) {
+				data.push(current);
+				current = "";
+			}
+
+			while (text[i] !== "}") {
+				current += text[i];
+				i++;
+			}
+			current += text[i];
+			i++;
+			data.push(current);
+			current = "";
+		} else {
+			current += text[i];
+			i++;
+		}
+		if (i >= text.length) {
+			if (current != undefined && current.length > 0) {
+				data.push(current);
+			}
+			break;
+		}
+	}
+	return data;
 }
 
-function processChords(text: string) {
-	const song = parseChords(text);
-	const disp = displayChords(song);
-	return disp;
+const DATA = [
+	{
+		type: PartType.VERSE,
+		start: "sov",
+		end: "eov",
+	},
+	{
+		type: PartType.CHORUS,
+		start: "soc",
+		end: "eoc",
+	},
+	{
+		type: PartType.BRIDGE,
+		start: "sob",
+		end: "eob",
+	},
+	{
+		type: PartType.VERSE,
+		start: "start_of_verse",
+		end: "end_of_verse",
+	},
+	{
+		type: PartType.CHORUS,
+		start: "start_of_chorus",
+		end: "end_of_chorus",
+	},
+	{
+		type: PartType.BRIDGE,
+		start: "{start_of_bridge}",
+		end: "{end_of_bridge}",
+	},
+];
+
+function parse(text: string) {
+	let data = lexer(text);
+	console.log(data);
+
+	let parts = [];
+	let i = 0;
+	let index = 0;
+	while (i < data.length) {
+		if (data[i][0] == "{") {
+			text = data[i].slice(1, -1).trim();
+			for (let j = 0; j < DATA.length; j++) {
+				const element = DATA[j];
+				if (text == element.start) {
+					i++;
+					parts.push(
+						new SongPart({
+							id: index,
+							type: element.type,
+							lirycs: data[i].trim(),
+						})
+					);
+					index++;
+					break;
+				}
+			}
+		}
+		i++;
+	}
+	console.log(parts);
+	return parts;
 }
 
-export default processChords;
+export { typeToDirective, parse };
