@@ -11,14 +11,13 @@ import {
 	toast,
 	useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "react-query";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
-import { updateSong } from "../../Services/api";
 import AddSongPart from "../UpdateSongPart";
 import DeleteButton from "../DeleteButton";
 
 import firstUpper from "../../Utilities/text";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 
 interface SongPartBoxInterface {
 	part: SongPart;
@@ -26,24 +25,7 @@ interface SongPartBoxInterface {
 }
 
 function SongPartBox(props: SongPartBoxInterface) {
-	const queryClient = useQueryClient();
-	const toast = useToast();
-	const update = useMutation(updateSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Updated ${props.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const update = useUpdateSong(props.song.title);
 
 	return (
 		<Container border="2px" borderRadius="5" mt="4" mb="4">

@@ -8,9 +8,8 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useQueryClient, useMutation } from "react-query";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 import Song from "../../Models/Song";
-import { updateSong } from "../../Services/api";
 import processTag from "../../Utilities/tag";
 
 interface TagListProps {
@@ -18,9 +17,8 @@ interface TagListProps {
 }
 
 function TagList(props: TagListProps) {
-	const queryClient = useQueryClient();
-	const toast = useToast();
 	const [edit, setEdit] = useState(false);
+	const toast = useToast();
 
 	const saveTag = (str: string) => {
 		setEdit(false);
@@ -43,22 +41,7 @@ function TagList(props: TagListProps) {
 		}
 	};
 
-	const update = useMutation(updateSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Updated ${props.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const update = useUpdateSong(props.song.title);
 
 	return (
 		<>

@@ -6,8 +6,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import React from "react";
-import { useQueryClient, useMutation } from "react-query";
-import { updateSong } from "../../Services/api";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 import firstUpper from "../../Utilities/text";
 
 interface EditableInputProps {
@@ -22,28 +21,12 @@ interface EditableInputProps {
 }
 
 function SongEditableInput(props: EditableInputProps) {
-	const queryClient = useQueryClient();
 	const [value, setValue] = React.useState(props.value);
 	const [valueLast, setValueLast] = React.useState(props.value);
 	const [isEditing, setIsEditing] = React.useState(false);
 	const toast = useToast();
 
-	const update = useMutation(updateSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Updated ${props.name}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const update = useUpdateSong(props.name);
 
 	return (
 		<Editable

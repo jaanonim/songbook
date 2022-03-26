@@ -16,8 +16,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { useRef, RefObject, useState } from "react";
-import { useQueryClient, useMutation } from "react-query";
-import { createSong, updateSong } from "../../Services/api";
+import useCreateSong from "../../Hooks/useCreateSong";
 
 const CreateSong = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,25 +24,7 @@ const CreateSong = () => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 
-	const queryClient = useQueryClient();
-	const toast = useToast();
-
-	const create = useMutation(createSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Created ${variables.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const create = useCreateSong();
 
 	return (
 		<>
@@ -51,7 +32,11 @@ const CreateSong = () => {
 				aria-label="Add tag"
 				icon={<AddIcon />}
 				ml="2"
-				onClick={() => onOpen()}
+				onClick={() => {
+					onOpen();
+					setAuthor("");
+					setTitle("");
+				}}
 			/>
 			<Modal
 				initialFocusRef={initialRef}

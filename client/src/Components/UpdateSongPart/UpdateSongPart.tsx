@@ -18,11 +18,10 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import React, { RefObject, useRef } from "react";
-import { useQueryClient, useMutation } from "react-query";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
-import { updateSong } from "../../Services/api";
 import firstUpper from "../../Utilities/text";
 
 interface UpdateSongPartProps {
@@ -35,8 +34,6 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = useRef() as RefObject<HTMLTextAreaElement>;
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
-	const queryClient = useQueryClient();
-	const toast = useToast();
 	const [value, setValue] = React.useState(
 		props.part ? props.part.type : PartType.VERSE
 	);
@@ -46,22 +43,7 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 		setText(inputValue);
 	};
 
-	const update = useMutation(updateSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Updated ${props.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const update = useUpdateSong(props.song.title);
 
 	return (
 		<>
