@@ -4,11 +4,11 @@ import SongPart from "../Models/SongPart";
 function typeToDirective(type: PartType): [string, string] {
 	switch (type) {
 		case PartType.CHORUS:
-			return ["{sov}", "{eov}"];
+			return ["{soc}", "{eoc}"];
 		case PartType.BRIDGE:
 			return ["{sob}", "{eob}"];
 		case PartType.VERSE:
-			return ["{soc}", "{eoc}"];
+			return ["{sov}", "{eov}"];
 		default:
 			return ["", ""];
 	}
@@ -82,7 +82,6 @@ const DATA = [
 
 function parse(text: string) {
 	let data = lexer(text);
-	console.log(data);
 
 	let parts = [];
 	let i = 0;
@@ -108,7 +107,6 @@ function parse(text: string) {
 		}
 		i++;
 	}
-	console.log(parts);
 	return parts;
 }
 

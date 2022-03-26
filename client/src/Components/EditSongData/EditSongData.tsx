@@ -33,10 +33,10 @@ import {
 	PopoverTrigger,
 } from "@chakra-ui/react";
 import { useRef, RefObject, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
-import { updateSong } from "../../Services/api";
+import { typeToDirective } from "../../Utilities/chordpro";
 import firstUpper from "../../Utilities/text";
 
 interface SongPartBoxProps {
@@ -45,33 +45,33 @@ interface SongPartBoxProps {
 
 function EditSongData(props: SongPartBoxProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const initialRef = useRef() as RefObject<HTMLTextAreaElement>;
-	const queryClient = useQueryClient();
-	const toast = useToast();
-	const [value, setValue] = useState(PartType.VERSE);
+	const lirycsRef = useRef() as RefObject<HTMLTextAreaElement>;
+	const [selectedType, setSelectedType] = useState(PartType.VERSE);
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
 
 	let [lirycs, setLirycs] = useState(props.song.partsToChrodPro());
 
 	let [other, setOther] = useState(props.song.other);
-	console.log(props.song);
 
-	const update = useMutation(updateSong, {
-		onSettled: (newItem, error, variables, context) => {
-			if (error) {
-				toast({
-					title: (error as Error).message,
-					status: "error",
-				});
-			} else {
-				toast({
-					title: `Updated ${props.song.title}`,
-					status: "success",
-				});
-				queryClient.invalidateQueries("song");
-			}
-		},
-	});
+	const update = useUpdateSong(props.song.title);
+
+	const handleInsert = () => {
+		if (lirycsRef.current) {
+			lirycsRef.current.focus();
+			const startPos = lirycsRef.current.selectionStart;
+			const endPos = lirycsRef.current.selectionEnd;
+
+			const before = lirycs.substring(0, startPos);
+			const center = lirycs.substring(startPos, endPos);
+			const after = lirycs.substring(endPos, lirycs.length);
+
+			const directives = typeToDirective(selectedType);
+
+			setLirycs(
+				`${before}${directives[0]}\n${center}\n${directives[1]}${after}`
+			);
+		}
+	};
 
 	return (
 		<>
@@ -82,7 +82,7 @@ function EditSongData(props: SongPartBoxProps) {
 				onClick={() => onOpen()}
 			></IconButton>
 			<Modal
-				initialFocusRef={initialRef}
+				initialFocusRef={lirycsRef}
 				isOpen={isOpen}
 				onClose={onClose}
 				isCentered
@@ -102,7 +102,7 @@ function EditSongData(props: SongPartBoxProps) {
 								<TabPanel>
 									<FormControl p={3} display="block">
 										<Textarea
-											ref={initialRef}
+											ref={lirycsRef}
 											value={lirycs}
 											onChange={(e) =>
 												setLirycs(e.target.value)
@@ -117,9 +117,9 @@ function EditSongData(props: SongPartBoxProps) {
 										<FormControl p={3} w="auto">
 											<RadioGroup
 												onChange={(v: any) =>
-													setValue(v)
+													setSelectedType(v)
 												}
-												value={value}
+												value={selectedType}
 											>
 												<Stack direction="row">
 													{PartTypesArr.map((key) => (
@@ -138,7 +138,9 @@ function EditSongData(props: SongPartBoxProps) {
 												</Stack>
 											</RadioGroup>
 										</FormControl>
-										<Button>Insert</Button>
+										<Button onClick={handleInsert}>
+											Insert
+										</Button>
 										<Spacer></Spacer>
 										<Popover>
 											<PopoverTrigger>
@@ -177,7 +179,6 @@ function EditSongData(props: SongPartBoxProps) {
 								<TabPanel>
 									<FormControl p={3} display="block">
 										<Textarea
-											ref={initialRef}
 											value={other}
 											onChange={(e) =>
 												setOther(e.target.value)
@@ -198,13 +199,13 @@ function EditSongData(props: SongPartBoxProps) {
 							mr={3}
 							onClick={() => {
 								onClose();
+								props.song.parts =
+									props.song.setPartsFromChrodPro(lirycs);
 								update.mutate({
 									id: props.song._id,
 									song: {
 										other: other,
-										parts: props.song.setPartsFromChrodPro(
-											lirycs
-										),
+										parts: props.song.parts,
 									},
 								});
 							}}

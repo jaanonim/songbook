@@ -13,7 +13,7 @@ import {
 import { useQuery } from "react-query";
 import Song from "../../Models/Song";
 import { getSong } from "../../Services/api";
-import AddSongPart from "../UpdateSongPart";
+import UpdateSongPart from "../UpdateSongPart";
 import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
@@ -121,9 +121,9 @@ function SongEdit(props: SongEditProps) {
 					</Center>
 					<Center m="2">
 						<EditSongData song={song} />
-						<AddSongPart song={song}>
+						<UpdateSongPart song={song} part={undefined}>
 							<AddIcon />
-						</AddSongPart>
+						</UpdateSongPart>
 						<DeleteSongButton song={song} />
 					</Center>
 					<Center>
