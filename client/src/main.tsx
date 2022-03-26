@@ -3,12 +3,13 @@ import * as React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ColorModeScript } from "@chakra-ui/react";
-import Manage from "./Pages/Manage";
-import Selection from "./Pages/Selection";
 import "./index.css";
 import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Loading from "./Components/Loading";
+const Manage = React.lazy(() => import("./Pages/Manage"));
+const Selection = React.lazy(() => import("./Pages/Selection"));
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -26,8 +27,22 @@ render(
 			<ChakraProvider theme={theme}>
 				<BrowserRouter>
 					<Routes>
-						<Route path="/" element={<Selection />} />
-						<Route path="/manage" element={<Manage />} />
+						<Route
+							path="/"
+							element={
+								<React.Suspense fallback={<Loading />}>
+									<Selection />
+								</React.Suspense>
+							}
+						/>
+						<Route
+							path="/manage"
+							element={
+								<React.Suspense fallback={<Loading />}>
+									<Manage />
+								</React.Suspense>
+							}
+						/>
 					</Routes>
 				</BrowserRouter>
 			</ChakraProvider>

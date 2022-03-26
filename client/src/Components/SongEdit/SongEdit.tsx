@@ -8,6 +8,7 @@ import {
 	Alert,
 	AlertIcon,
 	CircularProgress,
+	Spinner,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import Song from "../../Models/Song";
@@ -55,7 +56,7 @@ function SongEdit(props: SongEditProps) {
 		if (isLoading) {
 			return (
 				<Center w="100%">
-					<CircularProgress isIndeterminate />
+					<Spinner size="xl" />
 				</Center>
 			);
 		} else if (isError) {
