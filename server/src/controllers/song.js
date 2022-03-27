@@ -1,6 +1,6 @@
 const config = require('../config/api');
 const Song = require('../models/song');
-
+const ProccessFile = require('../utilities/proccessFile');
 
 // @route   GET api/song
 // @desc    Get all songs
@@ -134,6 +134,24 @@ exports.destroy = async (req, res) => {
         if (!song) return res.status(404).json({
             message: "Song not found"
         });
+        res.status(200).json(song);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+// @route   POST api/song/import
+// @desc    Import songs
+// @access  Public
+exports.import = async (req, res) => {
+    try {
+        const data = await new ProccessFile(req.file).proccessFile();
+        const song = new Song(
+            data
+        );
+        await song.save();
         res.status(200).json(song);
     } catch (error) {
         res.status(500).json({
