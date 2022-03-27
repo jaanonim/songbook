@@ -4,6 +4,7 @@ import ColorModeButton from "../../Components/ColorModeButton";
 import { useState } from "react";
 import Song from "../../Models/Song";
 import SongEdit from "../../Components/SongEdit";
+import ImportDropzone from "../../Components/ImportDropzone";
 
 function Manage() {
 	const [song, setSong] = useState<Song | null>(null);
@@ -11,6 +12,7 @@ function Manage() {
 	return (
 		<>
 			<Flex>
+				<ImportDropzone></ImportDropzone>
 				<SongTable
 					onSongClick={(s) => {
 						setSong(s);
