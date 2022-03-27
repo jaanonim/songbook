@@ -97,7 +97,7 @@ function parse(text: string) {
 						new SongPart({
 							id: index,
 							type: element.type,
-							lirycs: data[i].trim(),
+							text: data[i].trim(),
 						})
 					);
 					index++;

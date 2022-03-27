@@ -4,18 +4,18 @@ import PartType from "./PartTypes";
 interface SongPartInterface {
 	id: number;
 	type: PartType;
-	lirycs: string;
+	text: string;
 }
 
 export default class SongPart implements SongPartInterface {
 	id: number;
 	type: PartType;
-	lirycs: string;
+	text: string;
 
 	constructor(songPart: any) {
 		this.id = songPart.id;
 		this.type = songPart.type;
-		this.lirycs = songPart.lirycs;
+		this.text = songPart.text;
 	}
 
 	toChordPro(): string {
@@ -23,7 +23,7 @@ export default class SongPart implements SongPartInterface {
 		const ele = typeToDirective(this.type);
 		chordPro += ele[0];
 		chordPro += "\n";
-		chordPro += this.lirycs;
+		chordPro += this.text;
 		chordPro += "\n";
 		chordPro += ele[1];
 		return chordPro;

@@ -37,7 +37,7 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 	const [value, setValue] = React.useState(
 		props.part ? props.part.type : PartType.VERSE
 	);
-	let [text, setText] = React.useState(props.part ? props.part.lirycs : "");
+	let [text, setText] = React.useState(props.part ? props.part.text : "");
 	let handleInputChange = (e: any) => {
 		let inputValue = e.target.value;
 		setText(inputValue);
@@ -107,7 +107,7 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 									props.song.parts.map((part) => {
 										if (part.id === props.part?.id) {
 											part.type = value;
-											part.lirycs = text;
+											part.text = text;
 										}
 										return part;
 									});
@@ -116,7 +116,7 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 										new SongPart({
 											id: props.song.parts.length,
 											type: value,
-											lirycs: text,
+											text: text,
 										})
 									);
 								}

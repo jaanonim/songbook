@@ -45,29 +45,29 @@ interface SongPartBoxProps {
 
 function EditSongData(props: SongPartBoxProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const lirycsRef = useRef() as RefObject<HTMLTextAreaElement>;
+	const textRef = useRef() as RefObject<HTMLTextAreaElement>;
 	const [selectedType, setSelectedType] = useState(PartType.VERSE);
 	const PartTypesArr = Object.keys(PartType) as Array<keyof typeof PartType>;
 
-	let [lirycs, setLirycs] = useState(props.song.partsToChrodPro());
+	let [text, setText] = useState(props.song.partsToChrodPro());
 
 	let [other, setOther] = useState(props.song.other);
 
 	const update = useUpdateSong(props.song.title);
 
 	const handleInsert = () => {
-		if (lirycsRef.current) {
-			lirycsRef.current.focus();
-			const startPos = lirycsRef.current.selectionStart;
-			const endPos = lirycsRef.current.selectionEnd;
+		if (textRef.current) {
+			textRef.current.focus();
+			const startPos = textRef.current.selectionStart;
+			const endPos = textRef.current.selectionEnd;
 
-			const before = lirycs.substring(0, startPos);
-			const center = lirycs.substring(startPos, endPos);
-			const after = lirycs.substring(endPos, lirycs.length);
+			const before = text.substring(0, startPos);
+			const center = text.substring(startPos, endPos);
+			const after = text.substring(endPos, text.length);
 
 			const directives = typeToDirective(selectedType);
 
-			setLirycs(
+			setText(
 				`${before}${directives[0]}\n${center}\n${directives[1]}${after}`
 			);
 		}
@@ -82,7 +82,7 @@ function EditSongData(props: SongPartBoxProps) {
 				onClick={() => onOpen()}
 			></IconButton>
 			<Modal
-				initialFocusRef={lirycsRef}
+				initialFocusRef={textRef}
 				isOpen={isOpen}
 				onClose={onClose}
 				isCentered
@@ -102,10 +102,10 @@ function EditSongData(props: SongPartBoxProps) {
 								<TabPanel>
 									<FormControl p={3} display="block">
 										<Textarea
-											ref={lirycsRef}
-											value={lirycs}
+											ref={textRef}
+											value={text}
 											onChange={(e) =>
-												setLirycs(e.target.value)
+												setText(e.target.value)
 											}
 											placeholder="Enter lyrics"
 											size="md"
@@ -200,7 +200,7 @@ function EditSongData(props: SongPartBoxProps) {
 							onClick={() => {
 								onClose();
 								props.song.parts =
-									props.song.setPartsFromChrodPro(lirycs);
+									props.song.setPartsFromChrodPro(text);
 								update.mutate({
 									id: props.song._id,
 									song: {

@@ -57,7 +57,7 @@ function SongPartBox(props: SongPartBoxInterface) {
 			</Flex>
 			<Divider />
 			<Text mt="2" mb="2" whiteSpace="pre">
-				{props.part.lirycs}
+				{props.part.text}
 			</Text>
 		</Container>
 	);
