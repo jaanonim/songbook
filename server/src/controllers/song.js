@@ -148,6 +148,7 @@ exports.destroy = async (req, res) => {
 exports.import = async (req, res) => {
     try {
         const data = await new ProccessFile(req.file).proccessFile();
+        data.tags = req.body.tags || [];
         const song = new Song(
             data
         );
