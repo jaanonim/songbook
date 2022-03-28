@@ -13,16 +13,18 @@ import {
 	List,
 	ListItem,
 	CloseButton,
+	Heading,
 } from "@chakra-ui/react";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { MdUpload } from "react-icons/md";
 import "./ImportModal.css";
 import { limitLength } from "../../Utilities/text";
+import TagList from "../TagList";
 
 function ImportModal() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
+	const [tags, setTags] = useState([]);
 	const [files, setFiles] = useState([]);
 	const onDrop = useCallback(
 		(f: any) => {
@@ -45,6 +47,7 @@ function ImportModal() {
 
 	const myClose = () => {
 		setFiles([]);
+		setTags([]);
 		onClose();
 	};
 
@@ -101,6 +104,18 @@ function ImportModal() {
 								</Center>
 							)}
 						</div>
+						{files.length !== 0 ? (
+							<Center>
+								<TagList
+									tags={tags}
+									saveTags={(t: any) => {
+										setTags(t);
+									}}
+								></TagList>
+							</Center>
+						) : (
+							<></>
+						)}
 					</ModalBody>
 
 					<ModalFooter>
