@@ -37,7 +37,7 @@ import useUpdateSong from "../../Hooks/useUpdateSong";
 import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
 import { typeToDirective } from "../../Utilities/chordpro";
-import firstUpper from "../../Utilities/text";
+import { firstUpper } from "../../Utilities/text";
 
 interface SongPartBoxProps {
 	song: Song;

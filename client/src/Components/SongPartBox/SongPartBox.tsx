@@ -16,7 +16,7 @@ import SongPart from "../../Models/SongPart";
 import AddSongPart from "../UpdateSongPart";
 import DeleteButton from "../DeleteButton";
 
-import firstUpper from "../../Utilities/text";
+import { firstUpper } from "../../Utilities/text";
 import useUpdateSong from "../../Hooks/useUpdateSong";
 
 interface SongPartBoxInterface {

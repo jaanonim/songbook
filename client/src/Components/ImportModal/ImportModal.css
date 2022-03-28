@@ -1,0 +1,9 @@
+.dropzone{
+    width: calc(100% - 1rem);
+    min-height: 200px;
+    border: 2px dashed #fff;
+    border-radius: 1rem;
+    margin: 1rem;
+    display: flex;
+    text-align: center;
+}

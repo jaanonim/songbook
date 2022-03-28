@@ -22,7 +22,7 @@ import useUpdateSong from "../../Hooks/useUpdateSong";
 import PartType from "../../Models/PartTypes";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
-import firstUpper from "../../Utilities/text";
+import { firstUpper } from "../../Utilities/text";
 
 interface UpdateSongPartProps {
 	song: Song;

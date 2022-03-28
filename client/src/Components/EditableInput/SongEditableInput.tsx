@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import useUpdateSong from "../../Hooks/useUpdateSong";
-import firstUpper from "../../Utilities/text";
+import { firstUpper } from "../../Utilities/text";
 
 interface EditableInputProps {
 	id: string;
