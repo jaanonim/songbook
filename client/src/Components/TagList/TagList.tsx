@@ -7,31 +7,30 @@ import {
 	IconButton,
 	useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import useUpdateSong from "../../Hooks/useUpdateSong";
-import Song from "../../Models/Song";
+import { useEffect, useState } from "react";
 import processTag from "../../Utilities/tag";
 
 interface TagListProps {
-	song: Song;
+	tags: string[];
+	saveTags?: (str: string[]) => void;
 }
 
 function TagList(props: TagListProps) {
 	const [edit, setEdit] = useState(false);
+	const [tags, setTags] = useState(props.tags);
 	const toast = useToast();
+
+	useEffect(() => {
+		setTags(props.tags);
+	}, [props.tags]);
 
 	const saveTag = (str: string) => {
 		setEdit(false);
 		str = processTag(str);
-		if (props.song.tags.filter((t) => t === str).length === 0) {
+		if (tags.filter((t) => t === str).length === 0) {
 			if (str.length > 0) {
-				props.song.tags = [...props.song.tags, str];
-				update.mutate({
-					id: props.song._id,
-					song: {
-						tags: props.song.tags,
-					},
-				});
+				props.saveTags ? props.saveTags([...tags, str]) : null;
+				setTags([...tags, str]);
 			}
 		} else {
 			toast({
@@ -41,25 +40,18 @@ function TagList(props: TagListProps) {
 		}
 	};
 
-	const update = useUpdateSong(props.song.title);
-
 	return (
 		<>
-			{props.song.tags.map((n: string) => (
+			{tags.map((n: string) => (
 				<Tag m="1" key={n}>
 					<TagLabel>{n}</TagLabel>
 					<TagCloseButton
 						onClick={(e) => {
 							e.preventDefault();
-							props.song.tags = props.song.tags.filter(
-								(e) => e !== n
-							);
-							update.mutate({
-								id: props.song._id,
-								song: {
-									tags: props.song.tags,
-								},
-							});
+							props.saveTags
+								? props.saveTags(tags.filter((e) => e !== n))
+								: null;
+							setTags(tags.filter((e) => e !== n));
 						}}
 					/>
 				</Tag>

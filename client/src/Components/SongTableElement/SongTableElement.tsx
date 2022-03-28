@@ -1,7 +1,7 @@
 import { Tr, Td, useToast } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import DeleteSongButton from "../DeleteSongButton";
-import TagList from "../TagList";
+import TagList from "../SongTagList";
 
 interface SongTableElementProps {
 	song: Song;

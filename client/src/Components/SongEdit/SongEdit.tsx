@@ -17,7 +17,7 @@ import UpdateSongPart from "../UpdateSongPart";
 import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
 import SongPartBox from "../SongPartBox";
-import TagList from "../TagList";
+import TagList from "../SongTagList";
 import EditSongData from "../EditSongData";
 
 interface SongEditProps {
