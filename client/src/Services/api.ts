@@ -50,4 +50,14 @@ async function updateSong(args: any) {
 	});
 }
 
-export { getSongs, delSong, createSong, updateSong, getSong };
+async function importSong(file: any) {
+	let data = new FormData();
+	data.append("file", file);
+	const url = `${config.apiUrl}/song/import`;
+	return processRequest(url, {
+		method: "POST",
+		body: data,
+	});
+}
+
+export { getSongs, delSong, createSong, updateSong, getSong, importSong };

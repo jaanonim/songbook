@@ -84,7 +84,6 @@ function SongEdit(props: SongEditProps) {
 			);
 		} else {
 			const song = new Song(data);
-			console.log(song, data);
 			return (
 				<Box w="100vw" h="100vh">
 					<Center>
