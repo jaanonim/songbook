@@ -16,8 +16,13 @@ async function parse(file, text) {
     let title = data.song.properties[0].titles[0].title[0];
     let author = data.song.properties[0].authors[0].author[0];
     let lyrics = [];
-
     data.song.lyrics[0].verse.forEach(function (item, index) {
+        item.lines = item.lines.map((ele) => {
+            if (typeof (ele) !== 'string')
+                return ele._;
+            else
+                return ele;
+        })
         lyrics.push({
             id: index,
             type: checkeType(item.$.name),
