@@ -1,10 +1,10 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
-	Tag,
-	TagLabel,
-	TagCloseButton,
-	Input,
 	IconButton,
+	Input,
+	Tag,
+	TagCloseButton,
+	TagLabel,
 	useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";

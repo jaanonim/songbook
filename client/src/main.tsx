@@ -1,13 +1,12 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import { render } from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ColorModeScript } from "@chakra-ui/react";
-import "./index.css";
-import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Loading from "./Components/Loading";
+import "./index.css";
+import theme from "./theme";
 const Manage = React.lazy(() => import("./Pages/Manage"));
 const Selection = React.lazy(() => import("./Pages/Selection"));
 

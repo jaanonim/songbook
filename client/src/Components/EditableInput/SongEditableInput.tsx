@@ -2,7 +2,6 @@ import {
 	Editable,
 	EditableInput,
 	EditablePreview,
-	useEditableControls,
 	useToast,
 } from "@chakra-ui/react";
 import React from "react";

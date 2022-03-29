@@ -1,23 +1,19 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import {
 	Box,
 	Container,
 	Divider,
 	Flex,
 	Heading,
-	IconButton,
 	Spacer,
 	Text,
-	toast,
-	useToast,
 } from "@chakra-ui/react";
+import useUpdateSong from "../../Hooks/useUpdateSong";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
-import AddSongPart from "../UpdateSongPart";
-import DeleteButton from "../DeleteButton";
-
 import { firstUpper } from "../../Utilities/text";
-import useUpdateSong from "../../Hooks/useUpdateSong";
+import DeleteButton from "../DeleteButton";
+import AddSongPart from "../UpdateSongPart";
 
 interface SongPartBoxInterface {
 	part: SongPart;

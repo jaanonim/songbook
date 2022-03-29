@@ -1,18 +1,4 @@
-import {
-	Box,
-	Button,
-	Center,
-	Container,
-	Flex,
-	Heading,
-	LinkBox,
-	LinkOverlay,
-	Spacer,
-	Stack,
-	Text,
-	Wrap,
-	WrapItem,
-} from "@chakra-ui/react";
+import { Center, Container, Flex, Heading, Stack } from "@chakra-ui/react";
 import ColorModeButton from "../../Components/ColorModeButton";
 import SelectionButton from "../../Components/SelectionButton";
 import "./Selection.css";

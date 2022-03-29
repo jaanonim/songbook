@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import { useQueryClient, useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { delSong } from "../Services/api";
 
 function useDeleteSong(title: string) {

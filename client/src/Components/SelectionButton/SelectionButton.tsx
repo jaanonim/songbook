@@ -1,4 +1,4 @@
-import { Button, Stack, Heading, Text } from "@chakra-ui/react";
+import { Button, Heading, Stack, Text } from "@chakra-ui/react";
 import { ThemeTypings } from "@chakra-ui/styled-system";
 import { Link } from "react-router-dom";
 

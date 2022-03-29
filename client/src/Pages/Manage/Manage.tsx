@@ -1,9 +1,9 @@
-import SongTable from "../../Components/SongTable";
 import { Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import Song from "../../Models/Song";
-import SongEdit from "../../Components/SongEdit";
 import ImportModal from "../../Components/ImportModal";
+import SongEdit from "../../Components/SongEdit";
+import SongTable from "../../Components/SongTable";
+import Song from "../../Models/Song";
 
 function Manage() {
 	const [song, setSong] = useState<Song | null>(null);

@@ -1,26 +1,25 @@
 import {
-	useDisclosure,
-	IconButton,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalCloseButton,
-	ModalBody,
-	ModalFooter,
 	Button,
 	Center,
+	CloseButton,
+	IconButton,
 	List,
 	ListItem,
-	CloseButton,
-	Heading,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	useDisclosure,
 } from "@chakra-ui/react";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { MdUpload } from "react-icons/md";
-import "./ImportModal.css";
 import { limitLength } from "../../Utilities/text";
 import TagList from "../TagList";
+import "./ImportModal.css";
 
 function ImportModal() {
 	const { isOpen, onOpen, onClose } = useDisclosure();

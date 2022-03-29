@@ -1,6 +1,6 @@
 import config from "../Config/config";
-import ProcessSearchstring from "../Utilities/search";
 import processRequest from "../Utilities/api";
+import ProcessSearchstring from "../Utilities/search";
 
 async function getSongs(args: any) {
 	const search = args.queryKey[1];

@@ -1,5 +1,5 @@
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { useColorMode, Button, position } from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 
 interface ColorModeButtonInterface {
 	fixed?: boolean;

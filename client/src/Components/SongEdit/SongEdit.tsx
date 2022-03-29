@@ -1,24 +1,22 @@
-import { EditIcon, AddIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import {
+	Alert,
+	AlertIcon,
 	Box,
 	Center,
 	Heading,
-	IconButton,
-	Text,
-	Alert,
-	AlertIcon,
-	CircularProgress,
 	Spinner,
+	Text,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import Song from "../../Models/Song";
 import { getSong } from "../../Services/api";
-import UpdateSongPart from "../UpdateSongPart";
 import DeleteSongButton from "../DeleteSongButton";
 import SongEditableInput from "../EditableInput";
+import EditSongData from "../EditSongData";
 import SongPartBox from "../SongPartBox";
 import TagList from "../SongTagList";
-import EditSongData from "../EditSongData";
+import UpdateSongPart from "../UpdateSongPart";
 
 interface SongEditProps {
 	id?: string;
