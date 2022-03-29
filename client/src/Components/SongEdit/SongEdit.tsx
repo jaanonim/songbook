@@ -27,7 +27,10 @@ interface SongEditProps {
 function SongEdit(props: SongEditProps) {
 	const { isLoading, isError, data, error } = useQuery(
 		["song", props.id],
-		getSong
+		getSong,
+		{
+			enabled: !!props.id,
+		}
 	);
 
 	if (!props.id)
