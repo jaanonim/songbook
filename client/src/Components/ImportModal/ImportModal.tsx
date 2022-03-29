@@ -42,7 +42,7 @@ function ImportModal() {
 		const f = files.pop();
 		setFiles(files);
 		try {
-			const res = await importSong(f);
+			const res = await importSong(f, tags);
 			results.push(res as never);
 		} catch (e) {
 			results.push(f as never);

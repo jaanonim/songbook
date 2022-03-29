@@ -50,8 +50,9 @@ async function updateSong(args: any) {
 	});
 }
 
-async function importSong(file: any) {
+async function importSong(file: any, tags: string[]) {
 	let data = new FormData();
+	tags.forEach((tag) => data.append("tags", tag));
 	data.append("file", file);
 	const url = `${config.apiUrl}/song/import`;
 	return processRequest(url, {
