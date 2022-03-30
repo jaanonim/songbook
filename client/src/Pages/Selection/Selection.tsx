@@ -1,6 +1,7 @@
 import { Center, Container, Flex, Heading, Stack } from "@chakra-ui/react";
 import ColorModeButton from "../../Components/ColorModeButton";
 import SelectionButton from "../../Components/SelectionButton";
+import TopRightCorner from "../../Components/TopRightCorner";
 import "./Selection.css";
 
 function Selection() {
@@ -44,7 +45,9 @@ function Selection() {
 					</Flex>
 				</Center>
 			</Container>
-			<ColorModeButton fixed={true} />
+			<TopRightCorner>
+				<ColorModeButton />
+			</TopRightCorner>
 		</div>
 	);
 }

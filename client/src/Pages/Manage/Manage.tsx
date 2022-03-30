@@ -3,6 +3,7 @@ import { useState } from "react";
 import ImportModal from "../../Components/ImportModal";
 import SongEdit from "../../Components/SongEdit";
 import SongTable from "../../Components/SongTable";
+import TopRightCorner from "../../Components/TopRightCorner";
 import Song from "../../Models/Song";
 
 function Manage() {
@@ -23,7 +24,9 @@ function Manage() {
 				/>
 				<SongEdit key={song?._id} id={song?._id}></SongEdit>
 			</Flex>
-			<ImportModal></ImportModal>
+			<TopRightCorner>
+				<ImportModal />
+			</TopRightCorner>
 		</>
 	);
 }

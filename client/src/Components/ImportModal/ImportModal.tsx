@@ -96,7 +96,6 @@ function ImportModal() {
 	return (
 		<>
 			<IconButton
-				style={{ position: "fixed", top: "10px", right: "10px" }}
 				aria-label="Import"
 				icon={<MdUpload />}
 				onClick={onOpen}
