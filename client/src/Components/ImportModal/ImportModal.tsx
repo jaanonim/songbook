@@ -43,7 +43,9 @@ function ImportModal() {
 		setFiles(files);
 		try {
 			const res = await importSong(f, tags);
-			results.push(res as never);
+			res.forEach((element: never) => {
+				results.push(element);
+			});
 		} catch (e) {
 			results.push(f as never);
 		}

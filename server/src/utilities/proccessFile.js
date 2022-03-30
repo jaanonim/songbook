@@ -1,26 +1,22 @@
-const {
-    openlyricsParse,
-    openlyricsCheck
-} = require('./fileProccessors/openlyrics');
+const openlyrics = require('./fileProccessors/openlyrics');
+const buildin = require('./fileProccessors/buildin');
 const fs = require('fs');
 
 class ProccessFile {
     TYPES = {
-        "openlyrics": {
-            parser: openlyricsParse,
-            checker: openlyricsCheck
-        }
+        openlyrics,
+        buildin
     }
 
     constructor(file, type) {
         this.file = file;
-        this.text = fs.readFileSync(file.path, 'utf8');
         this.type = type;
     }
 
     async checkType() {
         for (const [key, value] of Object.entries(this.TYPES)) {
-            if (value.checker(this.file, this.text)) {
+            if (!value.check) continue;
+            if (value.check(this.file, this.text)) {
                 this.type = key;
                 return true;
             }
@@ -29,6 +25,7 @@ class ProccessFile {
     }
 
     async proccessFile() {
+        this.text = fs.readFileSync(this.file.path, 'utf8');
         if (!this.type) {
             if (!await this.checkType()) {
                 return {
@@ -36,9 +33,14 @@ class ProccessFile {
                 }
             }
         }
-        const value = this.TYPES[this.type].parser(this.file, this.text);
+        const value = this.TYPES[this.type].parse(this.file, this.text);
         fs.unlinkSync(this.file.path);
         return value;
+    }
+
+    async exportSongs() {
+        if (!this.type || !this.TYPES[this.type].exports) return null
+        return await this.TYPES[this.type].exports(this.file)
     }
 }
 

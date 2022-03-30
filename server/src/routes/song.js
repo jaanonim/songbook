@@ -10,7 +10,7 @@ const validate = require('../middlewares/validate');
 const router = express.Router();
 
 const upload = multer({
-    dest: 'uploads/'
+    dest: 'static/uploads/'
 }).single("file");
 
 
@@ -21,6 +21,7 @@ router.post('/', [
 ], validate, Song.create);
 router.patch('/:id', Song.update);
 router.delete('/:id', Song.destroy);
-router.post('/import', upload, Song.import);
+router.put('/import', upload, Song.import);
+router.put('/export', Song.export);
 
 module.exports = router;

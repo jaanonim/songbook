@@ -56,7 +56,7 @@ async function importSong(file: any, tags: string[]) {
 	data.append("file", file);
 	const url = `${config.apiUrl}/song/import`;
 	return processRequest(url, {
-		method: "POST",
+		method: "PUT",
 		body: data,
 	});
 }

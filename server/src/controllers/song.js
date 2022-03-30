@@ -142,18 +142,47 @@ exports.destroy = async (req, res) => {
     }
 }
 
-// @route   POST api/song/import
+// @route   PUT api/song/import
 // @desc    Import songs
 // @access  Public
 exports.import = async (req, res) => {
     try {
         const data = await new ProccessFile(req.file).proccessFile();
-        data.tags = req.body.tags || [];
-        const song = new Song(
-            data
-        );
-        await song.save();
-        res.status(200).json(song);
+        let songs = [];
+        for (let i = 0; i < data.length; i++) {
+            data[i].tags = req.body.tags || [];
+            const song = new Song(
+                data[i]
+            );
+            await song.save();
+            songs.push(song);
+        }
+        console.log(songs)
+        res.status(200).json(songs);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+// @route   PUT api/song/export
+// @desc    Export songs
+// @access  Public
+exports.export = async (req, res) => {
+    try {
+        let songids = req.query.id
+        let type = req.query.type
+        console.log(req.query)
+        if (!Array.isArray(songids)) songids = [songids]
+        const songs = await Song.find({
+            _id: {
+                $in: songids
+            }
+        });
+        const path = await new ProccessFile(songs, type).exportSongs();
+        res.status(200).json(path);
     } catch (error) {
         res.status(500).json({
             message: error.message

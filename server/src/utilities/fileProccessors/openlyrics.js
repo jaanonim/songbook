@@ -29,21 +29,26 @@ async function parse(file, text) {
             text: item.lines.join("\n")
         })
     })
-    return {
+    return [{
         title: title,
         author: author.trim(),
         parts: lyrics,
         tags: [],
         other: "",
-    }
+    }]
 }
 
 async function check(file, text) {
+    try {
+        await parseString(text);
+    } catch (e) {
+        return false;
+    }
     return text.indexOf('xmlns="http://openlyrics.info/namespace/2009/song"') != -1;
 }
 
 
 module.exports = {
-    openlyricsParse: parse,
-    openlyricsCheck: check
+    parse: parse,
+    check: check
 }
