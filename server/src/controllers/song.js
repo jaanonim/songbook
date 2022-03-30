@@ -157,10 +157,8 @@ exports.import = async (req, res) => {
             await song.save();
             songs.push(song);
         }
-        console.log(songs)
         res.status(200).json(songs);
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             message: error.message
         })
@@ -174,7 +172,6 @@ exports.export = async (req, res) => {
     try {
         let songids = req.query.id
         let type = req.query.type
-        console.log(req.query)
         if (!Array.isArray(songids)) songids = [songids]
         const songs = await Song.find({
             _id: {

@@ -11,7 +11,6 @@ async function exports(songs) {
             other: song.other,
         });
     }
-    console.log(fs.readdirSync("./"))
     const path = `./static/exports/buildin_${Date.now()}.json`
     fs.writeFileSync(path, JSON.stringify(result));
 
