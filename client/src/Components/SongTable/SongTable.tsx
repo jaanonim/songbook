@@ -4,28 +4,38 @@ import {
 	AlertIcon,
 	AlertTitle,
 	Box,
+	Center,
 	Divider,
 	Flex,
+	IconButton,
 	Input,
 	Progress,
+	Spinner,
 	Table,
 	Tbody,
 	Td,
 	Tooltip,
 	Tr,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { useInfiniteQuery } from "react-query";
 import { useDebounce } from "usehooks-ts";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
 import Song from "../../Models/Song";
 import { getSongs } from "../../Services/api";
 import CreateSong from "../CreateSong";
-import SongTableElement from "../SongTableElement";
 
 interface SongTableProps {
-	onSongClick: (song: Song) => void;
+	onSongUpdate: (songs: Song[] | null) => void;
 	onDelete?: (song: Song) => void;
+	h?: string;
+	w?: string;
+	element: any;
+	selected?: Song[];
+	multiple?: boolean;
+	disableAdd?: boolean;
+	selectAll?: boolean;
 }
 
 function SongTable(props: SongTableProps) {
@@ -34,8 +44,6 @@ function SongTable(props: SongTableProps) {
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setFilter(event.target.value);
 	};
-
-	const [song, setSong] = useState<Song | null>(null);
 
 	const { status, data, error, isFetching, fetchNextPage, hasNextPage } =
 		useInfiniteQuery(["song", debouncedFilter], getSongs, {
@@ -51,15 +59,77 @@ function SongTable(props: SongTableProps) {
 		enabled: !!hasNextPage,
 	});
 
+	const onDoubleClick = (element: any) => {
+		if (songs) {
+			if (songs.filter((ele) => ele._id === element._id).length === 0) {
+				if (multiple) {
+					setSongs([...songs, element]);
+				} else {
+					setSongs([element]);
+				}
+			} else if (multiple) {
+				const s = songs.filter((ele) => ele._id !== element._id);
+				setSongs(s === undefined ? null : s);
+			}
+		} else {
+			setSongs([element]);
+		}
+	};
+
+	const multiple = props.multiple === undefined ? false : props.multiple;
+	const [songs, setSongs] = useState<Song[] | null>(
+		props.selected === undefined ? null : props.selected
+	);
+
+	const [update, setUpdate] = useState(false);
+	const [fetchAll, setFetchAll] = useState<
+		null | ((d: any) => (d: any) => void)
+	>(null);
+	useEffect(() => {
+		if (fetchAll !== null) {
+			if (hasNextPage) {
+				fetchNextPage().then(() => {
+					setUpdate(!update);
+				});
+			} else {
+				fetchAll(data);
+				setFetchAll(null);
+			}
+		}
+	}, [update]);
+
+	useEffect(() => {
+		props.onSongUpdate(songs);
+	}, [songs]);
+
 	return (
 		<Box
-			w="100vw"
-			h="calc(100vh - 2rem)"
+			w={props.w || "100%"}
+			h={`calc(${props.h || "100vh"} - 2rem)`}
 			border="1px"
 			borderColor="rgba(255,255,255,0.1)"
 			borderRadius={5}
 			m="1rem"
 		>
+			{fetchAll !== null ? (
+				<Box pos="relative" top="0" left="0">
+					<Box
+						top="-2px"
+						left="-2px"
+						pos="absolute"
+						zIndex="100"
+						borderRadius={5}
+						w={`calc(${props.w || "100%"} + 4px)`}
+						h={`calc(${props.h || "100vh"} - 2rem + 4px)`}
+						backgroundColor="rgba(0,0,0,0.4)"
+					>
+						<Center h="100%">
+							<Spinner size="xl" />
+						</Center>
+					</Box>
+				</Box>
+			) : null}
+
 			<Box m="1rem" h="2.5rem">
 				<Flex justify="center">
 					<Tooltip label="Use # to search by tag 😉">
@@ -69,12 +139,77 @@ function SongTable(props: SongTableProps) {
 							onChange={handleChange}
 						/>
 					</Tooltip>
-					<CreateSong></CreateSong>
+					{props.disableAdd ? null : <CreateSong />}
+					{props.selectAll && multiple ? (
+						<IconButton
+							aria-label="selcet all"
+							ml="2"
+							icon={<MdCheckBox />}
+							onClick={() => {
+								setFetchAll((d: any) => (d: any) => {
+									const s = [] as Song[];
+
+									d?.pages.forEach((page: any) => {
+										page.docs.forEach((song: Song) => {
+											if (
+												songs === null ||
+												songs.filter(
+													(ele) =>
+														ele._id === song._id
+												).length === 0
+											) {
+												s.push(song);
+											}
+										});
+									});
+									if (s) {
+										if (songs) setSongs([...songs, ...s]);
+										else setSongs(s);
+									}
+								});
+								setUpdate(!update);
+							}}
+						></IconButton>
+					) : null}
+					{props.selectAll && multiple ? (
+						<IconButton
+							aria-label="unselcet all"
+							ml="2"
+							icon={<MdCheckBoxOutlineBlank />}
+							onClick={() => {
+								setFetchAll((d: any) => (d: any) => {
+									if (!songs) return;
+									let s = [...songs];
+
+									d?.pages.forEach((page: any) => {
+										page.docs.forEach((song: Song) => {
+											if (
+												songs.filter(
+													(ele) =>
+														ele._id === song._id
+												).length > 0
+											) {
+												s = s.filter(
+													(ele) =>
+														ele._id !== song._id
+												);
+											}
+										});
+									});
+									setSongs(s);
+								});
+								setUpdate(!update);
+							}}
+						></IconButton>
+					) : null}
 				</Flex>
 			</Box>
 			<Divider />
 
-			<Box h="calc(100vh - 1px - 6.5rem)" overflowY="scroll">
+			<Box
+				h={`calc( ${props.h || "100vh"} - 1px - 6.5rem)`}
+				overflowY="scroll"
+			>
 				{error ? (
 					<Alert
 						status="error"
@@ -104,24 +239,22 @@ function SongTable(props: SongTableProps) {
 									{page.docs.map((element: Song) => {
 										element = new Song(element);
 										return (
-											<SongTableElement
+											<props.element
 												key={element._id}
 												song={element}
 												onDelete={props.onDelete}
 												selected={
-													song?._id === element._id
+													songs
+														? songs?.filter(
+																(ele) =>
+																	ele._id ===
+																	element._id
+														  ).length > 0
+														: false
 												}
-												onDoubleClick={() => {
-													if (
-														song?._id !==
-														element._id
-													) {
-														props.onSongClick(
-															element
-														);
-														setSong(element);
-													}
-												}}
+												onDoubleClick={() =>
+													onDoubleClick(element)
+												}
 											/>
 										);
 									})}

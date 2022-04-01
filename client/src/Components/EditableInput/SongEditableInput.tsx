@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import useUpdateSong from "../../Hooks/useUpdateSong";
-import { firstUpper } from "../../Utilities/text";
+import { firstUpper, limitLength } from "../../Utilities/text";
 
 interface EditableInputProps {
 	id: string;
@@ -34,7 +34,7 @@ function SongEditableInput(props: EditableInputProps) {
 			}}
 			display={props.display}
 			ml={props.ml}
-			value={value}
+			value={isEditing ? value : limitLength(value)}
 			placeholder={isEditing ? `Enter ${props.name}` : `empty`}
 			color={value.length == 0 ? "gray.500" : "white"}
 			onChange={(v) => {

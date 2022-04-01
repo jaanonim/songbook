@@ -13,6 +13,7 @@ import processTag from "../../Utilities/tag";
 interface TagListProps {
 	tags: string[];
 	saveTags?: (str: string[]) => void;
+	editable?: boolean;
 }
 
 function TagList(props: TagListProps) {
@@ -40,51 +41,59 @@ function TagList(props: TagListProps) {
 		}
 	};
 
+	const editable = props.editable == undefined ? true : props.editable;
+
 	return (
 		<>
 			{tags.map((n: string) => (
 				<Tag m="1" key={n}>
 					<TagLabel>{n}</TagLabel>
-					<TagCloseButton
-						onClick={(e) => {
-							e.preventDefault();
-							props.saveTags
-								? props.saveTags(tags.filter((e) => e !== n))
-								: null;
-							setTags(tags.filter((e) => e !== n));
-						}}
-					/>
+					{editable ? (
+						<TagCloseButton
+							onClick={(e) => {
+								e.preventDefault();
+								props.saveTags
+									? props.saveTags(
+											tags.filter((e) => e !== n)
+									  )
+									: null;
+								setTags(tags.filter((e) => e !== n));
+							}}
+						/>
+					) : null}
 				</Tag>
 			))}
-			{edit ? (
-				<Input
-					placeholder="Tag name"
-					size="sm"
-					width="auto"
-					htmlSize={5}
-					onBlur={(e) => {
-						saveTag(e.target.value);
-					}}
-					onKeyDown={(e: any) => {
-						if (e.key === "Enter") {
+			{editable ? (
+				edit ? (
+					<Input
+						placeholder="Tag name"
+						size="sm"
+						width="auto"
+						htmlSize={5}
+						onBlur={(e) => {
 							saveTag(e.target.value);
-						}
-					}}
-					autoFocus={true}
-				/>
-			) : (
-				<IconButton
-					aria-label="Add tag"
-					icon={<AddIcon />}
-					h="1.5rem"
-					w="1.5rem"
-					m="1"
-					onClick={(e) => {
-						e.preventDefault();
-						setEdit(true);
-					}}
-				/>
-			)}
+						}}
+						onKeyDown={(e: any) => {
+							if (e.key === "Enter") {
+								saveTag(e.target.value);
+							}
+						}}
+						autoFocus={true}
+					/>
+				) : (
+					<IconButton
+						aria-label="Add tag"
+						icon={<AddIcon />}
+						h="1.5rem"
+						w="1.5rem"
+						m="1"
+						onClick={(e) => {
+							e.preventDefault();
+							setEdit(true);
+						}}
+					/>
+				)
+			) : null}
 		</>
 	);
 }
