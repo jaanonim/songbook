@@ -1,4 +1,6 @@
 import {
+	Alert,
+	AlertIcon,
 	Button,
 	Center,
 	Heading,
@@ -10,6 +12,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Progress,
 	Radio,
 	RadioGroup,
 	Stack,
@@ -18,8 +21,10 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdDownload } from "react-icons/md";
+import { useQuery } from "react-query";
 import { ExportTypes } from "../../Models/ExportTypes";
 import Song from "../../Models/Song";
+import { exportSong } from "../../Services/api";
 import SongTable from "../SongTable";
 import SongTableElementSmall from "../SongTableElementSmall";
 
@@ -34,6 +39,21 @@ function ExportModal() {
 	const [state, setState] = useState(States.SONG);
 	const [type, setType] = useState(Object.entries(ExportTypes)[0][0]);
 	const [songs, setSongs] = useState<Song[] | null>(null);
+
+	const { isLoading, isError, data, error, refetch } = useQuery(
+		["export", type, songs?.map((s) => s._id)],
+		exportSong,
+		{
+			refetchOnWindowFocus: false,
+			enabled: false,
+			onSuccess: (data) => {
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(data);
+				link.download = "";
+				link.click();
+			},
+		}
+	);
 
 	const myClose = () => {
 		setState(States.SONG);
@@ -74,7 +94,7 @@ function ExportModal() {
 									/>
 								</Stack>
 							</Center>
-						) : (
+						) : state === States.TYPE ? (
 							<Center>
 								<Stack>
 									<Text mb={3}>
@@ -101,31 +121,79 @@ function ExportModal() {
 									</RadioGroup>
 								</Stack>
 							</Center>
+						) : (
+							<Center>
+								<Stack>
+									{isLoading ? (
+										<>
+											<Text mb={3}>
+												Exporting selected songs.
+											</Text>
+											<Progress
+												borderRadius={5}
+												isIndeterminate={true}
+											></Progress>
+										</>
+									) : isError ? (
+										<Alert status="error" borderRadius={5}>
+											<AlertIcon />
+											{(error as Error).message}
+										</Alert>
+									) : (
+										<Alert
+											status="success"
+											borderRadius={5}
+										>
+											<AlertIcon />
+											Export successful.
+										</Alert>
+									)}
+								</Stack>
+							</Center>
 						)}
 					</ModalBody>
 
 					<ModalFooter>
-						<Button
-							mr={3}
-							variant="ghost"
-							onClick={() => {
-								if (state === States.SONG) {
-									myClose();
-								} else {
-									setState(States.SONG);
-								}
-							}}
-						>
-							{state === States.SONG ? "Cancel" : "Back"}
-						</Button>
+						{state !== States.EXPORT ? (
+							<Button
+								mr={3}
+								variant="ghost"
+								onClick={() => {
+									if (state === States.SONG) {
+										myClose();
+									} else {
+										setState(States.SONG);
+									}
+								}}
+							>
+								{state === States.SONG ? "Cancel" : "Back"}
+							</Button>
+						) : (
+							<></>
+						)}
 						<Button
 							colorScheme="blue"
 							onClick={() => {
-								setState(States.TYPE);
+								if (state === States.SONG) {
+									setState(States.TYPE);
+								} else if (state === States.TYPE) {
+									setState(States.EXPORT);
+									refetch();
+								} else {
+									myClose();
+								}
 							}}
-							disabled={songs?.length === 0 || songs == null}
+							disabled={
+								songs?.length === 0 ||
+								songs == null ||
+								isLoading
+							}
 						>
-							{state === States.SONG ? "Next" : "Export"}
+							{state === States.SONG
+								? "Next"
+								: state === States.TYPE
+								? "Export"
+								: "Close"}
 						</Button>
 					</ModalFooter>
 				</ModalContent>

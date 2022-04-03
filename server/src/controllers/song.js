@@ -1,6 +1,10 @@
 const config = require('../config/api');
 const Song = require('../models/song');
 const ProccessFile = require('../utilities/proccessFile');
+const {
+    dirname,
+    join
+} = require('path');
 
 // @route   GET api/song
 // @desc    Get all songs
@@ -170,8 +174,8 @@ exports.import = async (req, res) => {
 // @access  Public
 exports.export = async (req, res) => {
     try {
-        let songids = req.query.id
-        let type = req.query.type
+        let songids = req.body.id
+        let type = req.body.type
         if (!Array.isArray(songids)) songids = [songids]
         const songs = await Song.find({
             _id: {
@@ -179,7 +183,8 @@ exports.export = async (req, res) => {
             }
         });
         const path = await new ProccessFile(songs, type).exportSongs();
-        res.status(200).json(path);
+        const root = dirname(require.main.filename);
+        res.sendFile(join(root, "..", path));
     } catch (error) {
         res.status(500).json({
             message: error.message

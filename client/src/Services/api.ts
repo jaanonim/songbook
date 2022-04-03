@@ -61,4 +61,29 @@ async function importSong(file: any, tags: string[]) {
 	});
 }
 
-export { getSongs, delSong, createSong, updateSong, getSong, importSong };
+async function exportSong(args: any) {
+	const id = args.queryKey[2];
+	const type = args.queryKey[1];
+	const url = `${config.apiUrl}/song/export`;
+	return processRequest(
+		url,
+		{
+			method: "PUT",
+			body: JSON.stringify({ id, type }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		},
+		true
+	);
+}
+
+export {
+	getSongs,
+	delSong,
+	createSong,
+	updateSong,
+	getSong,
+	importSong,
+	exportSong,
+};
