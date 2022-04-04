@@ -209,8 +209,15 @@ function ImportModal() {
 						{uploadProgress !== 100 ? (
 							<>
 								<Button
-									colorScheme="blue"
 									mr={3}
+									variant="ghost"
+									onClick={myClose}
+									isDisabled={uploading}
+								>
+									Cancel
+								</Button>
+								<Button
+									colorScheme="blue"
 									isDisabled={files.length === 0}
 									isLoading={uploading}
 									onClick={async () => {
@@ -219,13 +226,6 @@ function ImportModal() {
 									}}
 								>
 									Import
-								</Button>
-								<Button
-									variant="ghost"
-									onClick={myClose}
-									isDisabled={uploading}
-								>
-									Cancel
 								</Button>
 							</>
 						) : (

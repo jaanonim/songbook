@@ -76,9 +76,11 @@ function CreateSong(props: CreateSongProps) {
 					</ModalBody>
 
 					<ModalFooter>
+						<Button onClick={onClose} mr={3}>
+							Cancel
+						</Button>
 						<Button
 							colorScheme="blue"
-							mr={3}
 							onClick={() => {
 								onClose();
 								create.mutate({
@@ -93,7 +95,6 @@ function CreateSong(props: CreateSongProps) {
 						>
 							Create
 						</Button>
-						<Button onClick={onClose}>Cancel</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

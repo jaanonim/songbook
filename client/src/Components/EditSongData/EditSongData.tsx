@@ -168,7 +168,7 @@ function EditSongData(props: SongPartBoxProps) {
 													harum. Inventore magnam
 													consectetur dolorum totam
 													voluptatem. Non odio aliquid
-													totam quae vero consectetur!{" "}
+													totam quae vero consectetur!
 												</PopoverBody>
 											</PopoverContent>
 										</Popover>
@@ -192,9 +192,11 @@ function EditSongData(props: SongPartBoxProps) {
 						</Tabs>
 					</ModalBody>
 					<ModalFooter>
+						<Button onClick={onClose} mr={3}>
+							Cancel
+						</Button>
 						<Button
 							colorScheme="blue"
-							mr={3}
 							onClick={() => {
 								onClose();
 								props.song.parts =
@@ -210,7 +212,6 @@ function EditSongData(props: SongPartBoxProps) {
 						>
 							Save
 						</Button>
-						<Button onClick={onClose}>Cancel</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

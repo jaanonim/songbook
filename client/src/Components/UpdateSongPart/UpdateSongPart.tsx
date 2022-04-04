@@ -97,9 +97,11 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 						</FormControl>
 					</ModalBody>
 					<ModalFooter>
+						<Button onClick={onClose} mr={3}>
+							Cancel
+						</Button>
 						<Button
 							colorScheme="blue"
-							mr={3}
 							onClick={() => {
 								if (props.part != undefined) {
 									props.song.parts.map((part) => {
@@ -128,7 +130,6 @@ function UpdateSongPart(props: UpdateSongPartProps) {
 						>
 							{props.part ? "Update" : "Create"}
 						</Button>
-						<Button onClick={onClose}>Cancel</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
