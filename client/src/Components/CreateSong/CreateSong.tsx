@@ -16,14 +16,21 @@ import {
 } from "@chakra-ui/react";
 import { RefObject, useRef, useState } from "react";
 import useCreateSong from "../../Hooks/useCreateSong";
+import Song from "../../Models/Song";
 
-const CreateSong = () => {
+interface CreateSongProps {
+	onCreate: (song: Song) => void;
+}
+
+function CreateSong(props: CreateSongProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = useRef() as RefObject<HTMLInputElement>;
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 
-	const create = useCreateSong();
+	const create = useCreateSong((song) => {
+		props.onCreate(song);
+	});
 
 	return (
 		<>
@@ -92,6 +99,6 @@ const CreateSong = () => {
 			</Modal>
 		</>
 	);
-};
+}
 
 export default CreateSong;

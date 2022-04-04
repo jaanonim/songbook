@@ -139,7 +139,13 @@ function SongTable(props: SongTableProps) {
 							onChange={handleChange}
 						/>
 					</Tooltip>
-					{props.disableAdd ? null : <CreateSong />}
+					{props.disableAdd ? null : (
+						<CreateSong
+							onCreate={(song) => {
+								setSongs([song]);
+							}}
+						/>
+					)}
 					{props.selectAll && multiple ? (
 						<IconButton
 							aria-label="selcet all"

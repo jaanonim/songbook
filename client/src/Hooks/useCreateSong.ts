@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "react-query";
 import { createSong } from "../Services/api";
 
-function useCreateSong() {
+function useCreateSong(callback: (song: any) => void) {
 	const queryClient = useQueryClient();
 	const toast = useToast();
 
@@ -19,6 +19,7 @@ function useCreateSong() {
 					status: "success",
 				});
 				queryClient.invalidateQueries("song");
+				callback(newItem);
 			}
 		},
 	});
