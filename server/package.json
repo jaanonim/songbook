@@ -29,12 +29,16 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "xmlbuilder2": "^3.0.2",
+    "zip-lib": "^0.7.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
   },
   "nodemonConfig": {
-    "ignore": ["static/*"]
+    "ignore": [
+      "static/*"
+    ]
   }
 }
