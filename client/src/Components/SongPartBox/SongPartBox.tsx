@@ -8,6 +8,7 @@ import {
 	Spacer,
 	Text,
 } from "@chakra-ui/react";
+import { parseCP } from "simplechordpro";
 import useUpdateSong from "../../Hooks/useUpdateSong";
 import Song from "../../Models/Song";
 import SongPart from "../../Models/SongPart";
@@ -52,8 +53,8 @@ function SongPartBox(props: SongPartBoxInterface) {
 				</Box>
 			</Flex>
 			<Divider />
-			<Text mt="2" mb="2" whiteSpace="pre">
-				{props.part.text}
+			<Text mt="2" mb="2">
+				<pre>{parseCP(props.part.text)}</pre>
 			</Text>
 		</Container>
 	);
