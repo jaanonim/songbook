@@ -108,7 +108,9 @@ function ImportModal() {
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader>Import songs</ModalHeader>
-					<ModalCloseButton isDisabled={uploading} />
+					<ModalCloseButton
+						isDisabled={uploading && uploadProgress !== 100}
+					/>
 					<ModalBody>
 						{!uploading ? (
 							<>
