@@ -13,7 +13,13 @@ async function parse(file, text) {
 }
 
 async function check(file, text) {
-	return true;
+	try {
+		let tags = ChordProTools.lexer(text);
+		if (tags.length < 2) return false;
+		return ChordProTools.parse(text).some((ele) => ele.getData().title);
+	} catch (e) {
+		return false;
+	}
 }
 
 module.exports = {
