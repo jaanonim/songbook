@@ -1,11 +1,13 @@
 const openlyrics = require("./fileProccessors/openlyrics");
 const buildin = require("./fileProccessors/buildin");
+const chordpro = require("./fileProccessors/chordpro");
 const fs = require("fs");
 
 class ProccessFile {
 	TYPES = {
 		openlyrics,
 		buildin,
+		chordpro,
 	};
 
 	constructor(file, type) {
