@@ -1,10 +1,10 @@
 const config = {
-    pangination: {
-        limit: 10,
-    },
-    auth: {
-        expirationDate: 1, //in hours
-    }
-}
+	pangination: {
+		limit: 50,
+	},
+	auth: {
+		expirationDate: 1, //in hours
+	},
+};
 
 module.exports = config;

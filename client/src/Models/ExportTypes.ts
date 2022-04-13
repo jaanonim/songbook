@@ -12,6 +12,10 @@ const ExportTypes = {
 		description:
 			"The ChordPro is an ASCII text file format for transcribing songs with chords and lyrics.",
 	},
+	pdf: {
+		name: "PDF",
+		description: "Export as PDF songbook.",
+	},
 };
 
 export { ExportTypes };

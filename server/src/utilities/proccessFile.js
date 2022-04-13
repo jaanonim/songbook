@@ -1,6 +1,7 @@
 const openlyrics = require("./fileProccessors/openlyrics");
 const buildin = require("./fileProccessors/buildin");
 const chordpro = require("./fileProccessors/chordpro");
+const pdf = require("./fileProccessors/pdf");
 const fs = require("fs");
 
 class ProccessFile {
@@ -8,6 +9,7 @@ class ProccessFile {
 		openlyrics,
 		buildin,
 		chordpro,
+		pdf,
 	};
 
 	constructor(file, type) {
