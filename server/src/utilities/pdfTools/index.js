@@ -130,7 +130,7 @@ module.exports = class SongBook {
 		this.doc.textToLines(part.text).forEach((line) => {
 			const parsed = parseCP(line);
 			const pList = this.doc.textToLines(parsed);
-			if (pList.length > 1) {
+			if (parsed.length !== line.length && pList.length > 1) {
 				const chrods = pList[0];
 				let i = 0;
 				while (i < chrods.length) {
@@ -272,5 +272,4 @@ module.exports = class SongBook {
 	save(path) {
 		this.doc.doc.save(path);
 	}
-}
-
+};
