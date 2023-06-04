@@ -1,14 +1,18 @@
+import { SmallCloseIcon } from "@chakra-ui/icons";
 import {
     Alert,
     AlertDescription,
     AlertIcon,
     AlertTitle,
     Box,
+    Button,
     Center,
     Divider,
     Flex,
     IconButton,
     Input,
+    InputGroup,
+    InputRightElement,
     Progress,
     Spinner,
     Table,
@@ -18,13 +22,14 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
 import { useInfiniteQuery } from "react-query";
 import { useDebounce } from "usehooks-ts";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
 import Song from "../../Models/Song";
 import { getSongs } from "../../Services/api";
 import CreateSong from "../CreateSong";
+import SearchCloseButton from "../SearchCloseButton";
 
 interface SongTableProps {
     onSongUpdate: (songs: Song[] | null) => void;
@@ -133,11 +138,22 @@ function SongTable(props: SongTableProps) {
             <Box m="1rem" h="2.5rem">
                 <Flex justify="center">
                     <Tooltip label="Use # to search by tag 😉">
-                        <Input
-                            placeholder="Search"
-                            value={filter}
-                            onChange={handleChange}
-                        />
+                        <InputGroup>
+                            <Input
+                                placeholder="Search"
+                                value={filter}
+                                onChange={handleChange}
+                            />
+                            {filter ? (
+                                <InputRightElement>
+                                    <SearchCloseButton
+                                        onClick={() => {
+                                            setFilter("");
+                                        }}
+                                    ></SearchCloseButton>
+                                </InputRightElement>
+                            ) : null}
+                        </InputGroup>
                     </Tooltip>
                     {props.disableAdd ? null : (
                         <CreateSong

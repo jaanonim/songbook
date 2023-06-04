@@ -1,0 +1,7 @@
+.button svg {
+    transition: all 0.2s;
+}
+
+.button:hover svg {
+    transform: rotate(90deg) scale(1.2);
+}

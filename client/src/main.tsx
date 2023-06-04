@@ -9,43 +9,52 @@ import "./index.css";
 import theme from "./theme";
 const Manage = React.lazy(() => import("./Pages/Manage"));
 const Selection = React.lazy(() => import("./Pages/Selection"));
+const Present = React.lazy(() => import("./Pages/Present"));
 
 const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			retry: false,
-		},
-	},
+    defaultOptions: {
+        queries: {
+            retry: false,
+        },
+    },
 });
 
 render(
-	<React.StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<ReactQueryDevtools initialIsOpen={false} />
-			<ColorModeScript initialColorMode={theme.config.initialColorMode} />
-			<ChakraProvider theme={theme}>
-				<BrowserRouter>
-					<Routes>
-						<Route
-							path="/"
-							element={
-								<React.Suspense fallback={<Loading />}>
-									<Selection />
-								</React.Suspense>
-							}
-						/>
-						<Route
-							path="/manage"
-							element={
-								<React.Suspense fallback={<Loading />}>
-									<Manage />
-								</React.Suspense>
-							}
-						/>
-					</Routes>
-				</BrowserRouter>
-			</ChakraProvider>
-		</QueryClientProvider>
-	</React.StrictMode>,
-	document.getElementById("root")
+    <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+            <ChakraProvider theme={theme}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <React.Suspense fallback={<Loading />}>
+                                    <Selection />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/manage"
+                            element={
+                                <React.Suspense fallback={<Loading />}>
+                                    <Manage />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/present"
+                            element={
+                                <React.Suspense fallback={<Loading />}>
+                                    <Present />
+                                </React.Suspense>
+                            }
+                        />
+                    </Routes>
+                </BrowserRouter>
+            </ChakraProvider>
+        </QueryClientProvider>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
