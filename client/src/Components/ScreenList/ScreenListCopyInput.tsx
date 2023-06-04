@@ -1,14 +1,26 @@
-import { Box, Input, LinkOverlay, useToast } from "@chakra-ui/react";
+import { Box, Input, useToast } from "@chakra-ui/react";
 import { useClipboard } from "@chakra-ui/react";
+import { RefObject, useEffect, useRef } from "react";
 
-export function ScreenListCopyInput() {
+interface ScreenListCopyInputProps {
+    value: string;
+}
+
+export function ScreenListCopyInput(props: ScreenListCopyInputProps) {
     const toast = useToast();
-    // const { onCopy, value, setValue, hasCopied } = useClipboard("");
+    const { onCopy, setValue } = useClipboard("");
+    const ref = useRef(null) as RefObject<HTMLInputElement>;
+
+    useEffect(() => {
+        setValue(props.value);
+    }, [props.value]);
 
     return (
         <Box
             onClick={() => {
-                console.log("eee");
+                onCopy();
+                ref.current?.focus();
+                ref.current?.select();
                 toast({
                     title: `Copied to clipboard`,
                     status: "success",
@@ -16,8 +28,9 @@ export function ScreenListCopyInput() {
             }}
         >
             <Input
+                ref={ref}
                 disabled
-                value={"B35DE3"}
+                value={props.value}
                 w="11ch"
                 className="input-copy"
             ></Input>

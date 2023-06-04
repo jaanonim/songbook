@@ -4,13 +4,11 @@ import {
     Center,
     Flex,
     Heading,
-    Input,
+    IconButton,
     Spacer,
-    useOutsideClick,
-    useToast,
 } from "@chakra-ui/react";
-import { useRef } from "react";
 import "./ScreenList.css";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ScreenListProps {
     w?: string;
@@ -18,6 +16,8 @@ interface ScreenListProps {
 }
 
 function ScreenList(props: ScreenListProps) {
+    const CODE = "A23AGH";
+
     return (
         <Box w={props.w || "100%"} h={props.h || "100%"} padding={2}>
             <Flex alignContent="center" justifyContent="center">
@@ -27,7 +27,15 @@ function ScreenList(props: ScreenListProps) {
                     </Heading>
                 </Center>
                 <Spacer />
-                <ScreenListCopyInput />
+                <ScreenListCopyInput value={CODE} />
+                <IconButton
+                    ml="2"
+                    aria-label="OpenScreen"
+                    icon={<ExternalLinkIcon></ExternalLinkIcon>}
+                    onClick={() => {
+                        window.open(`/screen?code=${CODE}`, "_blank");
+                    }}
+                ></IconButton>
             </Flex>
         </Box>
     );
