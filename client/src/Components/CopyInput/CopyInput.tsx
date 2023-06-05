@@ -2,11 +2,11 @@ import { Box, Input, useToast } from "@chakra-ui/react";
 import { useClipboard } from "@chakra-ui/react";
 import { RefObject, useEffect, useRef } from "react";
 
-interface ScreenListCopyInputProps {
+interface CopyInputProps {
     value: string;
 }
 
-export function ScreenListCopyInput(props: ScreenListCopyInputProps) {
+function CopyInput(props: CopyInputProps) {
     const toast = useToast();
     const { onCopy, setValue } = useClipboard("");
     const ref = useRef(null) as RefObject<HTMLInputElement>;
@@ -37,3 +37,5 @@ export function ScreenListCopyInput(props: ScreenListCopyInputProps) {
         </Box>
     );
 }
+
+export default CopyInput;

@@ -10,6 +10,8 @@ import theme from "./theme";
 const Manage = React.lazy(() => import("./Pages/Manage"));
 const Selection = React.lazy(() => import("./Pages/Selection"));
 const Present = React.lazy(() => import("./Pages/Present"));
+const Screen = React.lazy(() => import("./Pages/Screen"));
+const ScreenCode = React.lazy(() => import("./Pages/ScreenCode"));
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -48,6 +50,22 @@ render(
                             element={
                                 <React.Suspense fallback={<Loading />}>
                                     <Present />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/screen"
+                            element={
+                                <React.Suspense fallback={<Loading />}>
+                                    <ScreenCode />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/screen/:code"
+                            element={
+                                <React.Suspense fallback={<Loading />}>
+                                    <Screen />
                                 </React.Suspense>
                             }
                         />

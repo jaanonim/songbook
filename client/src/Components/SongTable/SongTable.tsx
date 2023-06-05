@@ -241,7 +241,7 @@ function SongTable(props: SongTableProps) {
                         justifyContent="center"
                         textAlign="center"
                         minHeight="10rem"
-                        width="xl"
+                        width="min(80% , 62em)"
                         m="1rem auto"
                         borderRadius={5}
                     >

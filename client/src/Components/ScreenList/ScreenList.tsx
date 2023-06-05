@@ -1,4 +1,3 @@
-import { ScreenListCopyInput } from "./ScreenListCopyInput";
 import {
     Alert,
     AlertIcon,
@@ -14,6 +13,7 @@ import {
 import "./ScreenList.css";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import CopyInput from "../CopyInput";
 
 interface ScreenListProps {
     w?: string;
@@ -33,13 +33,13 @@ function ScreenList(props: ScreenListProps) {
                     </Heading>
                 </Center>
                 <Spacer />
-                <ScreenListCopyInput value={CODE} />
+                <CopyInput value={CODE} />
                 <IconButton
                     ml="2"
                     aria-label="OpenScreen"
                     icon={<ExternalLinkIcon></ExternalLinkIcon>}
                     onClick={() => {
-                        window.open(`/screen?code=${CODE}`, "_blank");
+                        window.open(`/screen/${CODE}`, "_blank");
                     }}
                 ></IconButton>
             </Flex>
