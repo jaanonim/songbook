@@ -1,27 +1,13 @@
-import { Controls } from "./../../Components/Controls/Controls";
-import {
-    ArrowLeftIcon,
-    ArrowRightIcon,
-    TriangleDownIcon,
-    TriangleUpIcon,
-    ViewIcon,
-    ViewOffIcon,
-} from "@chakra-ui/icons";
-import {
-    Box,
-    Container,
-    Flex,
-    Heading,
-    IconButton,
-    Spacer,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
 import { useState } from "react";
+import ScreenList from "../../Components/ScreenList";
 import SongEdit from "../../Components/SongEdit";
+import SongQueue from "../../Components/SongQueue/SongQueue";
 import SongTable from "../../Components/SongTable";
 import SongTableElementSmall from "../../Components/SongTableElementSmall";
 import Song from "../../Models/Song";
+import { Controls } from "./../../Components/Controls/Controls";
 import "./Present.css";
-import ScreenList from "../../Components/ScreenList";
 
 function Present() {
     const [song, setSong] = useState<Song[] | null>(null);
@@ -79,14 +65,9 @@ function Present() {
                     </Box>
                 </Box>
                 <Box width="20%" padding="1rem">
-                    <Box
-                        width="100%"
-                        height="calc(50% - 1rem)"
-                        backgroundColor="green"
-                    >
-                        Queue
-                    </Box>
-                    <ScreenList w="100%" h="calc(50% - 1rem)" />
+                    <SongQueue w="100%" h="calc(60% - 1.5rem)" />
+                    <Divider padding={2} w="90%" margin="auto" />
+                    <ScreenList w="100%" h="calc(40% - 1.5rem)" />
                 </Box>
             </Flex>
         </>
