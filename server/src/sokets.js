@@ -13,7 +13,7 @@ const initSockets = (server) => {
     });
 
     io.on("connection", async (socket) => {
-        let roomCode = socket.handshake.query.room;
+        let roomCode = socket.handshake.query.code;
         let room;
         if (roomCode) {
             console.log("CONNECTED", "room:", roomCode);

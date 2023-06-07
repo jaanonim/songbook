@@ -14,17 +14,12 @@ module.exports = class Room {
         const screen = new Screen(socket);
         this.screens.push(screen);
         screen.sendData(this.data);
-        this.sendScreenConnected(screen);
+        this.sendScreen();
     }
 
     removeScreen(socket) {
-        const s = this.screens.filter((e) => {
-            e.socket.id == socket.id;
-        });
-        this.screens = this.screens.filter((e) => {
-            e.socket.id != socket.id;
-        });
-        this.sendScreenDisconnected(s);
+        this.screens = this.screens.filter((e) => e.socket.id !== socket.id);
+        this.sendScreen();
     }
 
     seedCode() {
@@ -37,12 +32,10 @@ module.exports = class Room {
         });
     }
 
-    sendScreenConnected(screen) {
-        this.presenter.emit("screen", { screen, status: "connect" });
-    }
-
-    sendScreenDisconnected(screen) {
-        this.presenter.emit("screen", { screen, status: "disconnect" });
+    sendScreen() {
+        this.presenter.emit("screen", {
+            screens: this.screens.map((s) => s.serialize()),
+        });
     }
 
     setData(data, socket) {

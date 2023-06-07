@@ -7,13 +7,17 @@ import {
     Heading,
     IconButton,
     Spacer,
+    Spinner,
     Table,
     Tbody,
+    Td,
+    Tr,
 } from "@chakra-ui/react";
 import "./ScreenList.css";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CopyInput from "../CopyInput";
+import { socket } from "../../Services/socket";
 
 interface ScreenListProps {
     w?: string;
@@ -21,8 +25,37 @@ interface ScreenListProps {
 }
 
 function ScreenList(props: ScreenListProps) {
-    const [screens, setScreens] = useState([]);
-    const CODE = "A23AGH";
+    const [screens, setScreens] = useState([] as any[]);
+    const [code, setCode] = useState(undefined);
+
+    useEffect(() => {
+        socket.connect();
+
+        function onCode(data: any) {
+            setCode(data.code);
+        }
+
+        function onScreen(data: any) {
+            setScreens(data.screens);
+        }
+
+        function onDisconnect() {
+            setCode(undefined);
+        }
+
+        socket.on("code", onCode);
+        socket.on("screen", onScreen);
+        socket.on("disconnect", onDisconnect);
+
+        return () => {
+            socket.off("code", onCode);
+            socket.off("screen", onScreen);
+            socket.off("disconnect", onDisconnect);
+            socket.disconnect();
+        };
+    }, []);
+
+    console.log(screens);
 
     return (
         <Box w={props.w || "100%"} h={props.h || "100%"} padding={2}>
@@ -33,15 +66,23 @@ function ScreenList(props: ScreenListProps) {
                     </Heading>
                 </Center>
                 <Spacer />
-                <CopyInput value={CODE} />
-                <IconButton
-                    ml="2"
-                    aria-label="OpenScreen"
-                    icon={<ExternalLinkIcon></ExternalLinkIcon>}
-                    onClick={() => {
-                        window.open(`/screen/${CODE}`, "_blank");
-                    }}
-                ></IconButton>
+                {code ? (
+                    <>
+                        <CopyInput value={code} />
+                        <IconButton
+                            ml="2"
+                            aria-label="OpenScreen"
+                            icon={<ExternalLinkIcon></ExternalLinkIcon>}
+                            onClick={() => {
+                                window.open(`/screen/${code}`, "_blank");
+                            }}
+                        ></IconButton>
+                    </>
+                ) : (
+                    <Center mx="2rem" mt="1">
+                        <Spinner></Spinner>
+                    </Center>
+                )}
             </Flex>
             <Box
                 h={`calc(100% - 2rem)`}
@@ -67,7 +108,13 @@ function ScreenList(props: ScreenListProps) {
                         </Center>
                     ) : (
                         <Table>
-                            <Tbody></Tbody>
+                            <Tbody>
+                                {screens.map((s) => (
+                                    <Tr key={s.socket}>
+                                        <Td>{s.socket}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
                         </Table>
                     )}
                 </Box>

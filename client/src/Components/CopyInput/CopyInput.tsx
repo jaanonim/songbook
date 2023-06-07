@@ -31,7 +31,8 @@ function CopyInput(props: CopyInputProps) {
                 ref={ref}
                 disabled
                 value={props.value}
-                w="11ch"
+                w="13ch"
+                textAlign="center"
                 className="input-copy"
             ></Input>
         </Box>

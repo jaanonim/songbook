@@ -3,6 +3,10 @@ module.exports = class Screen {
         this.socket = socket;
     }
 
+    serialize() {
+        return { socket: this.socket.id };
+    }
+
     sendData(data) {
         this.socket.emit("show", data);
     }
