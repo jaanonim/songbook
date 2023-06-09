@@ -1,14 +1,13 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Alert, AlertIcon, Box, Center, Heading, Text } from "@chakra-ui/react";
-import React from "react";
+import { Alert, AlertIcon, Center, Heading, Text } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import DeleteSongButton from "../DeleteSongButton";
-import SongEditableInput from "../EditableInput";
 import EditSongData from "../EditSongData";
-import SongPartBox from "../SongPartBox";
+import SongEditableInput from "../EditableInput";
 import SongTagList from "../SongTagList";
 import TagList from "../TagList";
 import UpdateSongPart from "../UpdateSongPart";
+import { SongEditPartsList } from "./SongEditPartsList";
 
 interface SongEditContentProps {
     song: Song;
@@ -88,26 +87,11 @@ export function SongEditContent(props: SongEditContentProps) {
             )}
             <Center>
                 {props.song.parts ? (
-                    <Box
-                        w={"min(100% , calc(70ch + 1rem))"}
-                        overflowY="scroll"
-                        overflowX="hidden"
-                        h={`calc( ${props.h || "100vh"} - ${
-                            props.preview ? "11rem" : "30vh"
-                        })`}
-                        borderBottom="1px"
-                        borderTop="1px"
-                        borderColor="rgba(255,255,255,0.1)"
-                    >
-                        {props.song.parts.map((part) => (
-                            <SongPartBox
-                                key={part.id}
-                                part={part}
-                                song={props.song}
-                                preview={props.preview}
-                            />
-                        ))}
-                    </Box>
+                    <SongEditPartsList
+                        song={props.song}
+                        h={props.h}
+                        preview={props.preview}
+                    />
                 ) : (
                     <Alert
                         status="info"
