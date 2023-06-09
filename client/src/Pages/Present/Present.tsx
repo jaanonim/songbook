@@ -4,10 +4,10 @@ import ScreenList from "../../Components/ScreenList";
 import SongEdit from "../../Components/SongEdit";
 import SongQueue from "../../Components/SongQueue/SongQueue";
 import SongTable from "../../Components/SongTable";
-import SongTableElementSmall from "../../Components/SongTableElementSmall";
 import Song from "../../Models/Song";
 import { Controls } from "./../../Components/Controls/Controls";
 import "./Present.css";
+import SongTableElementDraggable from "../../Components/SongTableElementDraggable/SongTableElementDraggable";
 
 function Present() {
     const [song, setSong] = useState<Song[] | null>(null);
@@ -18,11 +18,11 @@ function Present() {
                 <SongTable
                     w="25%"
                     disableAdd={true}
-                    multiple={true}
+                    multiple={false}
                     onSongUpdate={(s) => {
                         setSong(s !== null ? s : null);
                     }}
-                    element={SongTableElementSmall}
+                    element={SongTableElementDraggable}
                 />
                 <Box w="25%" h="100vh">
                     <Heading as="h3" textAlign="center" margin="1.5rem">
