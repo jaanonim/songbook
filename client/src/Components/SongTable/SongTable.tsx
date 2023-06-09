@@ -1,11 +1,9 @@
-import { SmallCloseIcon } from "@chakra-ui/icons";
 import {
     Alert,
     AlertDescription,
     AlertIcon,
     AlertTitle,
     Box,
-    Button,
     Center,
     Divider,
     Flex,
@@ -22,7 +20,7 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
+import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { useInfiniteQuery } from "react-query";
 import { useDebounce } from "usehooks-ts";
 import useIntersectionObserver from "../../Hooks/useIntersectionObserver";
@@ -50,7 +48,7 @@ function SongTable(props: SongTableProps) {
         setFilter(event.target.value);
     };
 
-    const { status, data, error, isFetching, fetchNextPage, hasNextPage } =
+    const { data, error, isFetching, fetchNextPage, hasNextPage } =
         useInfiniteQuery(["song", debouncedFilter], getSongs, {
             getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
         });
@@ -168,7 +166,7 @@ function SongTable(props: SongTableProps) {
                             ml="2"
                             icon={<MdCheckBox />}
                             onClick={() => {
-                                setFetchAll((d: any) => (d: any) => {
+                                setFetchAll((_d: any) => (d: any) => {
                                     const s = [] as Song[];
 
                                     d?.pages.forEach((page: any) => {
@@ -199,7 +197,7 @@ function SongTable(props: SongTableProps) {
                             ml="2"
                             icon={<MdCheckBoxOutlineBlank />}
                             onClick={() => {
-                                setFetchAll((d: any) => (d: any) => {
+                                setFetchAll((_d: any) => (d: any) => {
                                     if (!songs) return;
                                     let s = [...songs];
 

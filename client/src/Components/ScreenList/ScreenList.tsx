@@ -55,8 +55,6 @@ function ScreenList(props: ScreenListProps) {
         };
     }, []);
 
-    console.log(screens);
-
     return (
         <Box w={props.w || "100%"} h={props.h || "100%"} padding={2}>
             <Flex alignContent="center" justifyContent="center">
