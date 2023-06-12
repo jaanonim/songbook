@@ -19,7 +19,6 @@ interface ControlsProps {
 }
 
 export function Controls(props: ControlsProps) {
-    console.log(props.disabled);
     return (
         <Flex width="100%" marginBottom="0.5rem">
             <IconButton

@@ -60,7 +60,6 @@ function CurrentSong(props: CurrentSongProps) {
                 <SongEdit
                     selected={selected}
                     onSelect={(id) => {
-                        console.log(id);
                         setSelected(id);
                     }}
                     headingSize="l"
