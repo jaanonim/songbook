@@ -1,4 +1,4 @@
-import { SongEditContent } from "./SongEditContent";
+import SongEditContent from "./SongEditContent";
 import { SongEditNoSong } from "./SongEditNoSong";
 import { Box } from "@chakra-ui/react";
 import { useQuery } from "react-query";
@@ -13,6 +13,12 @@ interface SongEditProps {
     id?: string;
     headingSize?: string;
     preview?: boolean;
+    selected?: number | null;
+    onSelect?: (id: number) => void;
+}
+
+export interface SongEditRef {
+    setSelected: (id: number | null) => void;
 }
 
 function SongEditInner(props: SongEditProps) {
@@ -35,6 +41,8 @@ function SongEditInner(props: SongEditProps) {
             preview={props.preview}
             headingSize={props.headingSize}
             h={props.h}
+            onSelect={props.onSelect}
+            selected={props.selected !== undefined ? props.selected : null}
         />
     );
 }
@@ -51,6 +59,8 @@ function SongEdit(props: SongEditProps) {
                 preview={props.preview}
                 headingSize={props.headingSize}
                 h={props.h}
+                onSelect={props.onSelect}
+                selected={props.selected !== undefined ? props.selected : null}
             ></SongEditInner>
         </Box>
     );

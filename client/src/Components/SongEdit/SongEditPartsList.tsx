@@ -1,18 +1,22 @@
-import SongPartBox from "../SongPartBox";
 import { Box } from "@chakra-ui/react";
-import Song from "../../Models/Song";
-import { useCallback, useEffect, useState } from "react";
-import SongPart from "../../Models/SongPart";
 import update from "immutability-helper";
+import { useCallback, useEffect, useState } from "react";
+import Song from "../../Models/Song";
+import SongPart from "../../Models/SongPart";
+import SongPartBox from "../SongPartBox";
 
 interface SongEditPartsListProps {
     song: Song;
     preview?: boolean;
+    selectable?: boolean;
     h?: string;
+    onSelect?: (id: number) => void;
+    selected: number | null;
 }
 
-export function SongEditPartsList(props: SongEditPartsListProps) {
+function SongEditPartsList(props: SongEditPartsListProps) {
     const [parts, setParts] = useState<SongPart[]>(props.song.parts);
+
     useEffect(() => {
         setParts(props.song.parts);
     }, [props.song.parts]);
@@ -39,18 +43,29 @@ export function SongEditPartsList(props: SongEditPartsListProps) {
             borderBottom="1px"
             borderTop="1px"
             borderColor="rgba(255,255,255,0.1)"
+            scrollBehavior="smooth"
         >
             {parts.map((part, i) => (
                 <SongPartBox
                     key={part.id}
+                    selected={props.selected === part.id}
                     part={part}
                     parts={parts}
                     index={i}
                     song={props.song}
                     preview={props.preview}
                     movePart={movePart}
+                    onClick={
+                        props.onSelect
+                            ? () => {
+                                  if (props.onSelect) props.onSelect(part.id);
+                              }
+                            : undefined
+                    }
                 />
             ))}
         </Box>
     );
 }
+
+export default SongEditPartsList;

@@ -9,7 +9,14 @@ import {
     Table,
     Tbody,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import {
+    Ref,
+    forwardRef,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useState,
+} from "react";
 import { useDrop } from "react-dnd";
 import Song from "../../Models/Song";
 import { SongQueueControls } from "./SongQueueControls";
@@ -19,6 +26,7 @@ import update from "immutability-helper";
 interface SongQueueProps {
     w?: string;
     h?: string;
+    onSongHighlighted?: (s: Song | null) => void;
 }
 
 export interface QueueElement {
@@ -26,26 +34,17 @@ export interface QueueElement {
     song: Song;
 }
 
-function SongQueue(props: SongQueueProps) {
+export interface SongQueueRef {
+    deleteElement: (id: number | null) => void;
+    setHighlighted: (id: number | null) => void;
+    addSong: (song: Song, callback?: (id: number) => void) => void;
+}
+
+function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
     const [queue, setQueue] = useState<QueueElement[]>([]);
     const [selected, setSelected] = useState<null | number>(null);
     const [highlighted, setHighlighted] = useState<null | number>(null);
-    const [highlight, drop] = useDrop<Song, void, boolean>({
-        accept: "Song",
-        drop: (song: Song) => {
-            setQueue((q) => {
-                const id = q.reduce((p, c) => (p < c.id ? c.id : p), 0) + 1;
-                return [
-                    ...q,
-                    {
-                        id,
-                        song,
-                    },
-                ];
-            });
-        },
-        collect: (monitor) => monitor.isOver() && monitor.canDrop(),
-    });
+
     const moveElement = useCallback((dragIndex: number, hoverIndex: number) => {
         setQueue((p: QueueElement[]) =>
             update(p, {
@@ -56,6 +55,57 @@ function SongQueue(props: SongQueueProps) {
             })
         );
     }, []);
+
+    const deleteElement = useCallback((id: number | null) => {
+        setSelected((c) => (c === id ? null : c));
+        setHighlighted((c) => (c === id ? null : c));
+        setQueue((q) => q.filter((e) => e.id !== id));
+    }, []);
+
+    const addSong = useCallback((song: Song, callback?: (id: number) => {}) => {
+        setQueue((q) => {
+            const id = q.reduce((p, c) => (p < c.id ? c.id : p), 0) + 1;
+            if (callback) callback(id);
+            return [
+                ...q,
+                {
+                    id,
+                    song,
+                },
+            ];
+        });
+    }, []);
+
+    useEffect(() => {
+        const song = queue.find((ele) => ele.id === highlighted)?.song;
+        if (props.onSongHighlighted)
+            props.onSongHighlighted(song ? song : null);
+    }, [highlighted]);
+
+    const [{ canDrop, isOver }, drop] = useDrop<
+        Song,
+        void,
+        { [key: string]: boolean }
+    >({
+        accept: "Song",
+        drop: (song: Song) => {
+            addSong(song);
+        },
+        collect: (monitor) => ({
+            canDrop: monitor.canDrop(),
+            isOver: monitor.isOver(),
+        }),
+    });
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            deleteElement,
+            setHighlighted,
+            addSong,
+        }),
+        []
+    );
 
     return (
         <Box w={props.w || "100%"} h={props.h || "100%"} padding={2} ref={drop}>
@@ -69,8 +119,7 @@ function SongQueue(props: SongQueueProps) {
                 <SongQueueControls
                     isDisabled={selected === null}
                     onDelete={() => {
-                        setSelected(null);
-                        setQueue((q) => q.filter((e) => e.id !== selected));
+                        deleteElement(selected);
                         return false;
                     }}
                     onSelect={() => {
@@ -80,11 +129,14 @@ function SongQueue(props: SongQueueProps) {
             </Flex>
             <Box
                 h={`calc(100% - 2.5rem)`}
-                borderWidth={highlight ? "3px" : "1px"}
-                padding={highlight ? "0" : "2px"}
-                borderStyle={highlight ? "dashed" : "solid"}
-                borderColor={highlight ? "blue.300" : "rgba(255,255,255,0.1)"}
+                borderWidth={canDrop ? "3px" : "1px"}
+                padding={canDrop ? "0" : "2px"}
+                borderStyle={canDrop ? "dashed" : "solid"}
+                borderColor={canDrop ? "blue.300" : "rgba(255,255,255,0.1)"}
                 borderRadius={5}
+                backgroundColor={
+                    canDrop && isOver ? "rgba(99, 179, 237,0.1)" : undefined
+                }
                 mt="1rem"
             >
                 <Box h="100%" w="100%" overflowY="scroll">
@@ -134,4 +186,4 @@ function SongQueue(props: SongQueueProps) {
     );
 }
 
-export default SongQueue;
+export default forwardRef<SongQueueRef, SongQueueProps>(SongQueue);

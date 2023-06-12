@@ -9,7 +9,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import type { Identifier, XYCoord } from "dnd-core";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { parseCP } from "simplechordpro";
 import useUpdateSong from "../../Hooks/useUpdateSong";
@@ -25,8 +25,10 @@ interface SongPartBoxProps {
     song: Song;
     parts: SongPart[];
     preview?: boolean;
+    selected: boolean;
     index: number;
     movePart: (dragIndex: number, hoverIndex: number) => void;
+    onClick?: () => void;
 }
 
 interface Item {
@@ -97,6 +99,11 @@ function SongPartBox(props: SongPartBoxProps) {
             isDragging: monitor.isDragging(),
         }),
     });
+    useEffect(() => {
+        if (props.selected) {
+            ref.current?.scrollIntoView();
+        }
+    }, [ref, props.selected]);
 
     const opacity = isDragging ? 0.4 : 1;
 
@@ -105,13 +112,21 @@ function SongPartBox(props: SongPartBoxProps) {
     return (
         <Container
             ref={ref}
-            border="2px"
-            borderRadius="5"
+            border={props.selected ? "4px" : "1px"}
+            padding={
+                props.selected
+                    ? "calc(var(--chakra-space-4) - 3px)"
+                    : "var(--chakra-space-4)"
+            }
+            borderRadius={props.selected ? "8" : "5"}
+            borderColor={props.selected ? "blue.300" : undefined}
             mt="4"
             mb="4"
             style={{ opacity }}
             data-handler-id={handlerId}
             className="draggable"
+            onClick={props.onClick}
+            cursor={props.onClick ? "pointer" : undefined}
         >
             <Flex justify="center" mt="2" mb="2">
                 <Box p="2">

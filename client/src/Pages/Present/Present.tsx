@@ -1,29 +1,39 @@
 import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import CurrentSong from "../../Components/CurrentSong";
+import DeleteDropzone from "../../Components/DeleteDropzone/DeleteDropzone";
 import ScreenList from "../../Components/ScreenList";
 import SongEdit from "../../Components/SongEdit";
-import SongQueue from "../../Components/SongQueue/SongQueue";
+import SongQueue, { SongQueueRef } from "../../Components/SongQueue/SongQueue";
 import SongTable from "../../Components/SongTable";
-import Song from "../../Models/Song";
-import { Controls } from "./../../Components/Controls/Controls";
-import "./Present.css";
 import SongTableElementDraggable from "../../Components/SongTableElementDraggable/SongTableElementDraggable";
+import Song from "../../Models/Song";
+import "./Present.css";
 
 function Present() {
-    const [song, setSong] = useState<Song[] | null>(null);
+    const [preview, setPreview] = useState<Song | null>(null);
+    const [song, setSong] = useState<Song | null>(null);
+    const songQueue = useRef<SongQueueRef>(null);
 
     return (
         <>
             <Flex>
-                <SongTable
-                    w="25%"
-                    disableAdd={true}
-                    multiple={false}
-                    onSongUpdate={(s) => {
-                        setSong(s !== null ? s : null);
-                    }}
-                    element={SongTableElementDraggable}
-                />
+                <Box w="25%" position={"relative"}>
+                    <SongTable
+                        w="calc(100% - 2rem)"
+                        disableAdd={true}
+                        multiple={false}
+                        onSongUpdate={(s) => {
+                            setPreview(s !== null ? s[0] : null);
+                        }}
+                        element={SongTableElementDraggable}
+                    />
+                    <DeleteDropzone
+                        onQueueElement={(item) => {
+                            songQueue.current?.deleteElement(item.id);
+                        }}
+                    ></DeleteDropzone>
+                </Box>
                 <Box w="25%" h="100vh">
                     <Heading as="h3" textAlign="center" margin="1.5rem">
                         Preview
@@ -32,40 +42,35 @@ function Present() {
                         headingSize="l"
                         w="calc(100% - 2rem)"
                         h="calc(100vh - 4rem)"
-                        key={song?.at(-1)?._id}
-                        id={song?.at(-1)?._id}
+                        key={preview?._id}
+                        id={preview?._id}
                         preview={true}
                     ></SongEdit>
                 </Box>
-                <Box width="30%" padding="1rem" height="calc(100vh - 2rem)">
-                    <Box
-                        className="preview_box"
-                        height="30%"
-                        marginTop="0.5rem"
-                        marginBottom="0.5rem"
-                        backgroundColor="black"
-                    >
-                        <Box
-                            className="preview_box_screen"
-                            border="1px solid #fff"
-                        >
-                            <p>Preview</p>
-                        </Box>
-                    </Box>
-                    <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
-                        <Controls />
-                        <SongEdit
-                            headingSize="l"
-                            w="calc(100% - 2rem)"
-                            h="calc(70vh - 3rem)"
-                            key={song?.at(-1)?._id}
-                            id={song?.at(-1)?._id}
-                            preview={true}
-                        ></SongEdit>
-                    </Box>
-                </Box>
+
+                <Divider h="95vh" margin="auto" orientation="vertical" />
+
+                <CurrentSong
+                    song={song}
+                    onQueueElement={(item) => {
+                        songQueue.current?.setHighlighted(item.id);
+                    }}
+                    onSongDragged={(song) => {
+                        songQueue.current?.addSong(song, (id) => {
+                            songQueue.current?.setHighlighted(id);
+                        });
+                    }}
+                />
+
                 <Box width="20%" padding="1rem">
-                    <SongQueue w="100%" h="calc(60% - 1.5rem)" />
+                    <SongQueue
+                        ref={songQueue}
+                        w="100%"
+                        h="calc(60% - 1.5rem)"
+                        onSongHighlighted={(s) => {
+                            setSong(s);
+                        }}
+                    />
                     <Divider padding={2} w="90%" margin="auto" />
                     <ScreenList w="100%" h="calc(40% - 1.5rem)" />
                 </Box>

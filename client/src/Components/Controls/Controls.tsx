@@ -7,7 +7,6 @@ import {
     ViewOffIcon,
 } from "@chakra-ui/icons";
 import { Flex, IconButton, Spacer } from "@chakra-ui/react";
-import React from "react";
 
 interface ControlsProps {
     onPreviousSong?: () => void;
@@ -16,9 +15,11 @@ interface ControlsProps {
     onNextSlide?: () => void;
     onShow?: () => void;
     onHide?: () => void;
+    disabled?: boolean;
 }
 
 export function Controls(props: ControlsProps) {
+    console.log(props.disabled);
     return (
         <Flex width="100%" marginBottom="0.5rem">
             <IconButton
@@ -26,12 +27,14 @@ export function Controls(props: ControlsProps) {
                 aria-label="previous song"
                 icon={<ArrowLeftIcon></ArrowLeftIcon>}
                 onClick={props.onPreviousSong}
+                isDisabled={props.disabled}
             ></IconButton>
             <IconButton
                 marginX={2}
                 aria-label="next song"
                 icon={<ArrowRightIcon></ArrowRightIcon>}
                 onClick={props.onNextSong}
+                isDisabled={props.disabled}
             ></IconButton>
 
             <Spacer></Spacer>
@@ -41,12 +44,14 @@ export function Controls(props: ControlsProps) {
                 aria-label="previous slide"
                 icon={<TriangleUpIcon></TriangleUpIcon>}
                 onClick={props.onPreviousSlide}
+                isDisabled={props.disabled}
             ></IconButton>
             <IconButton
                 marginX={2}
                 aria-label="next slide"
                 icon={<TriangleDownIcon></TriangleDownIcon>}
                 onClick={props.onNextSlide}
+                isDisabled={props.disabled}
             ></IconButton>
 
             <Spacer></Spacer>
@@ -56,12 +61,14 @@ export function Controls(props: ControlsProps) {
                 aria-label="hide"
                 icon={<ViewOffIcon></ViewOffIcon>}
                 onClick={props.onHide}
+                isDisabled={props.disabled}
             ></IconButton>
             <IconButton
                 marginX={2}
                 aria-label="show"
                 icon={<ViewIcon></ViewIcon>}
                 onClick={props.onShow}
+                isDisabled={props.disabled}
             ></IconButton>
         </Flex>
     );

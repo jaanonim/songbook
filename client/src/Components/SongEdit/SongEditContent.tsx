@@ -7,16 +7,18 @@ import SongEditableInput from "../EditableInput";
 import SongTagList from "../SongTagList";
 import TagList from "../TagList";
 import UpdateSongPart from "../UpdateSongPart";
-import { SongEditPartsList } from "./SongEditPartsList";
+import SongEditPartsList from "./SongEditPartsList";
 
 interface SongEditContentProps {
     song: Song;
     preview?: boolean;
     headingSize?: string;
     h?: string;
+    selected: number | null;
+    onSelect?: (id: number) => void;
 }
 
-export function SongEditContent(props: SongEditContentProps) {
+function SongEditContent(props: SongEditContentProps) {
     return (
         <>
             <Center>
@@ -88,9 +90,11 @@ export function SongEditContent(props: SongEditContentProps) {
             <Center>
                 {props.song.parts ? (
                     <SongEditPartsList
+                        selected={props.selected}
                         song={props.song}
                         h={props.h}
                         preview={props.preview}
+                        onSelect={props.onSelect}
                     />
                 ) : (
                     <Alert
@@ -109,3 +113,5 @@ export function SongEditContent(props: SongEditContentProps) {
         </>
     );
 }
+
+export default SongEditContent;

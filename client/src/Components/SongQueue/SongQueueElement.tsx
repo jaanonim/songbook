@@ -17,7 +17,7 @@ interface SongQueueElementProps {
     moveElement: (dragIndex: number, hoverIndex: number) => void;
 }
 
-interface QueueElementDraggable {
+export interface QueueElementDraggable {
     index: number;
     id: number;
 }
