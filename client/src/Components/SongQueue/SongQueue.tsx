@@ -9,6 +9,7 @@ import {
     Table,
     Tbody,
 } from "@chakra-ui/react";
+import update from "immutability-helper";
 import {
     Ref,
     forwardRef,
@@ -21,7 +22,6 @@ import { useDrop } from "react-dnd";
 import Song from "../../Models/Song";
 import { SongQueueControls } from "./SongQueueControls";
 import SongQueueElement from "./SongQueueElement";
-import update from "immutability-helper";
 
 interface SongQueueProps {
     w?: string;
@@ -38,6 +38,8 @@ export interface SongQueueRef {
     deleteElement: (id: number | null) => void;
     setHighlighted: (id: number | null) => void;
     addSong: (song: Song, callback?: (id: number) => void) => void;
+    nextSong: () => void;
+    previousSong: () => void;
 }
 
 function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
@@ -99,12 +101,28 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
 
     useImperativeHandle(
         ref,
-        () => ({
-            deleteElement,
-            setHighlighted,
-            addSong,
-        }),
-        []
+        () => {
+            return {
+                deleteElement,
+                setHighlighted,
+                addSong,
+                nextSong: () => {
+                    setHighlighted((h) => {
+                        let idx = queue.findIndex((ele) => ele.id === h);
+                        if (idx + 1 >= queue.length) idx = -1;
+                        return queue[idx + 1].id;
+                    });
+                },
+                previousSong: () => {
+                    setHighlighted((h) => {
+                        let idx = queue.findIndex((ele) => ele.id === h);
+                        if (idx - 1 < 0) idx = queue.length;
+                        return queue[idx - 1].id;
+                    });
+                },
+            };
+        },
+        [queue]
     );
 
     return (
@@ -128,7 +146,7 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
                 />
             </Flex>
             <Box
-                h={`calc(100% - 2.5rem)`}
+                h={`calc(100% - 4rem)`}
                 borderWidth={canDrop ? "3px" : "1px"}
                 padding={canDrop ? "0" : "2px"}
                 borderStyle={canDrop ? "dashed" : "solid"}
@@ -139,7 +157,7 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
                 }
                 mt="1rem"
             >
-                <Box h="100%" w="100%" overflowY="scroll">
+                <Box h="100%" w="100%" overflowY="scroll" scrollBehavior="auto">
                     {queue.length == 0 ? (
                         <Center w="100%" h="100%">
                             <Alert

@@ -4,7 +4,7 @@ import Song from "../../Models/Song";
 import { QueueElement } from "./SongQueue";
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from "dnd-core";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface SongQueueElementProps {
     element: QueueElement;
@@ -24,6 +24,12 @@ export interface QueueElementDraggable {
 
 function SongQueueElement(props: SongQueueElementProps) {
     const ref = useRef<HTMLTableRowElement>(null);
+
+    useEffect(() => {
+        if (props.highlighted) {
+            ref.current?.scrollIntoView();
+        }
+    }, [ref, props.highlighted]);
 
     const [{ handlerId }, drop] = useDrop<
         QueueElementDraggable,

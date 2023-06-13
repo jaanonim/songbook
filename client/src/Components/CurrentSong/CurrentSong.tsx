@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Song from "../../Models/Song";
 import { Controls } from "../Controls/Controls";
 import SongEdit from "../SongEdit";
@@ -10,10 +10,16 @@ interface CurrentSongProps {
     song: Song | null;
     onSongDragged: (song: Song) => void;
     onQueueElement: (element: QueueElementDraggable) => void;
+    onNextSong?: () => void;
+    onPreviousSong?: () => void;
 }
 
 function CurrentSong(props: CurrentSongProps) {
     const [selected, setSelected] = useState<number | null>(null);
+    useEffect(() => {
+        if (props.song) setSelected(props.song.parts[0].id);
+        else setSelected(null);
+    }, [props.song]);
 
     return (
         <Box
@@ -55,6 +61,8 @@ function CurrentSong(props: CurrentSongProps) {
                         if (idx - 1 < 0) idx = props.song.parts.length;
                         setSelected(idx - 1);
                     }}
+                    onNextSong={props.onNextSong}
+                    onPreviousSong={props.onPreviousSong}
                     disabled={props.song === null}
                 />
                 <SongEdit

@@ -99,6 +99,7 @@ function SongPartBox(props: SongPartBoxProps) {
             isDragging: monitor.isDragging(),
         }),
     });
+    
     useEffect(() => {
         if (props.selected) {
             ref.current?.scrollIntoView();

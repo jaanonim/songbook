@@ -60,9 +60,15 @@ function Present() {
                             songQueue.current?.setHighlighted(id);
                         });
                     }}
+                    onNextSong={() => {
+                        songQueue.current?.nextSong();
+                    }}
+                    onPreviousSong={() => {
+                        songQueue.current?.previousSong();
+                    }}
                 />
 
-                <Box width="20%" padding="1rem">
+                <Box width="20%" padding="1rem" height="100vh">
                     <SongQueue
                         ref={songQueue}
                         w="100%"
@@ -71,7 +77,7 @@ function Present() {
                             setSong(s);
                         }}
                     />
-                    <Divider padding={2} w="90%" margin="auto" />
+                    <Divider padding="0.5rem" w="90%" margin="auto" />
                     <ScreenList w="100%" h="calc(40% - 1.5rem)" />
                 </Box>
             </Flex>
