@@ -37,8 +37,13 @@ const initSockets = (server) => {
         socket.join(roomCode);
 
         socket.on("show", (data) => {
-            console.log("SHOW", data);
+            console.log("SHOW", JSON.stringify(data));
             room.setData(data, socket);
+        });
+
+        socket.on("screenInfo", (data) => {
+            console.log("screenInfo", JSON.stringify(data));
+            room.setScreenInfo(data, socket);
         });
 
         socket.on("disconnecting", () => {

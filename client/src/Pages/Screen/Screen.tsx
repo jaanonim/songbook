@@ -1,5 +1,5 @@
 import { Box, Heading, IconButton, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,9 +8,10 @@ import ScreenView from "../../Components/ScreenView/ScreenView";
 import TopLeftCorner from "../../Components/TopLeftCorner/TopLeftCorner";
 import TopRightCorner from "../../Components/TopRightCorner/TopRightCorner";
 import useWindowFocus from "../../Hooks/useWindowFocus";
-import SongPart from "../../Models/SongPart";
 import { getSocket } from "../../Services/socket";
 import "./Screen.css";
+import ShowData from "../../Models/ShowData";
+import { useDebouncedCallback } from "use-debounce";
 
 function Screen() {
     const { code } = useParams();
@@ -18,12 +19,23 @@ function Screen() {
     const isFocused = useWindowFocus();
     const toast = useToast();
     const navigate = useNavigate();
-    const [data, setData] = useState<null | SongPart>(null);
+    const [data, setData] = useState<null | ShowData>(null);
+    const socket = useMemo(
+        () =>
+            getSocket({
+                code: code as string,
+            }),
+        []
+    );
+
+    const onResize = useDebouncedCallback(() => {
+        socket.emit("screenInfo", {
+            height: window.innerHeight,
+            width: window.innerWidth,
+        });
+    }, 300);
 
     useEffect(() => {
-        const socket = getSocket({
-            code: code as string,
-        });
         socket.connect();
 
         function onKick(data: any) {
@@ -45,15 +57,19 @@ function Screen() {
             setData(obj.data);
         }
 
+        onResize();
+
         socket.on("kick", onKick);
         socket.on("connect", onConnect);
         socket.on("show", onShow);
+        window.addEventListener("resize", onResize);
 
         return () => {
             socket.off("kick", onKick);
             socket.off("connect", onConnect);
             socket.off("show", onShow);
             socket.disconnect();
+            window.removeEventListener("resize", onResize);
         };
     }, []);
 

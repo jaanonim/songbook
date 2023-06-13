@@ -1,9 +1,9 @@
 import { AbsoluteCenter, Box } from "@chakra-ui/react";
 import { parseCP } from "simplechordpro";
-import SongPart from "../../Models/SongPart";
+import ShowData from "../../Models/ShowData";
 
 interface ScreenViewProps {
-    data: null | SongPart;
+    data: null | ShowData;
 }
 
 function ScreenView(props: ScreenViewProps) {
@@ -15,9 +15,11 @@ function ScreenView(props: ScreenViewProps) {
             position="relative"
             textAlign="center"
         >
-            <AbsoluteCenter axis="both">
-                <pre>{parseCP(props.data ? props.data.text : "")}</pre>
-            </AbsoluteCenter>
+            {props.data?.isHidden ? null : (
+                <AbsoluteCenter axis="both">
+                    <pre>{parseCP(props.data ? props.data.part.text : "")}</pre>
+                </AbsoluteCenter>
+            )}
         </Box>
     );
 }

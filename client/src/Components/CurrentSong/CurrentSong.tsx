@@ -1,11 +1,12 @@
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Song from "../../Models/Song";
+import { socket } from "../../Services/socket";
 import { Controls } from "../Controls/Controls";
 import SongEdit from "../SongEdit";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
 import CurrentSongDrop from "./CurrentSongDrop";
-import { socket } from "../../Services/socket";
+import { CurrentSongPreview } from "./CurrentSongPreview";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -13,24 +14,33 @@ interface CurrentSongProps {
     onQueueElement: (element: QueueElementDraggable) => void;
     onNextSong?: () => void;
     onPreviousSong?: () => void;
+    isScreen: boolean;
 }
 
 function CurrentSong(props: CurrentSongProps) {
     const [selected, setSelected] = useState<number | null>(null);
+    const [isHidden, setIsHidden] = useState(false);
     useEffect(() => {
         if (props.song) setSelected(props.song.parts[0].id);
         else setSelected(null);
     }, [props.song]);
 
+    const getData = useCallback(() => {
+        if (!props.song) return null;
+
+        const part = props.song.parts.find((p) => p.id === selected);
+        if (!part) return null;
+
+        return { part, isHidden };
+    }, [props.song, selected, isHidden]);
+
     useEffect(() => {
         if (socket.connected) {
             socket.emit("show", {
-                data: props.song
-                    ? props.song.parts.find((p) => p.id === selected)
-                    : null,
+                data: getData(),
             });
         }
-    }, [props.song, selected]);
+    }, [getData]);
 
     return (
         <Box
@@ -43,17 +53,7 @@ function CurrentSong(props: CurrentSongProps) {
                 onQueueElement={props.onQueueElement}
                 onSongDragged={props.onSongDragged}
             ></CurrentSongDrop>
-            <Box
-                className="preview_box"
-                height="30%"
-                marginTop="0.5rem"
-                marginBottom="0.5rem"
-                backgroundColor="black"
-            >
-                <Box className="preview_box_screen" border="1px solid #fff">
-                    <p>Preview</p>
-                </Box>
-            </Box>
+            <CurrentSongPreview isScreen={props.isScreen} data={getData()} />
             <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
                 <Controls
                     onNextSlide={() => {
@@ -74,6 +74,13 @@ function CurrentSong(props: CurrentSongProps) {
                     }}
                     onNextSong={props.onNextSong}
                     onPreviousSong={props.onPreviousSong}
+                    onHide={() => {
+                        setIsHidden(true);
+                    }}
+                    onShow={() => {
+                        setIsHidden(false);
+                    }}
+                    isHidden={isHidden}
                     disabled={props.song === null}
                 />
                 <SongEdit

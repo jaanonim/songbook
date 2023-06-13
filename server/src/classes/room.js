@@ -20,6 +20,8 @@ module.exports = class Room {
     removeScreen(socket) {
         this.screens = this.screens.filter((e) => e.socket.id !== socket.id);
         this.sendScreen();
+        if (this.screens.length > 0)
+            this.sendScreenInfo(this.screens[0].screenInfo);
     }
 
     seedCode() {
@@ -45,6 +47,18 @@ module.exports = class Room {
         }
         this.data = data;
         this.sendData();
+    }
+
+    setScreenInfo(data, socket) {
+        const screen = this.screens.find((s) => s.socket.id === socket.id);
+        screen.setScreenInfo(data);
+        if (socket.id === this.screens[0]?.socket.id) {
+            this.sendScreenInfo(data);
+        }
+    }
+
+    sendScreenInfo(data) {
+        this.presenter.emit("screenInfo", data);
     }
 
     drop() {

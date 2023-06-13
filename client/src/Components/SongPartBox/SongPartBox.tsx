@@ -99,7 +99,7 @@ function SongPartBox(props: SongPartBoxProps) {
             isDragging: monitor.isDragging(),
         }),
     });
-    
+
     useEffect(() => {
         if (props.selected) {
             ref.current?.scrollIntoView();
@@ -165,7 +165,7 @@ function SongPartBox(props: SongPartBoxProps) {
             </Flex>
             <Divider />
             <Text mt="2" mb="2" as="div">
-                <pre>{parseCP(props.part.text)}</pre>
+                <pre className="pre-warp">{parseCP(props.part.text)}</pre>
             </Text>
         </Container>
     );

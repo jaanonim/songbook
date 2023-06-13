@@ -22,6 +22,7 @@ import { socket } from "../../Services/socket";
 interface ScreenListProps {
     w?: string;
     h?: string;
+    onScreenChange?: (isConnected: boolean) => void;
 }
 
 function ScreenList(props: ScreenListProps) {
@@ -36,6 +37,8 @@ function ScreenList(props: ScreenListProps) {
         }
 
         function onScreen(data: any) {
+            if (props.onScreenChange)
+                props.onScreenChange(data.screens.length > 0);
             setScreens(data.screens);
         }
 

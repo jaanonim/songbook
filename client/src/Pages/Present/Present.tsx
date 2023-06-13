@@ -12,6 +12,7 @@ import "./Present.css";
 
 function Present() {
     const [preview, setPreview] = useState<Song | null>(null);
+    const [hasScreenConnected, setHasScreenConnected] = useState(false);
     const [song, setSong] = useState<Song | null>(null);
     const songQueue = useRef<SongQueueRef>(null);
 
@@ -52,6 +53,7 @@ function Present() {
 
                 <CurrentSong
                     song={song}
+                    isScreen={hasScreenConnected}
                     onQueueElement={(item) => {
                         songQueue.current?.setHighlighted(item.id);
                     }}
@@ -78,7 +80,13 @@ function Present() {
                         }}
                     />
                     <Divider padding="0.5rem" w="90%" margin="auto" />
-                    <ScreenList w="100%" h="calc(40% - 1.5rem)" />
+                    <ScreenList
+                        w="100%"
+                        h="calc(40% - 1.5rem)"
+                        onScreenChange={(isConnected) => {
+                            setHasScreenConnected(isConnected);
+                        }}
+                    />
                 </Box>
             </Flex>
         </>

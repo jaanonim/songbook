@@ -16,6 +16,7 @@ interface ControlsProps {
     onShow?: () => void;
     onHide?: () => void;
     disabled?: boolean;
+    isHidden?: boolean;
 }
 
 export function Controls(props: ControlsProps) {
@@ -55,20 +56,23 @@ export function Controls(props: ControlsProps) {
 
             <Spacer></Spacer>
 
-            <IconButton
-                marginX={2}
-                aria-label="hide"
-                icon={<ViewOffIcon></ViewOffIcon>}
-                onClick={props.onHide}
-                isDisabled={props.disabled}
-            ></IconButton>
-            <IconButton
-                marginX={2}
-                aria-label="show"
-                icon={<ViewIcon></ViewIcon>}
-                onClick={props.onShow}
-                isDisabled={props.disabled}
-            ></IconButton>
+            {props.isHidden ? (
+                <IconButton
+                    marginX={2}
+                    aria-label="show"
+                    icon={<ViewIcon></ViewIcon>}
+                    onClick={props.onShow}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            ) : (
+                <IconButton
+                    marginX={2}
+                    aria-label="hide"
+                    icon={<ViewOffIcon></ViewOffIcon>}
+                    onClick={props.onHide}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            )}
         </Flex>
     );
 }
