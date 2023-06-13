@@ -1,20 +1,16 @@
-import {
-    Center,
-    Container,
-    Heading,
-    IconButton,
-    useToast,
-} from "@chakra-ui/react";
+import { Box, Heading, IconButton, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
-import TopRightCorner from "../../Components/TopRightCorner/TopRightCorner";
-import "./Screen.css";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import useWindowFocus from "../../Hooks/useWindowFocus";
 import CopyInput from "../../Components/CopyInput/CopyInput";
+import ScreenView from "../../Components/ScreenView/ScreenView";
 import TopLeftCorner from "../../Components/TopLeftCorner/TopLeftCorner";
+import TopRightCorner from "../../Components/TopRightCorner/TopRightCorner";
+import useWindowFocus from "../../Hooks/useWindowFocus";
+import SongPart from "../../Models/SongPart";
 import { getSocket } from "../../Services/socket";
-import { useEffect } from "react";
+import "./Screen.css";
 
 function Screen() {
     const { code } = useParams();
@@ -22,6 +18,7 @@ function Screen() {
     const isFocused = useWindowFocus();
     const toast = useToast();
     const navigate = useNavigate();
+    const [data, setData] = useState<null | SongPart>(null);
 
     useEffect(() => {
         const socket = getSocket({
@@ -44,12 +41,18 @@ function Screen() {
             });
         }
 
+        function onShow(obj: any) {
+            setData(obj.data);
+        }
+
         socket.on("kick", onKick);
         socket.on("connect", onConnect);
+        socket.on("show", onShow);
 
         return () => {
             socket.off("kick", onKick);
             socket.off("connect", onConnect);
+            socket.off("show", onShow);
             socket.disconnect();
         };
     }, []);
@@ -85,9 +88,17 @@ function Screen() {
                     </>
                 ) : null}
 
-                <Container as="main">
-                    <Center></Center>
-                </Container>
+                <Box
+                    position="fixed"
+                    top={0}
+                    left={0}
+                    w="100vw"
+                    h="100vh"
+                    fontSize="100vh"
+                    pointerEvents={"none"}
+                >
+                    <ScreenView data={data} />
+                </Box>
             </div>
         </FullScreen>
     );

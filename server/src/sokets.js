@@ -37,7 +37,8 @@ const initSockets = (server) => {
         socket.join(roomCode);
 
         socket.on("show", (data) => {
-            this.room.setData(data);
+            console.log("SHOW", data);
+            room.setData(data, socket);
         });
 
         socket.on("disconnecting", () => {

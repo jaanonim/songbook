@@ -5,6 +5,7 @@ import { Controls } from "../Controls/Controls";
 import SongEdit from "../SongEdit";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
 import CurrentSongDrop from "./CurrentSongDrop";
+import { socket } from "../../Services/socket";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -20,6 +21,16 @@ function CurrentSong(props: CurrentSongProps) {
         if (props.song) setSelected(props.song.parts[0].id);
         else setSelected(null);
     }, [props.song]);
+
+    useEffect(() => {
+        if (socket.connected) {
+            socket.emit("show", {
+                data: props.song
+                    ? props.song.parts.find((p) => p.id === selected)
+                    : null,
+            });
+        }
+    }, [props.song, selected]);
 
     return (
         <Box
