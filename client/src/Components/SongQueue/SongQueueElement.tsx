@@ -93,9 +93,8 @@ function SongQueueElement(props: SongQueueElementProps) {
             ref={ref}
             opacity={opacity}
             className="noselect"
-            backgroundColor={
-                props.selected ? "var(--chakra-colors-blue-800)" : "none"
-            }
+            borderWidth={props.selected ? "2px" : 0}
+            borderColor={"blue.300"}
             key={props.element.song._id}
             onClick={props.onClick}
             onDoubleClick={props.onDoubleClick}

@@ -14,10 +14,11 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import "./ScreenList.css";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import CopyInput from "../CopyInput";
 import { socket } from "../../Services/socket";
+import DeleteButton from "../DeleteButton/DeleteButton";
 
 interface ScreenListProps {
     w?: string;
@@ -92,7 +93,7 @@ function ScreenList(props: ScreenListProps) {
                 borderRadius={5}
                 mt="1rem"
             >
-                <Box h="100%" w="100%" overflowY="scroll">
+                <Box h="100%" w="100%" overflowY="scroll" overflowX="hidden">
                     {screens.length == 0 ? (
                         <Center w="100%" h="100%">
                             <Alert
@@ -113,6 +114,17 @@ function ScreenList(props: ScreenListProps) {
                                 {screens.map((s) => (
                                     <Tr key={s.socket}>
                                         <Td>{s.socket}</Td>
+                                        <Td>
+                                            <DeleteButton
+                                                icon={<NotAllowedIcon />}
+                                                onClick={() => {
+                                                    socket.emit("kick", {
+                                                        id: s.socket,
+                                                    });
+                                                    return false;
+                                                }}
+                                            ></DeleteButton>
+                                        </Td>
                                     </Tr>
                                 ))}
                             </Tbody>

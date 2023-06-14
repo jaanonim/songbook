@@ -7,6 +7,7 @@ interface DeleteButtonProps {
     marginX?: string;
     isDisabled?: boolean;
     onClick?: (e: any) => boolean;
+    icon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 }
 
 function DeleteButton(props: DeleteButtonProps) {
@@ -27,7 +28,7 @@ function DeleteButton(props: DeleteButtonProps) {
                 }
             }}
             isLoading={loading}
-            icon={<DeleteIcon />}
+            icon={props.icon || <DeleteIcon />}
         ></IconButton>
     );
 }

@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from "react";
 import Song from "../../Models/Song";
 import { socket } from "../../Services/socket";
 import { Controls } from "../Controls/Controls";
-import SongEdit from "../SongEdit";
+import { SongEditNoApi } from "../SongEdit";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
 import CurrentSongDrop from "./CurrentSongDrop";
 import { CurrentSongPreview } from "./CurrentSongPreview";
+import useKey from "../../Hooks/useKey";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -42,6 +43,34 @@ function CurrentSong(props: CurrentSongProps) {
         }
     }, [getData]);
 
+    const nextSlide = useCallback(() => {
+        if (props.song == null) return;
+        let idx = props.song.parts.findIndex((part) => part.id === selected);
+        if (idx + 1 >= props.song.parts.length) idx = -1;
+        setSelected(idx + 1);
+    }, [props.song, selected]);
+
+    const previousSlide = useCallback(() => {
+        if (props.song == null) return;
+        let idx = props.song.parts.findIndex((part) => part.id === selected);
+        if (idx - 1 < 0) idx = props.song.parts.length;
+        setSelected(idx - 1);
+    }, [props.song, selected]);
+
+    useKey(
+        (e) => {
+            if (props.song === null) return;
+            if (e.key === "ArrowUp") {
+                previousSlide();
+            } else if (e.key === "ArrowDown") {
+                nextSlide();
+            } else if (e.key === ".") {
+                setIsHidden((h) => !h);
+            }
+        },
+        [props.song, selected]
+    );
+
     return (
         <Box
             width="30%"
@@ -56,22 +85,8 @@ function CurrentSong(props: CurrentSongProps) {
             <CurrentSongPreview isScreen={props.isScreen} data={getData()} />
             <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
                 <Controls
-                    onNextSlide={() => {
-                        if (props.song == null) return;
-                        let idx = props.song.parts.findIndex(
-                            (part) => part.id === selected
-                        );
-                        if (idx + 1 >= props.song.parts.length) idx = -1;
-                        setSelected(idx + 1);
-                    }}
-                    onPreviousSlide={() => {
-                        if (props.song == null) return;
-                        let idx = props.song.parts.findIndex(
-                            (part) => part.id === selected
-                        );
-                        if (idx - 1 < 0) idx = props.song.parts.length;
-                        setSelected(idx - 1);
-                    }}
+                    onNextSlide={nextSlide}
+                    onPreviousSlide={previousSlide}
                     onNextSong={props.onNextSong}
                     onPreviousSong={props.onPreviousSong}
                     onHide={() => {
@@ -83,7 +98,7 @@ function CurrentSong(props: CurrentSongProps) {
                     isHidden={isHidden}
                     disabled={props.song === null}
                 />
-                <SongEdit
+                <SongEditNoApi
                     selected={selected}
                     onSelect={(id) => {
                         setSelected(id);
@@ -91,10 +106,9 @@ function CurrentSong(props: CurrentSongProps) {
                     headingSize="l"
                     w="calc(100% - 2rem)"
                     h="calc(70vh - 3rem)"
-                    key={props.song?._id}
-                    id={props.song?._id}
+                    song={props.song}
                     preview={true}
-                ></SongEdit>
+                ></SongEditNoApi>
             </Box>
         </Box>
     );

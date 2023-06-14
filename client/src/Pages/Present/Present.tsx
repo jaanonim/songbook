@@ -3,18 +3,26 @@ import { useRef, useState } from "react";
 import CurrentSong from "../../Components/CurrentSong";
 import DeleteDropzone from "../../Components/DeleteDropzone/DeleteDropzone";
 import ScreenList from "../../Components/ScreenList";
-import SongEdit from "../../Components/SongEdit";
+import { SongEditNoApi } from "../../Components/SongEdit";
 import SongQueue, { SongQueueRef } from "../../Components/SongQueue/SongQueue";
 import SongTable from "../../Components/SongTable";
 import SongTableElementDraggable from "../../Components/SongTableElementDraggable/SongTableElementDraggable";
 import Song from "../../Models/Song";
 import "./Present.css";
+import useKey from "../../Hooks/useKey";
 
 function Present() {
     const [preview, setPreview] = useState<Song | null>(null);
     const [hasScreenConnected, setHasScreenConnected] = useState(false);
     const [song, setSong] = useState<Song | null>(null);
     const songQueue = useRef<SongQueueRef>(null);
+    useKey((e: any) => {
+        if (e.key === "ArrowRight") {
+            songQueue.current?.nextSong();
+        } else if (e.key === "ArrowLeft") {
+            songQueue.current?.previousSong();
+        }
+    });
 
     return (
         <>
@@ -39,14 +47,13 @@ function Present() {
                     <Heading as="h3" textAlign="center" margin="1.5rem">
                         Preview
                     </Heading>
-                    <SongEdit
+                    <SongEditNoApi
                         headingSize="l"
                         w="calc(100% - 2rem)"
                         h="calc(100vh - 4rem)"
-                        key={preview?._id}
-                        id={preview?._id}
+                        song={preview}
                         preview={true}
-                    ></SongEdit>
+                    ></SongEditNoApi>
                 </Box>
 
                 <Divider h="95vh" margin="auto" orientation="vertical" />

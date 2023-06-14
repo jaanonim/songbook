@@ -1,1 +1,1 @@
-export { default } from "./SongEdit";
+export { SongEdit, SongEditNoApi } from "./SongEdit";

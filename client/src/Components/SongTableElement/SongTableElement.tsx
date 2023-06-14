@@ -14,9 +14,8 @@ function SongTableElement(props: SongTableElementProps) {
     return (
         <Tr
             className="noselect"
-            backgroundColor={
-                props.selected ? "var(--chakra-colors-blue-800)" : "none"
-            }
+            borderWidth={props.selected ? "2px" : 0}
+            borderColor={"blue.300"}
             key={props.song._id}
             onClick={(e: any) => {
                 if (props.onSelect) props.onSelect(e);

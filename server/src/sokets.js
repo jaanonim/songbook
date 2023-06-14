@@ -41,6 +41,11 @@ const initSockets = (server) => {
             room.setData(data, socket);
         });
 
+        socket.on("kick", (data) => {
+            console.log("KICK", JSON.stringify(data));
+            room.kick(data, socket);
+        });
+
         socket.on("screenInfo", (data) => {
             console.log("screenInfo", JSON.stringify(data));
             room.setScreenInfo(data, socket);

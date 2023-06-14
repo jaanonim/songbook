@@ -107,18 +107,20 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
                 setHighlighted,
                 addSong,
                 nextSong: () => {
-                    setHighlighted((h) => {
-                        let idx = queue.findIndex((ele) => ele.id === h);
-                        if (idx + 1 >= queue.length) idx = -1;
-                        return queue[idx + 1].id;
-                    });
+                    if (queue.length > 0)
+                        setHighlighted((h) => {
+                            let idx = queue.findIndex((ele) => ele.id === h);
+                            if (idx + 1 >= queue.length) idx = -1;
+                            return queue[idx + 1].id;
+                        });
                 },
                 previousSong: () => {
-                    setHighlighted((h) => {
-                        let idx = queue.findIndex((ele) => ele.id === h);
-                        if (idx - 1 < 0) idx = queue.length;
-                        return queue[idx - 1].id;
-                    });
+                    if (queue.length > 0)
+                        setHighlighted((h) => {
+                            let idx = queue.findIndex((ele) => ele.id === h);
+                            if (idx - 1 < 0) idx = queue.length;
+                            return queue[idx - 1].id;
+                        });
                 },
             };
         },

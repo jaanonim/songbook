@@ -17,6 +17,16 @@ interface SongEditProps {
     onSelect?: (id: number) => void;
 }
 
+interface SongEditNoApiProps {
+    h?: string;
+    w?: string;
+    song: Song | null;
+    headingSize?: string;
+    preview?: boolean;
+    selected?: number | null;
+    onSelect?: (id: number) => void;
+}
+
 export interface SongEditRef {
     setSelected: (id: number | null) => void;
 }
@@ -66,4 +76,37 @@ function SongEdit(props: SongEditProps) {
     );
 }
 
-export default SongEdit;
+function SongEditNoApiInner(props: SongEditNoApiProps) {
+    if (!props.song) return <SongEditNoSong />;
+    return (
+        <SongEditContent
+            song={props.song}
+            preview={props.preview}
+            headingSize={props.headingSize}
+            h={props.h}
+            onSelect={props.onSelect}
+            selected={props.selected !== undefined ? props.selected : null}
+        />
+    );
+}
+
+function SongEditNoApi(props: SongEditNoApiProps) {
+    return (
+        <Box
+            margin="1rem"
+            w={props.w || "100vw"}
+            h={`calc(${props.h || "100vh"} - 2rem)`}
+        >
+            <SongEditNoApiInner
+                song={props.song}
+                preview={props.preview}
+                headingSize={props.headingSize}
+                h={props.h}
+                onSelect={props.onSelect}
+                selected={props.selected !== undefined ? props.selected : null}
+            />
+        </Box>
+    );
+}
+
+export { SongEdit, SongEditNoApi };

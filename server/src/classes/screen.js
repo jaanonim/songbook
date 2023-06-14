@@ -12,6 +12,11 @@ module.exports = class Screen {
         this.socket.emit("show", data);
     }
 
+    onKick() {
+        this.socket.emit("kick", { message: "Disconnected by presenter." });
+        this.socket.disconnect();
+    }
+
     onDrop() {
         this.socket.emit("kick", { message: "Room closed." });
         this.socket.disconnect();

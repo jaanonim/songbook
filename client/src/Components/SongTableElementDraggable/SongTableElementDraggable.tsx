@@ -27,12 +27,10 @@ function SongTableElementDraggable(props: SongTableElementDraggableProps) {
             className="noselect"
             opacity={isDragging ? 0.4 : 1}
             backgroundColor={
-                isDragging
-                    ? "var(--chakra-colors-chakra-body-bg)"
-                    : props.selected
-                    ? "var(--chakra-colors-blue-800)"
-                    : "none"
+                isDragging ? "var(--chakra-colors-chakra-body-bg)" : "none"
             }
+            borderWidth={props.selected ? "2px" : 0}
+            borderColor={"blue.300"}
             key={props.song._id}
             onClick={(e: any) => {
                 if (props.onSelect) props.onSelect(e);

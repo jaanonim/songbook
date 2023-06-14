@@ -61,6 +61,18 @@ module.exports = class Room {
         this.presenter.emit("screenInfo", data);
     }
 
+    kick(data, socket) {
+        if (socket.id !== this.presenter.id) {
+            console.log("Not presenter");
+            return;
+        }
+        const s = this.screens.find((e) => e.socket.id === data.id);
+        if (s) {
+            s.onKick();
+            this.removeScreen(s.socket);
+        }
+    }
+
     drop() {
         this.screens.forEach((s) => {
             s.onDrop();

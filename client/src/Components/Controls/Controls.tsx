@@ -6,7 +6,7 @@ import {
     ViewIcon,
     ViewOffIcon,
 } from "@chakra-ui/icons";
-import { Flex, IconButton, Spacer } from "@chakra-ui/react";
+import { Flex, IconButton, Spacer, Tooltip } from "@chakra-ui/react";
 
 interface ControlsProps {
     onPreviousSong?: () => void;
@@ -22,56 +22,70 @@ interface ControlsProps {
 export function Controls(props: ControlsProps) {
     return (
         <Flex width="100%" marginBottom="0.5rem">
-            <IconButton
-                marginX={2}
-                aria-label="previous song"
-                icon={<ArrowLeftIcon></ArrowLeftIcon>}
-                onClick={props.onPreviousSong}
-                isDisabled={props.disabled}
-            ></IconButton>
-            <IconButton
-                marginX={2}
-                aria-label="next song"
-                icon={<ArrowRightIcon></ArrowRightIcon>}
-                onClick={props.onNextSong}
-                isDisabled={props.disabled}
-            ></IconButton>
+            <Tooltip label="Previous song [Left Arrow]">
+                <IconButton
+                    marginX={2}
+                    aria-label="previous song"
+                    icon={<ArrowLeftIcon></ArrowLeftIcon>}
+                    onClick={props.onPreviousSong}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            </Tooltip>
+
+            <Tooltip label="Next song [Right Arrow]">
+                <IconButton
+                    marginX={2}
+                    aria-label="next song"
+                    icon={<ArrowRightIcon></ArrowRightIcon>}
+                    onClick={props.onNextSong}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            </Tooltip>
 
             <Spacer></Spacer>
 
-            <IconButton
-                marginX={2}
-                aria-label="previous slide"
-                icon={<TriangleUpIcon></TriangleUpIcon>}
-                onClick={props.onPreviousSlide}
-                isDisabled={props.disabled}
-            ></IconButton>
-            <IconButton
-                marginX={2}
-                aria-label="next slide"
-                icon={<TriangleDownIcon></TriangleDownIcon>}
-                onClick={props.onNextSlide}
-                isDisabled={props.disabled}
-            ></IconButton>
+            <Tooltip label="Previous slide [Up Arrow]">
+                <IconButton
+                    marginX={2}
+                    aria-label="previous slide"
+                    icon={<TriangleUpIcon></TriangleUpIcon>}
+                    onClick={props.onPreviousSlide}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            </Tooltip>
+
+            <Tooltip label="Next slide [Down Arrow]">
+                <IconButton
+                    marginX={2}
+                    aria-label="next slide"
+                    icon={<TriangleDownIcon></TriangleDownIcon>}
+                    onClick={props.onNextSlide}
+                    isDisabled={props.disabled}
+                ></IconButton>
+            </Tooltip>
 
             <Spacer></Spacer>
 
             {props.isHidden ? (
-                <IconButton
-                    marginX={2}
-                    aria-label="show"
-                    icon={<ViewIcon></ViewIcon>}
-                    onClick={props.onShow}
-                    isDisabled={props.disabled}
-                ></IconButton>
+                <Tooltip label="Show screen [.]">
+                    <IconButton
+                        marginX={2}
+                        aria-label="show"
+                        icon={<ViewIcon></ViewIcon>}
+                        onClick={props.onShow}
+                        isDisabled={props.disabled}
+                    ></IconButton>
+                </Tooltip>
             ) : (
-                <IconButton
-                    marginX={2}
-                    aria-label="hide"
-                    icon={<ViewOffIcon></ViewOffIcon>}
-                    onClick={props.onHide}
-                    isDisabled={props.disabled}
-                ></IconButton>
+                <Tooltip label="Hide screen [.]">
+                    <IconButton
+                        marginX={2}
+                        aria-label="hide"
+                        icon={<ViewOffIcon></ViewOffIcon>}
+                        onClick={props.onHide}
+                        isDisabled={props.disabled}
+                    ></IconButton>
+                </Tooltip>
             )}
         </Flex>
     );
