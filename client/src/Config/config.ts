@@ -2,7 +2,7 @@ const environment = import.meta.env.PROD;
 
 const production = {
     apiUrl: "/api",
-    socketUrl: `"https://${import.meta.env.SOCKET_URL}/"`,
+    socketUrl: "/",
 };
 const development = {
     apiUrl: "http://localhost:5000/api",
