@@ -1,8 +1,8 @@
-const environment = process.env.NODE_ENV;
+const environment = process.env.ENV;
 
 const production = {
     apiUrl: "/api",
-    socketUrl: `"https://https://songbook.onrender.com/"`,
+    socketUrl: `"https://${process.env.BASE_URL}/"`,
 };
 const development = {
     apiUrl: "http://localhost:5000/api",
