@@ -1,8 +1,9 @@
 const environment = process.env.NODE_ENV;
+const base_url = process.env.BASE_URL;
 
 const production = {
     apiUrl: "/api",
-    socketUrl: `"/"`,
+    socketUrl: `"ws://${base_url}/"`,
 };
 const development = {
     apiUrl: "http://localhost:5000/api",
