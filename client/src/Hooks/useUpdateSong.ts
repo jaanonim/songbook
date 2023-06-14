@@ -6,7 +6,7 @@ function useUpdateSong(title: string) {
     const queryClient = useQueryClient();
     const toast = useToast();
     const update = useMutation(updateSong, {
-        onSettled: (newItem, error, variables, context) => {
+        onSettled: (_newItem, error, _variables, _context) => {
             if (error) {
                 toast({
                     title: (error as Error).message,
