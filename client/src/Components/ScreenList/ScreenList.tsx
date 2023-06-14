@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
     Alert,
     AlertIcon,
@@ -13,12 +14,13 @@ import {
     Td,
     Tr,
 } from "@chakra-ui/react";
-import "./ScreenList.css";
-import { ExternalLinkIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
-import CopyInput from "../CopyInput";
+import ScreenSettings from "../../Models/ScreenSettings";
 import { socket } from "../../Services/socket";
-import DeleteButton from "../DeleteButton/DeleteButton";
+import CopyInput from "../CopyInput";
+import "./ScreenList.css";
+import { ScreenListElement } from "./ScreenListElement";
+import ScreenData, { ScreenDataNotNull } from "../../Models/ScreenData";
 
 interface ScreenListProps {
     w?: string;
@@ -27,7 +29,7 @@ interface ScreenListProps {
 }
 
 function ScreenList(props: ScreenListProps) {
-    const [screens, setScreens] = useState([] as any[]);
+    const [screens, setScreens] = useState([] as ScreenData[]);
     const [code, setCode] = useState(undefined);
 
     useEffect(() => {
@@ -37,9 +39,17 @@ function ScreenList(props: ScreenListProps) {
             setCode(data.code);
         }
 
-        function onScreen(data: any) {
+        function onScreen(data: { screens: ScreenData[] }) {
             if (props.onScreenChange)
                 props.onScreenChange(data.screens.length > 0);
+            data.screens.forEach((screen: ScreenData) => {
+                if (!screen.settings) {
+                    socket.emit(
+                        "screenSettings",
+                        new ScreenSettings(screen.socket)
+                    );
+                }
+            });
             setScreens(data.screens);
         }
 
@@ -111,22 +121,21 @@ function ScreenList(props: ScreenListProps) {
                     ) : (
                         <Table>
                             <Tbody>
-                                {screens.map((s) => (
-                                    <Tr key={s.socket}>
-                                        <Td>{s.socket}</Td>
-                                        <Td>
-                                            <DeleteButton
-                                                icon={<NotAllowedIcon />}
-                                                onClick={() => {
-                                                    socket.emit("kick", {
-                                                        id: s.socket,
-                                                    });
-                                                    return false;
-                                                }}
-                                            ></DeleteButton>
-                                        </Td>
-                                    </Tr>
-                                ))}
+                                {screens.map((s: ScreenData) =>
+                                    s.settings === null ? (
+                                        <Tr key={s.socket}>
+                                            <Td>
+                                                <Center>
+                                                    <Spinner></Spinner>
+                                                </Center>
+                                            </Td>
+                                        </Tr>
+                                    ) : (
+                                        <ScreenListElement
+                                            data={s as ScreenDataNotNull}
+                                        />
+                                    )
+                                )}
                             </Tbody>
                         </Table>
                     )}

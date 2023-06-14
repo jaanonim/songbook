@@ -12,10 +12,14 @@ import { getSocket } from "../../Services/socket";
 import "./Screen.css";
 import ShowData from "../../Models/ShowData";
 import { useDebouncedCallback } from "use-debounce";
+import ScreenSettings from "../../Models/ScreenSettings";
 
 function Screen() {
     const { code } = useParams();
     const fullscreenHandle = useFullScreenHandle();
+    const [settings, setSettings] = useState<ScreenSettings>(
+        new ScreenSettings("null")
+    );
     const isFocused = useWindowFocus();
     const toast = useToast();
     const navigate = useNavigate();
@@ -57,17 +61,23 @@ function Screen() {
             setData(obj.data);
         }
 
+        function onScreenSettings(settings: ScreenSettings) {
+            setSettings(settings);
+        }
+
         onResize();
 
-        socket.on("kick", onKick);
         socket.on("connect", onConnect);
         socket.on("show", onShow);
+        socket.on("screenSettings", onScreenSettings);
+        socket.on("kick", onKick);
         window.addEventListener("resize", onResize);
 
         return () => {
-            socket.off("kick", onKick);
             socket.off("connect", onConnect);
             socket.off("show", onShow);
+            socket.off("screenSettings", onScreenSettings);
+            socket.off("kick", onKick);
             socket.disconnect();
             window.removeEventListener("resize", onResize);
         };
@@ -80,7 +90,7 @@ function Screen() {
                     <>
                         <TopLeftCorner>
                             <Heading as="h2" size="md" margin={1}>
-                                Screen Name
+                                {settings.name}
                             </Heading>
                         </TopLeftCorner>
                         <TopRightCorner>

@@ -61,6 +61,20 @@ module.exports = class Room {
         this.presenter.emit("screenInfo", data);
     }
 
+    setScreenSettings(data, socket) {
+        if (socket.id !== this.presenter.id) {
+            console.log("Not presenter");
+            return;
+        }
+        const screen = this.screens.find((s) => s.socket.id === data.id);
+        if (!screen) {
+            console.log("Bad screen id");
+            return;
+        }
+        screen.setSettings(data);
+        this.sendScreen();
+    }
+
     kick(data, socket) {
         if (socket.id !== this.presenter.id) {
             console.log("Not presenter");

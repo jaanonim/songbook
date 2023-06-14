@@ -2,14 +2,24 @@ module.exports = class Screen {
     constructor(socket) {
         this.socket = socket;
         this.screenInfo = null;
+        this.settings = null;
     }
 
     serialize() {
-        return { socket: this.socket.id };
+        return { socket: this.socket.id, settings: this.settings };
     }
 
     sendData(data) {
         this.socket.emit("show", data);
+    }
+
+    setSettings(data) {
+        this.settings = data;
+        this.sendScreenSetting();
+    }
+
+    sendScreenSetting() {
+        this.socket.emit("screenSettings", this.settings);
     }
 
     onKick() {
