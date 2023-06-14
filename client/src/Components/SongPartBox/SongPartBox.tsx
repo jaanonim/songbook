@@ -19,6 +19,7 @@ import { firstUpper } from "../../Utilities/text";
 import DeleteButton from "../DeleteButton";
 import AddSongPart from "../UpdateSongPart";
 import "./SongPartBox.css";
+import DragTypes from "../../Models/DragTypes";
 
 interface SongPartBoxProps {
     part: SongPart;
@@ -45,7 +46,7 @@ function SongPartBox(props: SongPartBoxProps) {
         void,
         { handlerId: Identifier | null }
     >({
-        accept: "SongPartBox",
+        accept: DragTypes.SongPartBox,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
@@ -91,7 +92,7 @@ function SongPartBox(props: SongPartBoxProps) {
     });
 
     const [{ isDragging }, drag, dragPreview] = useDrag({
-        type: "SongPartBox",
+        type: DragTypes.SongPartBox,
         item: () => {
             return { index: props.index, id: props.part.id };
         },

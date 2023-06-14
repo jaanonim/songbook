@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { useDrop } from "react-dnd";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
+import DragTypes from "../../Models/DragTypes";
 
 interface DeleteDropzoneProps {
     onQueueElement: (element: QueueElementDraggable) => void;
@@ -12,7 +13,7 @@ function DeleteDropzone(props: DeleteDropzoneProps) {
         void,
         { [key: string]: boolean }
     >({
-        accept: ["SongElement"],
+        accept: [DragTypes.QueueElement],
         drop: (item: QueueElementDraggable) => {
             props.onQueueElement(item);
         },

@@ -2,6 +2,7 @@ import { Td, Tr } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import TagList from "../TagList";
 import { useDrag } from "react-dnd";
+import DragTypes from "../../Models/DragTypes";
 
 interface SongTableElementDraggableProps {
     song: Song;
@@ -12,7 +13,7 @@ interface SongTableElementDraggableProps {
 
 function SongTableElementDraggable(props: SongTableElementDraggableProps) {
     const [{ isDragging }, drag] = useDrag({
-        type: "Song",
+        type: DragTypes.SongTableElement,
         item: () => {
             return props.song;
         },

@@ -22,6 +22,7 @@ import { useDrop } from "react-dnd";
 import Song from "../../Models/Song";
 import { SongQueueControls } from "./SongQueueControls";
 import SongQueueElement from "./SongQueueElement";
+import DragTypes from "../../Models/DragTypes";
 
 interface SongQueueProps {
     w?: string;
@@ -89,7 +90,7 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
         void,
         { [key: string]: boolean }
     >({
-        accept: "Song",
+        accept: DragTypes.SongTableElement,
         drop: (song: Song) => {
             addSong(song);
         },

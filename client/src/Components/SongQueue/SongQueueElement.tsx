@@ -5,6 +5,7 @@ import { QueueElement } from "./SongQueue";
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from "dnd-core";
 import { useEffect, useRef } from "react";
+import DragTypes from "../../Models/DragTypes";
 
 interface SongQueueElementProps {
     element: QueueElement;
@@ -36,7 +37,7 @@ function SongQueueElement(props: SongQueueElementProps) {
         void,
         { handlerId: Identifier | null }
     >({
-        accept: "SongElement",
+        accept: DragTypes.QueueElement,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
@@ -74,7 +75,7 @@ function SongQueueElement(props: SongQueueElementProps) {
     });
 
     const [{ isDragging }, drag] = useDrag({
-        type: "SongElement",
+        type: DragTypes.QueueElement,
         item: () => {
             return { index: props.index, id: props.element.id };
         },

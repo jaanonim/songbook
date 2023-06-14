@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { useDrop } from "react-dnd";
 import Song from "../../Models/Song";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
+import DragTypes from "../../Models/DragTypes";
 
 interface CurrentSongDropProps {
     onSongDragged: (song: Song) => void;
@@ -14,7 +15,7 @@ function CurrentSongDrop(props: CurrentSongDropProps) {
         void,
         { [key: string]: boolean }
     >({
-        accept: ["Song", "SongElement"],
+        accept: [DragTypes.SongTableElement, DragTypes.QueueElement],
         drop: (item: Song | QueueElementDraggable) => {
             if (item instanceof Song) props.onSongDragged(item);
             else props.onQueueElement(item);
