@@ -132,6 +132,7 @@ function ScreenList(props: ScreenListProps) {
                                         </Tr>
                                     ) : (
                                         <ScreenListElement
+                                            key={s.socket}
                                             data={s as ScreenDataNotNull}
                                         />
                                     )

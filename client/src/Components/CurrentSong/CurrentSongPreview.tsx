@@ -1,8 +1,9 @@
-import { AbsoluteCenter, Box, useDimensions } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { AbsoluteCenter, Box } from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
 import { socket } from "../../Services/socket";
 import ScreenView from "../ScreenView";
 import ShowData from "../../Models/ShowData";
+import { useElementSize } from "usehooks-ts";
 
 interface CurrentSongPreviewProps {
     data: null | ShowData;
@@ -10,29 +11,28 @@ interface CurrentSongPreviewProps {
 }
 
 export function CurrentSongPreview(props: CurrentSongPreviewProps) {
-    const ref = useRef(null);
-    const dimensionsParent = useDimensions(ref);
+    const [ref, { width, height }] = useElementSize();
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    const [aspectRatio, setAspectRatio] = useState(1);
+
+    const updateSize = useCallback(() => {
+        const calculateDimensions = (aspectRatio: number) => {
+            const parentH = height ? height : 0;
+            const parentW = width ? width : 0;
+            const w = parentH * aspectRatio;
+            const h = parentW / aspectRatio;
+
+            if (parentW < w) return { width: parentW, height: h };
+            return { width: w, height: parentH };
+        };
+
+        setDimensions(calculateDimensions(aspectRatio));
+    }, [aspectRatio, width, height]);
 
     useEffect(() => {
         function onScreenInfo(data: any) {
             if (!data) return;
-
-            const calculateDimensions = (aspectRatio: number) => {
-                const parentH = dimensionsParent
-                    ? dimensionsParent.contentBox.height
-                    : 0;
-                const parentW = dimensionsParent
-                    ? dimensionsParent.contentBox.width
-                    : 0;
-                const w = parentH * aspectRatio;
-                const h = parentW / aspectRatio;
-
-                if (parentW < w) return { width: parentW, height: h };
-                return { width: w, height: parentH };
-            };
-
-            setDimensions(calculateDimensions(data.width / data.height));
+            setAspectRatio(data.width / data.height);
         }
 
         socket.on("screenInfo", onScreenInfo);
@@ -40,7 +40,11 @@ export function CurrentSongPreview(props: CurrentSongPreviewProps) {
         return () => {
             socket.off("screenInfo", onScreenInfo);
         };
-    }, [dimensionsParent]);
+    }, [width, height]);
+
+    useEffect(() => {
+        updateSize();
+    }, [width, height, aspectRatio]);
 
     return (
         <Box
