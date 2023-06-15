@@ -30,7 +30,10 @@ const initSockets = (server) => {
             room.addScreen(socket);
         } else {
             console.log("CONNECTED", "New room");
-            room = new Room(socket);
+            room = new Room(
+                socket,
+                ROOMS.map((ele) => ele.code)
+            );
             ROOMS.push(room);
         }
 
@@ -58,9 +61,9 @@ const initSockets = (server) => {
 
         socket.on("disconnecting", () => {
             console.log("DISCONNECTING", socket.id);
-            if (room.presenter.id == socket.id) {
+            if (room.presenter.id === socket.id) {
                 room.drop();
-                ROOMS = ROOMS.filter((r) => r.code != room.code);
+                ROOMS = ROOMS.filter((r) => r.code !== room.code);
             } else {
                 room.removeScreen(socket);
             }

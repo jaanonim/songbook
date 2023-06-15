@@ -2,8 +2,10 @@ const { getRandomString } = require("../utilities/random");
 const Screen = require("./screen");
 
 module.exports = class Room {
-    constructor(presenter) {
-        this.code = getRandomString(6);
+    constructor(presenter, roomCodes) {
+        do {
+            this.code = getRandomString(6);
+        } while (roomCodes.some((s) => s === this.code));
         this.data = {};
         this.screens = [];
         this.presenter = presenter;
