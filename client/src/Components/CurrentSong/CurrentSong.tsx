@@ -8,6 +8,7 @@ import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
 import CurrentSongDrop from "./CurrentSongDrop";
 import { CurrentSongPreview } from "./CurrentSongPreview";
 import useKey from "../../Hooks/useKey";
+import ScreenData from "../../Models/ScreenData";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -15,7 +16,7 @@ interface CurrentSongProps {
     onQueueElement: (element: QueueElementDraggable) => void;
     onNextSong?: () => void;
     onPreviousSong?: () => void;
-    isScreen: boolean;
+    screen: null | ScreenData;
 }
 
 function CurrentSong(props: CurrentSongProps) {
@@ -82,7 +83,7 @@ function CurrentSong(props: CurrentSongProps) {
                 onQueueElement={props.onQueueElement}
                 onSongDragged={props.onSongDragged}
             ></CurrentSongDrop>
-            <CurrentSongPreview isScreen={props.isScreen} data={getData()} />
+            <CurrentSongPreview screen={props.screen} data={getData()} />
             <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
                 <Controls
                     onNextSlide={nextSlide}

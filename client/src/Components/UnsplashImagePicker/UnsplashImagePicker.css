@@ -1,0 +1,7 @@
+.img-hover-effect {
+    transition-duration: 0.2s;
+}
+
+.img-hover-effect:hover {
+    transform: scale(1.2);
+}

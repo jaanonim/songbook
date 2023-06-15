@@ -4,10 +4,12 @@ import { socket } from "../../Services/socket";
 import ScreenView from "../ScreenView";
 import ShowData from "../../Models/ShowData";
 import { useElementSize } from "usehooks-ts";
+import ScreenData from "../../Models/ScreenData";
+import ScreenSettings from "../../Models/ScreenSettings";
 
 interface CurrentSongPreviewProps {
     data: null | ShowData;
-    isScreen: boolean;
+    screen: null | ScreenData;
 }
 
 export function CurrentSongPreview(props: CurrentSongPreviewProps) {
@@ -56,7 +58,7 @@ export function CurrentSongPreview(props: CurrentSongPreviewProps) {
             backgroundColor="black"
             position="relative"
         >
-            {props.isScreen ? (
+            {props.screen !== null ? (
                 <AbsoluteCenter
                     className="preview_box_screen"
                     border="1px solid #fff"
@@ -66,7 +68,14 @@ export function CurrentSongPreview(props: CurrentSongPreviewProps) {
                     overflow="hidden"
                     axis="both"
                 >
-                    <ScreenView data={props.data} />
+                    <ScreenView
+                        data={props.data}
+                        settings={
+                            props.screen.settings
+                                ? props.screen.settings
+                                : new ScreenSettings("null")
+                        }
+                    />
                 </AbsoluteCenter>
             ) : (
                 <AbsoluteCenter axis="both">No Screen</AbsoluteCenter>

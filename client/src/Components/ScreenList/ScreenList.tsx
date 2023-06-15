@@ -25,7 +25,7 @@ import ScreenData, { ScreenDataNotNull } from "../../Models/ScreenData";
 interface ScreenListProps {
     w?: string;
     h?: string;
-    onScreenChange?: (isConnected: boolean) => void;
+    onScreenChange?: (screen: ScreenData | null) => void;
 }
 
 function ScreenList(props: ScreenListProps) {
@@ -41,7 +41,9 @@ function ScreenList(props: ScreenListProps) {
 
         function onScreen(data: { screens: ScreenData[] }) {
             if (props.onScreenChange)
-                props.onScreenChange(data.screens.length > 0);
+                props.onScreenChange(
+                    data.screens.length > 0 ? data.screens[0] : null
+                );
             data.screens.forEach((screen: ScreenData) => {
                 if (!screen.settings) {
                     socket.emit(

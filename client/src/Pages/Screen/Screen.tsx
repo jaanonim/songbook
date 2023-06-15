@@ -88,12 +88,12 @@ function Screen() {
             <div id="container-screen">
                 {isFocused ? (
                     <>
-                        <TopLeftCorner>
+                        <TopLeftCorner zIndex="10">
                             <Heading as="h2" size="md" margin={1}>
                                 {settings.name}
                             </Heading>
                         </TopLeftCorner>
-                        <TopRightCorner>
+                        <TopRightCorner zIndex="10">
                             <CopyInput value={code as string}></CopyInput>
                             {fullscreenHandle.active ? (
                                 <IconButton
@@ -118,12 +118,13 @@ function Screen() {
                     position="fixed"
                     top={0}
                     left={0}
+                    zIndex={0}
                     w="100vw"
                     h="100vh"
                     fontSize="100vh"
                     pointerEvents={"none"}
                 >
-                    <ScreenView data={data} />
+                    <ScreenView data={data} settings={settings} />
                 </Box>
             </div>
         </FullScreen>

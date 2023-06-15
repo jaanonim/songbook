@@ -10,10 +10,11 @@ import SongTableElementDraggable from "../../Components/SongTableElementDraggabl
 import Song from "../../Models/Song";
 import "./Present.css";
 import useKey from "../../Hooks/useKey";
+import ScreenData from "../../Models/ScreenData";
 
 function Present() {
     const [preview, setPreview] = useState<Song | null>(null);
-    const [hasScreenConnected, setHasScreenConnected] = useState(false);
+    const [previewScreen, setPreviewScreen] = useState<null | ScreenData>(null);
     const [song, setSong] = useState<Song | null>(null);
     const songQueue = useRef<SongQueueRef>(null);
     useKey((e: any) => {
@@ -60,7 +61,7 @@ function Present() {
 
                 <CurrentSong
                     song={song}
-                    isScreen={hasScreenConnected}
+                    screen={previewScreen}
                     onQueueElement={(item) => {
                         songQueue.current?.setHighlighted(item.id);
                     }}
@@ -90,8 +91,8 @@ function Present() {
                     <ScreenList
                         w="100%"
                         h="calc(40% - 1.5rem)"
-                        onScreenChange={(isConnected) => {
-                            setHasScreenConnected(isConnected);
+                        onScreenChange={(screen) => {
+                            setPreviewScreen(screen);
                         }}
                     />
                 </Box>

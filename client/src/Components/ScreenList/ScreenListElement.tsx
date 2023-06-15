@@ -1,10 +1,9 @@
-import { NotAllowedIcon, SettingsIcon } from "@chakra-ui/icons";
+import { NotAllowedIcon } from "@chakra-ui/icons";
 import {
     Editable,
     EditableInput,
     EditablePreview,
     Flex,
-    IconButton,
     Spacer,
     Td,
     Tr,
@@ -13,6 +12,7 @@ import { useEffect, useState } from "react";
 import { ScreenDataNotNull } from "../../Models/ScreenData";
 import { socket } from "../../Services/socket";
 import DeleteButton from "../DeleteButton";
+import ScreenSettingsModal from "../ScreenSettingsModal/ScreenSettingsModal";
 
 interface ScreenListElementProps {
     data: ScreenDataNotNull;
@@ -48,12 +48,7 @@ export function ScreenListElement(props: ScreenListElementProps) {
                         <EditableInput />
                     </Editable>
                     <Spacer></Spacer>
-                    <IconButton
-                        aria-label="settings"
-                        size={"sm"}
-                        icon={<SettingsIcon></SettingsIcon>}
-                        marginRight={2}
-                    ></IconButton>
+                    <ScreenSettingsModal data={props.data} />
                     <DeleteButton
                         icon={<NotAllowedIcon />}
                         onClick={() => {
