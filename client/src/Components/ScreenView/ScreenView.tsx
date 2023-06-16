@@ -25,11 +25,21 @@ function ScreenView(props: ScreenViewProps) {
         <Box
             w="100%"
             h="100%"
-            backgroundImage={`url(${
-                typeof props.settings.background === "string"
-                    ? props.settings.background
-                    : props.settings.background.url
-            })`}
+            backgroundColor={
+                props.data?.isBlack ||
+                typeof props.settings.background !== "string"
+                    ? "black"
+                    : props.settings.background
+            }
+            backgroundImage={
+                props.data?.isBlack
+                    ? undefined
+                    : `url(${
+                          typeof props.settings.background === "string"
+                              ? props.settings.background
+                              : props.settings.background.url
+                      })`
+            }
             backgroundRepeat={"no-repeat"}
             backgroundPosition={"center"}
             backgroundSize={"cover"}
@@ -38,7 +48,7 @@ function ScreenView(props: ScreenViewProps) {
             textAlign="center"
             color={props.settings.fontColor}
         >
-            {props.data?.isHidden ? null : (
+            {props.data?.isHidden || props.data?.isBlack ? null : (
                 <AbsoluteCenter axis="both">
                     <pre>{processText(props.data?.part.text)}</pre>
                 </AbsoluteCenter>

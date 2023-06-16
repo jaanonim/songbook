@@ -1,6 +1,8 @@
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
+    NotAllowedIcon,
+    SunIcon,
     TriangleDownIcon,
     TriangleUpIcon,
     ViewIcon,
@@ -15,11 +17,14 @@ interface ControlsProps {
     onNextSlide?: () => void;
     onShow?: () => void;
     onHide?: () => void;
+    onBlackOn?: () => void;
+    onBlackOff?: () => void;
     disabled?: boolean;
     isHidden?: boolean;
+    isBlack?: boolean;
 }
 
-export function Controls(props: ControlsProps) {
+function Controls(props: ControlsProps) {
     return (
         <Flex width="100%" marginBottom="0.5rem">
             <Tooltip label="Previous song [Left Arrow]">
@@ -87,6 +92,30 @@ export function Controls(props: ControlsProps) {
                     ></IconButton>
                 </Tooltip>
             )}
+
+            {props.isBlack ? (
+                <Tooltip label="Show screen">
+                    <IconButton
+                        marginX={2}
+                        aria-label="show"
+                        icon={<SunIcon></SunIcon>}
+                        onClick={props.onBlackOff}
+                        isDisabled={props.disabled}
+                    ></IconButton>
+                </Tooltip>
+            ) : (
+                <Tooltip label="Make screen black">
+                    <IconButton
+                        marginX={2}
+                        aria-label="black"
+                        icon={<NotAllowedIcon></NotAllowedIcon>}
+                        onClick={props.onBlackOn}
+                        isDisabled={props.disabled}
+                    ></IconButton>
+                </Tooltip>
+            )}
         </Flex>
     );
 }
+
+export default Controls;

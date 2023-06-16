@@ -2,13 +2,13 @@ import { Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import Song from "../../Models/Song";
 import { socket } from "../../Services/socket";
-import { Controls } from "../Controls/Controls";
 import { SongEditNoApi } from "../SongEdit";
 import { QueueElementDraggable } from "../SongQueue/SongQueueElement";
 import CurrentSongDrop from "./CurrentSongDrop";
 import { CurrentSongPreview } from "./CurrentSongPreview";
 import useKey from "../../Hooks/useKey";
 import ScreenData from "../../Models/ScreenData";
+import Controls from "../Controls";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -22,6 +22,7 @@ interface CurrentSongProps {
 function CurrentSong(props: CurrentSongProps) {
     const [selected, setSelected] = useState<number | null>(null);
     const [isHidden, setIsHidden] = useState(false);
+    const [isBlack, setIsBlack] = useState(false);
     useEffect(() => {
         if (props.song) setSelected(props.song.parts[0].id);
         else setSelected(null);
@@ -33,8 +34,8 @@ function CurrentSong(props: CurrentSongProps) {
         const part = props.song.parts.find((p) => p.id === selected);
         if (!part) return null;
 
-        return { part, isHidden };
-    }, [props.song, selected, isHidden]);
+        return { part, isHidden, isBlack };
+    }, [props.song, selected, isHidden, isBlack]);
 
     useEffect(() => {
         if (socket.connected) {
@@ -96,7 +97,14 @@ function CurrentSong(props: CurrentSongProps) {
                     onShow={() => {
                         setIsHidden(false);
                     }}
+                    onBlackOn={() => {
+                        setIsBlack(true);
+                    }}
+                    onBlackOff={() => {
+                        setIsBlack(false);
+                    }}
                     isHidden={isHidden}
+                    isBlack={isBlack}
                     disabled={props.song === null}
                 />
                 <SongEditNoApi

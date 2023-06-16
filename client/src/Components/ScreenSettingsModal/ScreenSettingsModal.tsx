@@ -25,8 +25,8 @@ import { ScreenDataNotNull } from "../../Models/ScreenData";
 import ScreenSettings from "../../Models/ScreenSettings";
 import { socket } from "../../Services/socket";
 import getListOfColors from "../../Utilities/colors";
+import BackgroundPicker from "../BackgroundPicker/BackgroundPicker";
 import ColorPicker from "../ColorPicker/ColorPicker";
-import UnsplashImagePicker from "../UnsplashImagePicker";
 
 interface ScreenSettingsModalProps {
     data: ScreenDataNotNull;
@@ -142,7 +142,7 @@ function ScreenSettingsModal(props: ScreenSettingsModalProps) {
                                 <FormLabel mt={4} mb={0} display="inline-block">
                                     Background
                                 </FormLabel>
-                                <UnsplashImagePicker
+                                <BackgroundPicker
                                     onSelect={(ele) => {
                                         setSettings((s) => {
                                             const sett = s.copy();
@@ -151,12 +151,8 @@ function ScreenSettingsModal(props: ScreenSettingsModalProps) {
                                             return sett;
                                         });
                                     }}
-                                    selected={
-                                        typeof settings.background === "string"
-                                            ? null
-                                            : settings.background
-                                    }
-                                ></UnsplashImagePicker>
+                                    selected={settings.background}
+                                ></BackgroundPicker>
                             </Flex>
                         </FormControl>
                         <FormControl>
