@@ -141,6 +141,7 @@ function SongTable(props: SongTableProps) {
                                 placeholder="Search"
                                 value={filter}
                                 onChange={handleChange}
+                                className="noKeyHook"
                             />
                             {filter ? (
                                 <InputRightElement>

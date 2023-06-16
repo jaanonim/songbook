@@ -68,6 +68,8 @@ function CurrentSong(props: CurrentSongProps) {
                 nextSlide();
             } else if (e.key === ".") {
                 setIsHidden((h) => !h);
+            } else if (e.key === "/") {
+                setIsBlack((b) => !b);
             }
         },
         [props.song, selected]

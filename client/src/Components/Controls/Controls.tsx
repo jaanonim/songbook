@@ -94,7 +94,7 @@ function Controls(props: ControlsProps) {
             )}
 
             {props.isBlack ? (
-                <Tooltip label="Show screen">
+                <Tooltip label="Show screen [/]">
                     <IconButton
                         marginX={2}
                         aria-label="show"
@@ -104,7 +104,7 @@ function Controls(props: ControlsProps) {
                     ></IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip label="Make screen black">
+                <Tooltip label="Make screen black [/]">
                     <IconButton
                         marginX={2}
                         aria-label="black"

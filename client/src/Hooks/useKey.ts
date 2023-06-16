@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export default function useKey(onKey: (e: any) => void, deps?: any[]) {
     useEffect(() => {
         const _onKeyDown = (e: any) => {
-            if (document.activeElement === document.body) {
+            if (!document.activeElement?.classList.contains("noKeyHook")) {
                 onKey(e);
             }
         };
