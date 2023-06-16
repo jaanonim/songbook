@@ -1,0 +1,7 @@
+.invertColor {
+    position: relative;
+    background-color: inherit;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-filter: invert() contrast(10) grayscale() contrast(100);
+}

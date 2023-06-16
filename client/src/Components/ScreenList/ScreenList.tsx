@@ -15,12 +15,11 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import ScreenData, { ScreenDataNotNull } from "../../Models/ScreenData";
 import ScreenSettings from "../../Models/ScreenSettings";
 import { socket } from "../../Services/socket";
 import CopyInput from "../CopyInput";
-import "./ScreenList.css";
 import { ScreenListElement } from "./ScreenListElement";
-import ScreenData, { ScreenDataNotNull } from "../../Models/ScreenData";
 
 interface ScreenListProps {
     w?: string;

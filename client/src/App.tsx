@@ -1,13 +1,15 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Loading from "./Components/Loading";
 import "./index.css";
 import theme from "./theme";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import config from "./Config/config";
+
 const Manage = React.lazy(() => import("./Pages/Manage"));
 const Selection = React.lazy(() => import("./Pages/Selection"));
 const Present = React.lazy(() => import("./Pages/Present"));
@@ -26,7 +28,9 @@ function App() {
     return (
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools initialIsOpen={false} />
+                {config.reactQueryDevtools ? (
+                    <ReactQueryDevtools initialIsOpen={false} />
+                ) : null}
                 <ColorModeScript
                     initialColorMode={theme.config.initialColorMode}
                 />

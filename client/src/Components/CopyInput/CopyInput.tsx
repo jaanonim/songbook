@@ -1,6 +1,6 @@
-import { Box, Input, useToast } from "@chakra-ui/react";
-import { useClipboard } from "@chakra-ui/react";
+import { Box, Input, useClipboard, useToast } from "@chakra-ui/react";
 import { RefObject, useEffect, useRef } from "react";
+import "./CopyInput.css";
 
 interface CopyInputProps {
     value: string;

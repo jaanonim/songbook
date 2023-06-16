@@ -4,7 +4,6 @@ import {
     FormControl,
     FormLabel,
     IconButton,
-    Image,
     Input,
     Modal,
     ModalBody,
@@ -25,6 +24,8 @@ import { useDebouncedCallback } from "use-debounce";
 import { ScreenDataNotNull } from "../../Models/ScreenData";
 import ScreenSettings from "../../Models/ScreenSettings";
 import { socket } from "../../Services/socket";
+import getListOfColors from "../../Utilities/colors";
+import ColorPicker from "../ColorPicker/ColorPicker";
 import UnsplashImagePicker from "../UnsplashImagePicker";
 
 interface ScreenSettingsModalProps {
@@ -141,59 +142,43 @@ function ScreenSettingsModal(props: ScreenSettingsModalProps) {
                                 <FormLabel mt={4} mb={0} display="inline-block">
                                     Background
                                 </FormLabel>
-                                <Flex
-                                    alignItems="center"
-                                    h="2rem"
-                                    w="3rem"
-                                    mt={3}
-                                    backgroundColor={"#000"}
-                                >
-                                    <Image
-                                        display={"block"}
-                                        margin="auto"
-                                        src={
-                                            typeof settings.background ===
-                                            "string"
-                                                ? settings.background
-                                                : settings.background.url
-                                        }
-                                        h="100%"
-                                    ></Image>
-                                </Flex>
+                                <UnsplashImagePicker
+                                    onSelect={(ele) => {
+                                        setSettings((s) => {
+                                            const sett = s.copy();
+                                            sett.background =
+                                                ele === null ? "" : ele;
+                                            return sett;
+                                        });
+                                    }}
+                                    selected={
+                                        typeof settings.background === "string"
+                                            ? null
+                                            : settings.background
+                                    }
+                                ></UnsplashImagePicker>
                             </Flex>
-                            <UnsplashImagePicker
-                                onSelect={(ele) => {
-                                    setSettings((s) => {
-                                        const sett = s.copy();
-                                        sett.background =
-                                            ele === null ? "" : ele;
-                                        return sett;
-                                    });
-                                }}
-                                selected={
-                                    typeof settings.background === "string"
-                                        ? null
-                                        : settings.background
-                                }
-                            ></UnsplashImagePicker>
+                        </FormControl>
+                        <FormControl>
+                            <Flex>
+                                <FormLabel mt={4} mb={0} display="inline-block">
+                                    Font Color
+                                </FormLabel>
+                                <ColorPicker
+                                    mt="3"
+                                    colors={getListOfColors()}
+                                    selectedColor={settings.fontColor}
+                                    onSelect={(color: string) => {
+                                        setSettings((s) => {
+                                            const sett = s.copy();
+                                            sett.fontColor = color;
+                                            return sett;
+                                        });
+                                    }}
+                                ></ColorPicker>
+                            </Flex>
                         </FormControl>
                     </ModalBody>
-
-                    {/* <ModalFooter>
-                        <Button onClick={onClose} mr={3}>
-                            Cancel
-                        </Button>
-                        <Button
-                            colorScheme="blue"
-                            onClick={() => {
-                                onClose();
-                                if (socket.connected)
-                                    socket.emit("screenSettings", settings);
-                            }}
-                        >
-                            Save
-                        </Button>
-                    </ModalFooter> */}
                 </ModalContent>
             </Modal>
         </>

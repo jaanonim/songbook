@@ -36,6 +36,7 @@ function ScreenView(props: ScreenViewProps) {
             fontSize={`${props.settings.fontSize / 10}%`}
             position="relative"
             textAlign="center"
+            color={props.settings.fontColor}
         >
             {props.data?.isHidden ? null : (
                 <AbsoluteCenter axis="both">
