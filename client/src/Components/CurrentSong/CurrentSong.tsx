@@ -145,7 +145,7 @@ function CurrentSong(props: CurrentSongProps) {
                     }}
                     headingSize="l"
                     w="calc(100% - 2rem)"
-                    h="calc(70vh - 3rem)"
+                    h="calc(70vh - 4rem)"
                     song={props.song}
                     preview={true}
                 ></SongEditNoApi>
