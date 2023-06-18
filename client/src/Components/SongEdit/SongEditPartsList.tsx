@@ -9,7 +9,6 @@ interface SongEditPartsListProps {
     song: Song;
     preview?: boolean;
     selectable?: boolean;
-    h?: string;
     onSelect?: (id: number) => void;
     selected: number | null;
 }
@@ -37,9 +36,7 @@ function SongEditPartsList(props: SongEditPartsListProps) {
             w={"min(100% , calc(70ch + 1rem))"}
             overflowY="scroll"
             overflowX="hidden"
-            h={`calc( ${props.h || "100vh"} - ${
-                props.preview ? "11rem" : "30vh"
-            })`}
+            h="100%"
             borderBottom="1px"
             borderTop="1px"
             borderColor="rgba(255,255,255,0.1)"

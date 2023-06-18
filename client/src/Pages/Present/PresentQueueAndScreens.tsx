@@ -10,11 +10,19 @@ interface PresentQueueAndScreensProps {
     songQueue: Ref<SongQueueRef> | undefined;
     setSong: (song: Song | null) => void;
     setPreviewScreen: (data: ScreenData | null) => void;
+    w: string;
+    h: string;
+    visible: boolean;
 }
 
 export function PresentQueueAndScreens(props: PresentQueueAndScreensProps) {
     return (
-        <Box width="20%" padding="1rem" height="100vh">
+        <Box
+            width={props.w}
+            padding="1rem"
+            height={props.h}
+            display={props.visible ? undefined : "none"}
+        >
             <SongQueue
                 ref={props.songQueue}
                 w="100%"

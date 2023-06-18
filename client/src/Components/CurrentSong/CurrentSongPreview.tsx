@@ -10,6 +10,7 @@ import ScreenSettings from "../../Models/ScreenSettings";
 interface CurrentSongPreviewProps {
     data: null | ShowData;
     screen: null | ScreenData;
+    visible: boolean;
 }
 
 export function CurrentSongPreview(props: CurrentSongPreviewProps) {
@@ -46,7 +47,7 @@ export function CurrentSongPreview(props: CurrentSongPreviewProps) {
 
     useEffect(() => {
         updateSize();
-    }, [width, height, aspectRatio]);
+    }, [width, height, aspectRatio, props.visible]);
 
     return (
         <Box

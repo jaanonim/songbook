@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Alert, AlertIcon, Center, Heading, Text } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Center, Heading, Text } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import DeleteSongButton from "../DeleteSongButton";
 import EditSongData from "../EditSongData";
@@ -20,7 +20,7 @@ interface SongEditContentProps {
 
 function SongEditContent(props: SongEditContentProps) {
     return (
-        <>
+        <Box h="100%">
             <Center>
                 <Heading
                     as="h3"
@@ -87,12 +87,11 @@ function SongEditContent(props: SongEditContentProps) {
                     <DeleteSongButton song={props.song} />
                 </Center>
             )}
-            <Center>
+            <Center h={`calc(${props.h || "100vh"} - 0.5rem)`}>
                 {props.song.parts ? (
                     <SongEditPartsList
                         selected={props.selected}
                         song={props.song}
-                        h={props.h}
                         preview={props.preview}
                         onSelect={props.onSelect}
                     />
@@ -110,7 +109,7 @@ function SongEditContent(props: SongEditContentProps) {
                     </Alert>
                 )}
             </Center>
-        </>
+        </Box>
     );
 }
 

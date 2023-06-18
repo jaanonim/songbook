@@ -18,6 +18,9 @@ interface CurrentSongProps {
     onNextSong?: () => void;
     onPreviousSong?: () => void;
     screen: null | ScreenData;
+    w: string;
+    h: string;
+    visible: boolean;
 }
 
 function CurrentSong(props: CurrentSongProps) {
@@ -106,16 +109,21 @@ function CurrentSong(props: CurrentSongProps) {
 
     return (
         <Box
-            width="30%"
+            width={props.w}
             padding="1rem"
-            height="calc(100vh - 2rem)"
+            height={`calc(${props.h} - 2rem)`}
+            display={props.visible ? undefined : "none"}
             position="relative"
         >
             <CurrentSongDrop
                 onQueueElement={props.onQueueElement}
                 onSongDragged={props.onSongDragged}
             ></CurrentSongDrop>
-            <CurrentSongPreview screen={props.screen} data={getData()} />
+            <CurrentSongPreview
+                screen={props.screen}
+                data={getData()}
+                visible={props.visible}
+            />
             <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
                 <Controls
                     onNextSlide={nextSlide}
@@ -145,7 +153,7 @@ function CurrentSong(props: CurrentSongProps) {
                     }}
                     headingSize="l"
                     w="calc(100% - 2rem)"
-                    h="calc(70vh - 4rem)"
+                    h="calc(100% - 2.2rem)"
                     song={props.song}
                     preview={true}
                 ></SongEditNoApi>

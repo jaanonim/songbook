@@ -1,17 +1,20 @@
-import { Td, Tr } from "@chakra-ui/react";
+import { IconButton, Td, Tr, useToast } from "@chakra-ui/react";
 import Song from "../../Models/Song";
 import TagList from "../TagList";
 import { useDrag } from "react-dnd";
 import DragTypes from "../../Models/DragTypes";
+import { AddIcon } from "@chakra-ui/icons";
 
 interface SongTableElementDraggableProps {
     song: Song;
     selected: boolean;
     onDelete?: (song: Song) => void;
     onSelect?: (e: any) => void;
+    onAdd?: (song: Song) => void;
 }
 
 function SongTableElementDraggable(props: SongTableElementDraggableProps) {
+    const toast = useToast();
     const [{ isDragging }, drag] = useDrag({
         type: DragTypes.SongTableElement,
         item: () => {
@@ -51,6 +54,21 @@ function SongTableElementDraggable(props: SongTableElementDraggableProps) {
             </Td>
             <Td w="40%">
                 <TagList tags={props.song.tags} editable={false} />
+            </Td>
+            <Td>
+                <IconButton
+                    onClick={(e) => {
+                        if (props.onAdd) props.onAdd(props.song);
+                        toast({
+                            title: `${props.song.title} added to queue`,
+                            status: "success",
+                        });
+                        e.stopPropagation();
+                    }}
+                    aria-label={"add to queue"}
+                    size="sm"
+                    icon={<AddIcon></AddIcon>}
+                />
             </Td>
         </Tr>
     );

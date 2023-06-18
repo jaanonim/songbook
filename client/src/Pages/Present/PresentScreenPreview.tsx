@@ -1,6 +1,6 @@
 import CurrentSong from "../../Components/CurrentSong";
-import Song from "../../Models/Song";
 import ScreenData from "../../Models/ScreenData";
+import Song from "../../Models/Song";
 
 interface PresentScreenPreviewProps {
     previousSong?: () => void;
@@ -9,11 +9,17 @@ interface PresentScreenPreviewProps {
     setHighlighted?: (song: number) => void;
     song: Song | null;
     previewScreen: ScreenData | null;
+    w: string;
+    h: string;
+    visible: boolean;
 }
 
 export function PresentScreenPreview(props: PresentScreenPreviewProps) {
     return (
         <CurrentSong
+            w={props.w}
+            h={props.h}
+            visible={props.visible}
             song={props.song}
             screen={props.previewScreen}
             onQueueElement={(item) => {

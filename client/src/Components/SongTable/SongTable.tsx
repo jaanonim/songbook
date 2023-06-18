@@ -32,6 +32,7 @@ import SearchCloseButton from "../SearchCloseButton";
 interface SongTableProps {
     onSongUpdate: (id: string[] | null) => void;
     onDelete?: (song: Song) => void;
+    onAdd?: (song: Song) => void;
     h?: string;
     w?: string;
     element: any;
@@ -258,6 +259,7 @@ function SongTable(props: SongTableProps) {
                                         element = new Song(element);
                                         return (
                                             <props.element
+                                                onAdd={props.onAdd}
                                                 key={element._id}
                                                 song={element}
                                                 onDelete={props.onDelete}
