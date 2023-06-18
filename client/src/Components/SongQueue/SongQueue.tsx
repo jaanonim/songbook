@@ -172,7 +172,7 @@ function SongQueue(props: SongQueueProps, ref: Ref<unknown> | undefined) {
                                 w="70%"
                             >
                                 <AlertIcon />
-                                Add song to queue
+                                Drag song to queue
                             </Alert>
                         </Center>
                     ) : (

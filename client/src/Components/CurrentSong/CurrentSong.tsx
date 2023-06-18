@@ -9,6 +9,7 @@ import { CurrentSongPreview } from "./CurrentSongPreview";
 import useKey from "../../Hooks/useKey";
 import ScreenData from "../../Models/ScreenData";
 import Controls from "../Controls";
+import PartType from "../../Models/PartTypes";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -59,6 +60,26 @@ function CurrentSong(props: CurrentSongProps) {
         setSelected(idx - 1);
     }, [props.song, selected]);
 
+    const nextType = useCallback(
+        (type: PartType) => {
+            if (props.song == null) return;
+            let idx = props.song.parts.findIndex(
+                (part) => part.id === selected
+            );
+
+            let i = idx;
+            do {
+                i += 1;
+                if (i >= props.song.parts.length) i = 0;
+                if (i === idx) {
+                    return;
+                }
+            } while (props.song.parts[i].type !== type);
+            setSelected(i);
+        },
+        [props.song, selected]
+    );
+
     useKey(
         (e) => {
             if (props.song === null) return;
@@ -70,6 +91,12 @@ function CurrentSong(props: CurrentSongProps) {
                 setIsHidden((h) => !h);
             } else if (e.key === "/") {
                 setIsBlack((b) => !b);
+            } else if (e.key === "v") {
+                nextType(PartType.VERSE);
+            } else if (e.key === "c") {
+                nextType(PartType.CHORUS);
+            } else if (e.key === "b") {
+                nextType(PartType.BRIDGE);
             }
         },
         [props.song, selected]
