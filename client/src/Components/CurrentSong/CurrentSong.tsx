@@ -85,8 +85,10 @@ function CurrentSong(props: CurrentSongProps) {
             if (props.song === null) return;
             if (e.key === "ArrowUp") {
                 previousSlide();
+                e.preventDefault();
             } else if (e.key === "ArrowDown") {
                 nextSlide();
+                e.preventDefault();
             } else if (e.key === ".") {
                 setIsHidden((h) => !h);
             } else if (e.key === "/") {
