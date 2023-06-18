@@ -1,9 +1,16 @@
-import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
+import {
+    Box,
+    Divider,
+    Flex,
+    Heading,
+    IconButton,
+    Stack,
+} from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import CurrentSong from "../../Components/CurrentSong";
 import DeleteDropzone from "../../Components/DeleteDropzone/DeleteDropzone";
 import ScreenList from "../../Components/ScreenList";
-import { SongEditNoApi } from "../../Components/SongEdit";
+import { SongEdit } from "../../Components/SongEdit";
 import SongQueue, { SongQueueRef } from "../../Components/SongQueue/SongQueue";
 import SongTable from "../../Components/SongTable";
 import SongTableElementDraggable from "../../Components/SongTableElementDraggable/SongTableElementDraggable";
@@ -11,9 +18,10 @@ import Song from "../../Models/Song";
 import "./Present.css";
 import useKey from "../../Hooks/useKey";
 import ScreenData from "../../Models/ScreenData";
+import { EditIcon } from "@chakra-ui/icons";
 
 function Present() {
-    const [preview, setPreview] = useState<Song | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
     const [previewScreen, setPreviewScreen] = useState<null | ScreenData>(null);
     const [song, setSong] = useState<Song | null>(null);
     const songQueue = useRef<SongQueueRef>(null);
@@ -45,16 +53,34 @@ function Present() {
                     ></DeleteDropzone>
                 </Box>
                 <Box w="25%" h="100vh">
-                    <Heading as="h3" textAlign="center" margin="1.5rem">
-                        Preview
-                    </Heading>
-                    <SongEditNoApi
+                    <Stack position="relative">
+                        <Heading as="h3" textAlign="center" margin="1.5rem">
+                            Preview
+                        </Heading>
+                        {preview ? (
+                            <IconButton
+                                position="absolute"
+                                top="1.75rem"
+                                right="1rem"
+                                size={"sm"}
+                                aria-label="edit"
+                                icon={<EditIcon></EditIcon>}
+                                onClick={() => {
+                                    window.open(
+                                        `/manage/?id=${preview}`,
+                                        "_blank"
+                                    );
+                                }}
+                            ></IconButton>
+                        ) : null}
+                    </Stack>
+                    <SongEdit
                         headingSize="l"
                         w="calc(100% - 2rem)"
                         h="calc(100vh - 4rem)"
-                        song={preview}
+                        id={preview ? preview : undefined}
                         preview={true}
-                    ></SongEditNoApi>
+                    ></SongEdit>
                 </Box>
 
                 <Divider h="95vh" margin="auto" orientation="vertical" />

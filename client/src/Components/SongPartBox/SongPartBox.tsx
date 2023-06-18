@@ -126,7 +126,7 @@ function SongPartBox(props: SongPartBoxProps) {
             mb="4"
             style={{ opacity }}
             data-handler-id={handlerId}
-            className="draggable"
+            className={props.onClick ? "draggable noselect" : "draggable"}
             onClick={props.onClick}
             cursor={props.onClick ? "pointer" : undefined}
         >

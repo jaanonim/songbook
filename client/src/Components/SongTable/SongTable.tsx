@@ -30,12 +30,12 @@ import CreateSong from "../CreateSong";
 import SearchCloseButton from "../SearchCloseButton";
 
 interface SongTableProps {
-    onSongUpdate: (songs: Song[] | null) => void;
+    onSongUpdate: (id: string[] | null) => void;
     onDelete?: (song: Song) => void;
     h?: string;
     w?: string;
     element: any;
-    selected?: Song[];
+    selected?: string[];
     multiple?: boolean;
     disableAdd?: boolean;
     selectAll?: boolean;
@@ -62,25 +62,25 @@ function SongTable(props: SongTableProps) {
         enabled: !!hasNextPage,
     });
 
-    const onSelect = (element: any) => {
+    const onSelect = (element: Song) => {
         if (songs) {
-            if (songs.filter((ele) => ele._id === element._id).length === 0) {
+            if (songs.filter((id) => id === element._id).length === 0) {
                 if (multiple) {
-                    setSongs([...songs, element]);
+                    setSongs([...songs, element._id]);
                 } else {
-                    setSongs([element]);
+                    setSongs([element._id]);
                 }
             } else if (multiple) {
-                const s = songs.filter((ele) => ele._id !== element._id);
+                const s = songs.filter((id) => id !== element._id);
                 setSongs(s === undefined ? null : s);
             }
         } else {
-            setSongs([element]);
+            setSongs([element._id]);
         }
     };
 
     const multiple = props.multiple === undefined ? false : props.multiple;
-    const [songs, setSongs] = useState<Song[] | null>(
+    const [songs, setSongs] = useState<string[] | null>(
         props.selected === undefined ? null : props.selected
     );
 
@@ -157,29 +157,28 @@ function SongTable(props: SongTableProps) {
                     {props.disableAdd ? null : (
                         <CreateSong
                             onCreate={(song) => {
-                                setSongs([song]);
+                                setSongs([song._id]);
                             }}
                         />
                     )}
                     {props.selectAll && multiple ? (
                         <IconButton
-                            aria-label="selcet all"
+                            aria-label="select all"
                             ml="2"
                             icon={<MdCheckBox />}
                             onClick={() => {
                                 setFetchAll((_d: any) => (d: any) => {
-                                    const s = [] as Song[];
+                                    const s = [] as string[];
 
                                     d?.pages.forEach((page: any) => {
                                         page.docs.forEach((song: Song) => {
                                             if (
                                                 songs === null ||
                                                 songs.filter(
-                                                    (ele) =>
-                                                        ele._id === song._id
+                                                    (id) => id === song._id
                                                 ).length === 0
                                             ) {
-                                                s.push(song);
+                                                s.push(song._id);
                                             }
                                         });
                                     });
@@ -194,7 +193,7 @@ function SongTable(props: SongTableProps) {
                     ) : null}
                     {props.selectAll && multiple ? (
                         <IconButton
-                            aria-label="unselcet all"
+                            aria-label="unselect all"
                             ml="2"
                             icon={<MdCheckBoxOutlineBlank />}
                             onClick={() => {
@@ -206,13 +205,11 @@ function SongTable(props: SongTableProps) {
                                         page.docs.forEach((song: Song) => {
                                             if (
                                                 songs.filter(
-                                                    (ele) =>
-                                                        ele._id === song._id
+                                                    (id) => id === song._id
                                                 ).length > 0
                                             ) {
                                                 s = s.filter(
-                                                    (ele) =>
-                                                        ele._id !== song._id
+                                                    (id) => id !== song._id
                                                 );
                                             }
                                         });
@@ -267,8 +264,8 @@ function SongTable(props: SongTableProps) {
                                                 selected={
                                                     songs
                                                         ? songs?.filter(
-                                                              (ele) =>
-                                                                  ele._id ===
+                                                              (id) =>
+                                                                  id ===
                                                                   element._id
                                                           ).length > 0
                                                         : false

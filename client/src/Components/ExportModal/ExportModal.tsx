@@ -23,7 +23,6 @@ import { useState } from "react";
 import { MdDownload } from "react-icons/md";
 import { useQuery } from "react-query";
 import { ExportTypes } from "../../Models/ExportTypes";
-import Song from "../../Models/Song";
 import { exportSong } from "../../Services/api";
 import SongTable from "../SongTable";
 import SongTableElementSmall from "../SongTableElementSmall";
@@ -38,10 +37,10 @@ function ExportModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [state, setState] = useState(States.SONG);
     const [type, setType] = useState(Object.entries(ExportTypes)[0][0]);
-    const [songs, setSongs] = useState<Song[] | null>(null);
+    const [songs, setSongs] = useState<string[] | null>(null);
 
     const { isLoading, isError, error, refetch } = useQuery(
-        ["export", type, songs?.map((s) => s._id)],
+        ["export", type, songs],
         exportSong,
         {
             refetchOnWindowFocus: false,
