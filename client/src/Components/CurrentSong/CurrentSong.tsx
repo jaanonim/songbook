@@ -111,7 +111,7 @@ function CurrentSong(props: CurrentSongProps) {
         <Box
             width={props.w}
             padding="1rem"
-            height={`calc(${props.h} - 2rem)`}
+            height={props.h}
             display={props.visible ? undefined : "none"}
             position="relative"
         >
@@ -124,7 +124,7 @@ function CurrentSong(props: CurrentSongProps) {
                 data={getData()}
                 visible={props.visible}
             />
-            <Box h="30%" height="calc(70% - 2rem)" padding="0.5rem">
+            <Box h="30%" height="calc(70%)" padding="0.5rem">
                 <Controls
                     onNextSlide={nextSlide}
                     onPreviousSlide={previousSlide}

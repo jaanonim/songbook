@@ -27,6 +27,7 @@ function SongTableElementDraggable(props: SongTableElementDraggableProps) {
 
     return (
         <Tr
+            width="100%"
             ref={drag}
             className="noselect"
             opacity={isDragging ? 0.4 : 1}
@@ -49,13 +50,13 @@ function SongTableElementDraggable(props: SongTableElementDraggableProps) {
             cursor="pointer"
             h="auto"
         >
-            <Td>
+            <Td px="2" py="3">
                 {props.song.title} ({props.song.author})
             </Td>
-            <Td w="40%">
+            <Td w="40%" px="2" py="3">
                 <TagList tags={props.song.tags} editable={false} />
             </Td>
-            <Td>
+            <Td px="2" py="3">
                 <IconButton
                     onClick={(e) => {
                         if (props.onAdd) props.onAdd(props.song);

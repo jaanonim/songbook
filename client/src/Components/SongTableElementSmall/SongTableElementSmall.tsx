@@ -29,10 +29,10 @@ function SongTableElementSmall(props: SongTableElementSmallProps) {
             cursor="pointer"
             h="auto"
         >
-            <Td>
+            <Td px="2" py="3">
                 {props.song.title} ({props.song.author})
             </Td>
-            <Td w="40%">
+            <Td w="40%" px="2" py="3">
                 <TagList tags={props.song.tags} editable={false} />
             </Td>
         </Tr>

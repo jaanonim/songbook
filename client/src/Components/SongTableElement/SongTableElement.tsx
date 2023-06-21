@@ -29,13 +29,13 @@ function SongTableElement(props: SongTableElementProps) {
             }
             cursor="pointer"
         >
-            <Td>
+            <Td px="2" py="3">
                 {props.song.title} ({props.song.author})
             </Td>
-            <Td>
+            <Td px="2" py="3">
                 <TagList song={props.song} />
             </Td>
-            <Td>
+            <Td px="2" py="3">
                 <DeleteSongButton onDelete={props.onDelete} song={props.song} />
             </Td>
         </Tr>

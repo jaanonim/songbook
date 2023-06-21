@@ -87,7 +87,9 @@ function SongEditContent(props: SongEditContentProps) {
                     <DeleteSongButton song={props.song} />
                 </Center>
             )}
-            <Center h={`calc(${props.h || "100vh"} - 0.5rem)`}>
+            <Center
+                h={`calc(100% - ${props.headingSize ? "6.5rem" : "13rem"})`}
+            >
                 {props.song.parts ? (
                     <SongEditPartsList
                         selected={props.selected}

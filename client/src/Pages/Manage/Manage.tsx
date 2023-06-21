@@ -19,8 +19,10 @@ function Manage() {
 
     return (
         <>
-            <Flex>
+            <Flex h="100vh" w="100vw">
                 <SongTable
+                    h="100%"
+                    w="50%"
                     onSongUpdate={(s) => {
                         setSong(s !== null ? s[0] : null);
                         setParams(s !== null ? { id: s[0] } : {});
@@ -34,7 +36,12 @@ function Manage() {
                     element={SongTableElement}
                     selected={getSelected()}
                 />
-                <SongEdit key={song} id={song ? song : undefined}></SongEdit>
+                <SongEdit
+                    h="100%"
+                    w="50%"
+                    key={song}
+                    id={song ? song : undefined}
+                ></SongEdit>
             </Flex>
             <TopRightCorner>
                 <ImportModal />

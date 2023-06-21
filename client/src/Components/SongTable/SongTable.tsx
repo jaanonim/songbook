@@ -225,10 +225,7 @@ function SongTable(props: SongTableProps) {
             </Box>
             <Divider />
 
-            <Box
-                h={`calc( ${props.h || "100vh"} - 1px - 6.5rem)`}
-                overflowY="scroll"
-            >
+            <Box h={`calc( ${props.h || "100vh"} - 5rem)`} overflowY="scroll">
                 {error ? (
                     <Alert
                         status="error"
@@ -251,8 +248,8 @@ function SongTable(props: SongTableProps) {
                         </AlertDescription>
                     </Alert>
                 ) : (
-                    <Table>
-                        <Tbody>
+                    <Table w="100%">
+                        <Tbody w="100%">
                             {data?.pages.map((page) => (
                                 <React.Fragment key={page.nextPage}>
                                     {page.docs.map((element: Song) => {
