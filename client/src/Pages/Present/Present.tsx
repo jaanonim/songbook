@@ -88,9 +88,15 @@ function Present() {
                     h={h}
                     w={moreThen1440 ? "25%" : moreThen780 ? "50%" : "100%"}
                     visible={moreThen1440 || tab === 0}
-                    setPreview={setPreview}
+                    setPreview={(song) => {
+                        if (!moreThen1440 && !moreThen780 && song !== null)
+                            setTab(1);
+                        setPreview(song);
+                    }}
                     deleteElement={songQueue.current?.deleteElement}
                     onAdd={(s) => {
+                        if (moreThen1440 && !moreThen780) setTab(1);
+                        else if (!moreThen1440 && !moreThen780) setTab(3);
                         songQueue.current?.addSong(s);
                     }}
                 />
@@ -132,7 +138,11 @@ function Present() {
                     h={h}
                     w={moreThen1440 ? "20%" : moreThen780 ? "40%" : "100%"}
                     songQueue={songQueue}
-                    setSong={setSong}
+                    setSong={(song) => {
+                        if (!moreThen1440 && !moreThen780 && song !== null)
+                            setTab(2);
+                        setSong(song);
+                    }}
                     setPreviewScreen={setPreviewScreen}
                 />
             </Flex>
