@@ -71,7 +71,7 @@ function SongEditContent(props: SongEditContentProps) {
                     />
                 )}
             </Center>
-            <Center mt="2" minH="2" mb="2">
+            <Center mt="2" h="8" mb="2">
                 {props.preview ? (
                     <TagList tags={props.song.tags} editable={false} />
                 ) : (
@@ -87,9 +87,7 @@ function SongEditContent(props: SongEditContentProps) {
                     <DeleteSongButton song={props.song} />
                 </Center>
             )}
-            <Center
-                h={`calc(100% - ${props.headingSize ? "6.5rem" : "13rem"})`}
-            >
+            <Center h={`calc(100% - ${props.headingSize ? "9rem" : "13rem"})`}>
                 {props.song.parts ? (
                     <SongEditPartsList
                         selected={props.selected}

@@ -21,7 +21,12 @@ interface ColorPickerProps {
 }
 
 function ColorPicker(props: ColorPickerProps) {
-    const [color, setColor] = useState(props.selectedColor ?? props.colors[0]);
+    const [color, setColor] = useState(
+        props.selectedColor === undefined ||
+            props.selectedColor.trim().length <= 0
+            ? props.colors[0]
+            : props.selectedColor
+    );
 
     const handleColorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         handleColorChange(e.target.value);

@@ -145,7 +145,12 @@ function Present() {
                     w={moreThen1440 ? "20%" : moreThen780 ? "40%" : "100%"}
                     songQueue={songQueue}
                     setSong={(song) => {
-                        if (!moreThen1440 && !moreThen780 && song !== null)
+                        if (
+                            !moreThen1440 &&
+                            !moreThen780 &&
+                            song !== null &&
+                            tab !== 4
+                        )
                             setTab(2);
                         setSong(song);
                     }}

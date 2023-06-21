@@ -142,8 +142,9 @@ function BackgroundPicker(props: BackgroundPickerProps) {
                                         props.onSelect(color);
                                     }}
                                     selectedColor={
-                                        option === 1
-                                            ? (props.selected as string)
+                                        option === 1 &&
+                                        typeof props.selected === "string"
+                                            ? props.selected
                                             : "black"
                                     }
                                 />
