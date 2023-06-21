@@ -15,6 +15,7 @@ import {
     MdList,
     MdOutlineSlideshow,
     MdPreview,
+    MdSettingsRemote,
 } from "react-icons/md";
 
 function Present() {
@@ -78,6 +79,10 @@ function Present() {
                     icon: MdAddToQueue,
                     name: "Queue",
                 },
+                {
+                    icon: MdSettingsRemote,
+                    name: "Controller",
+                },
             ];
     }, [moreThen780]);
 
@@ -127,6 +132,7 @@ function Present() {
                     nextSong={songQueue.current?.nextSong}
                     addSong={songQueue.current?.addSong}
                     setHighlighted={songQueue.current?.setHighlighted}
+                    asController={!moreThen780 && tab === 4}
                 />
 
                 <PresentQueueAndScreens

@@ -12,6 +12,7 @@ interface PresentScreenPreviewProps {
     w: string;
     h: string;
     visible: boolean;
+    asController: boolean;
 }
 
 export function PresentScreenPreview(props: PresentScreenPreviewProps) {
@@ -37,6 +38,7 @@ export function PresentScreenPreview(props: PresentScreenPreviewProps) {
             onPreviousSong={() => {
                 if (props.previousSong) props.previousSong();
             }}
+            asController={props.asController}
         />
     );
 }

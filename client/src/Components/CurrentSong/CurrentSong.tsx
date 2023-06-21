@@ -10,6 +10,7 @@ import useKey from "../../Hooks/useKey";
 import ScreenData from "../../Models/ScreenData";
 import Controls from "../Controls";
 import PartType from "../../Models/PartTypes";
+import Controller from "../Controller";
 
 interface CurrentSongProps {
     song: Song | null;
@@ -21,6 +22,7 @@ interface CurrentSongProps {
     w: string;
     h: string;
     visible: boolean;
+    asController: boolean;
 }
 
 function CurrentSong(props: CurrentSongProps) {
@@ -108,57 +110,83 @@ function CurrentSong(props: CurrentSongProps) {
     );
 
     return (
-        <Box
-            width={props.w}
-            padding="1rem"
-            height={props.h}
-            display={props.visible ? undefined : "none"}
-            position="relative"
-        >
-            <CurrentSongDrop
-                onQueueElement={props.onQueueElement}
-                onSongDragged={props.onSongDragged}
-            ></CurrentSongDrop>
-            <CurrentSongPreview
-                screen={props.screen}
-                data={getData()}
-                visible={props.visible}
-            />
-            <Box h="30%" height="calc(70%)" padding="0.5rem">
-                <Controls
-                    onNextSlide={nextSlide}
-                    onPreviousSlide={previousSlide}
-                    onNextSong={props.onNextSong}
-                    onPreviousSong={props.onPreviousSong}
-                    onHide={() => {
-                        setIsHidden(true);
-                    }}
-                    onShow={() => {
-                        setIsHidden(false);
-                    }}
-                    onBlackOn={() => {
-                        setIsBlack(true);
-                    }}
-                    onBlackOff={() => {
-                        setIsBlack(false);
-                    }}
-                    isHidden={isHidden}
-                    isBlack={isBlack}
-                    disabled={props.song === null}
+        <>
+            <Box
+                width={props.w}
+                padding="1rem"
+                height={props.h}
+                display={props.visible ? undefined : "none"}
+                position="relative"
+            >
+                <CurrentSongDrop
+                    onQueueElement={props.onQueueElement}
+                    onSongDragged={props.onSongDragged}
+                ></CurrentSongDrop>
+                <CurrentSongPreview
+                    screen={props.screen}
+                    data={getData()}
+                    visible={props.visible}
                 />
-                <SongEditNoApi
-                    selected={selected}
-                    onSelect={(id) => {
-                        setSelected(id);
-                    }}
-                    headingSize="l"
-                    w="calc(100% - 2rem)"
-                    h="calc(100% - 2.2rem)"
-                    song={props.song}
-                    preview={true}
-                ></SongEditNoApi>
+                <Box h="30%" height="calc(70%)" padding="0.5rem">
+                    <Controls
+                        onNextSlide={nextSlide}
+                        onPreviousSlide={previousSlide}
+                        onNextSong={props.onNextSong}
+                        onPreviousSong={props.onPreviousSong}
+                        onHide={() => {
+                            setIsHidden(true);
+                        }}
+                        onShow={() => {
+                            setIsHidden(false);
+                        }}
+                        onBlackOn={() => {
+                            setIsBlack(true);
+                        }}
+                        onBlackOff={() => {
+                            setIsBlack(false);
+                        }}
+                        isHidden={isHidden}
+                        isBlack={isBlack}
+                        disabled={props.song === null}
+                    />
+                    <SongEditNoApi
+                        selected={selected}
+                        onSelect={(id) => {
+                            setSelected(id);
+                        }}
+                        headingSize="l"
+                        w="calc(100% - 2rem)"
+                        h="calc(100% - 2.2rem)"
+                        song={props.song}
+                        preview={true}
+                    ></SongEditNoApi>
+                </Box>
             </Box>
-        </Box>
+            <Controller
+                visible={props.asController}
+                h={props.h}
+                w={"100%"}
+                onNextSlide={nextSlide}
+                onPreviousSlide={previousSlide}
+                onNextSong={props.onNextSong}
+                onPreviousSong={props.onPreviousSong}
+                onHide={() => {
+                    setIsHidden(true);
+                }}
+                onShow={() => {
+                    setIsHidden(false);
+                }}
+                onBlackOn={() => {
+                    setIsBlack(true);
+                }}
+                onBlackOff={() => {
+                    setIsBlack(false);
+                }}
+                isHidden={isHidden}
+                isBlack={isBlack}
+                disabled={props.song === null}
+            />
+        </>
     );
 }
 
