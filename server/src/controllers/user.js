@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require("../models/user");
 
 // @route GET admin/user
 // @desc Returns all users
@@ -6,7 +6,7 @@ const User = require('../models/user');
 exports.findMany = async function (req, res) {
     const users = await User.find({});
     res.status(200).json({
-        users
+        users,
     });
 };
 
@@ -15,23 +15,23 @@ exports.findMany = async function (req, res) {
 // @access Public
 exports.create = async (req, res) => {
     try {
-        const {
-            email
-        } = req.body;
+        const { email } = req.body;
 
         // Make sure this account doesn't already exist
         const user = await User.findOne({
-            email
+            email,
         });
 
-        if (user) return res.status(401).json({
-            message: 'The email address you have entered is already associated with another account. You can change this users role instead.'
-        });
+        if (user)
+            return res.status(401).json({
+                message:
+                    "The email address you have entered is already associated with another account. You can change this users role instead.",
+            });
 
-        const password = '_' + Math.random().toString(36).substr(2, 9); //generate a random password
+        const password = "_" + Math.random().toString(36).substr(2, 9); //generate a random password
         const newUser = new User({
             ...req.body,
-            password
+            password,
         });
 
         const user_ = await newUser.save();
@@ -43,14 +43,13 @@ exports.create = async (req, res) => {
         await user_.save();
 
         res.status(200).json({
-            message: 'User created.'
+            message: "User created.",
         });
-
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error.message
-        })
+            message: error.message,
+        });
     }
 };
 
@@ -63,17 +62,18 @@ exports.findOne = async function (req, res) {
 
         const user = await User.findById(id);
 
-        if (!user) return res.status(401).json({
-            message: 'User does not exist'
-        });
+        if (!user)
+            return res.status(401).json({
+                message: "User does not exist",
+            });
 
         res.status(200).json({
-            user
+            user: user.serialize(),
         });
     } catch (error) {
         res.status(500).json({
-            message: error.message
-        })
+            message: error.message,
+        });
     }
 };
 
@@ -87,24 +87,28 @@ exports.update = async function (req, res) {
         const userId = req.user._id;
 
         //Make sure the passed id is that of the logged in user
-        if (userId.toString() !== id.toString()) return res.status(401).json({
-            message: "Sorry, you don't have the permission to upd this data."
-        });
+        if (userId.toString() !== id.toString())
+            return res.status(401).json({
+                message:
+                    "Sorry, you don't have the permission to upd this data.",
+            });
 
-        const user = await User.findAndUpdate({
-            _id: id
-        }, {
-            $set: update
-        });
+        const user = await User.findAndUpdate(
+            {
+                _id: id,
+            },
+            {
+                $set: update,
+            }
+        );
 
         return res.status(200).json({
-            user,
-            message: 'User has been updated'
+            user: user.serialize(),
+            message: "User has been updated",
         });
-
     } catch (error) {
         res.status(500).json({
-            message: error.message
+            message: error.message,
         });
     }
 };
@@ -118,17 +122,19 @@ exports.destroy = async function (req, res) {
         const user_id = req.user._id;
 
         //Make sure the passed id is that of the logged in user
-        if (user_id.toString() !== id.toString()) return res.status(401).json({
-            message: "Sorry, you don't have the permission to delete this data."
-        });
+        if (user_id.toString() !== id.toString())
+            return res.status(401).json({
+                message:
+                    "Sorry, you don't have the permission to delete this data.",
+            });
 
         await User.findByIdAndDelete(id);
         res.status(200).json({
-            message: 'User has been deleted'
+            message: "User has been deleted",
         });
     } catch (error) {
         res.status(500).json({
-            message: error.message
+            message: error.message,
         });
     }
 };

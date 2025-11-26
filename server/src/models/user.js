@@ -1,39 +1,41 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const config = require('../config/api');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const config = require("../config/api");
 
-const UserSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: 'Your email is required',
-        trim: true
+const UserSchema = new mongoose.Schema(
+    {
+        email: {
+            type: String,
+            unique: true,
+            required: "Your email is required",
+            trim: true,
+        },
+
+        username: {
+            type: String,
+            unique: true,
+            required: false,
+            index: true,
+            sparse: true,
+        },
+        password: {
+            type: String,
+            required: "Your password is required",
+            max: 100,
+        },
+        refreshToken: [String],
     },
+    {
+        timestamps: true,
+    }
+);
 
-    username: {
-        type: String,
-        unique: true,
-        required: false,
-        index: true,
-        sparse: true
-    },
-
-    password: {
-        type: String,
-        required: 'Your password is required',
-        max: 100
-    },
-}, {
-    timestamps: true
-});
-
-
-UserSchema.pre('save', function (next) {
+UserSchema.pre("save", function (next) {
     const user = this;
 
-    if (!user.isModified('password')) return next();
+    if (!user.isModified("password")) return next();
 
     bcrypt.genSalt(10, function (err, salt) {
         if (err) return next(err);
@@ -47,29 +49,44 @@ UserSchema.pre('save', function (next) {
     });
 });
 
+UserSchema.methods.serialize = function () {
+    return {
+        id: this._id,
+        email: this.email,
+        username: this.username,
+    };
+};
+
 UserSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-UserSchema.methods.generateJWT = function () {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
-
+UserSchema.methods.generateAccess = function () {
     let payload = {
         id: this._id,
         email: this.email,
-        username: this.username
+        username: this.username,
     };
 
-    return jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: parseInt(expirationDate.getTime() / 1000, 10)
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1m",
+    });
+};
+
+UserSchema.methods.generateRefresh = function () {
+    let payload = {
+        email: this.email,
+    };
+
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+        expiresIn: "1d",
     });
 };
 
 UserSchema.methods.generatePasswordReset = function () {
-    this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
-    this.resetPasswordExpires = Date.now() + 3600000 * config.auth.expirationDate; //expires in an hour
+    this.resetPasswordToken = crypto.randomBytes(20).toString("hex");
+    this.resetPasswordExpires =
+        Date.now() + 3600000 * config.auth.expirationDate; //expires in an hour
 };
 
-module.exports = mongoose.model('Users', UserSchema);
+module.exports = mongoose.model("Users", UserSchema);
