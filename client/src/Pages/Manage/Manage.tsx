@@ -1,8 +1,15 @@
 import { EditIcon } from "@chakra-ui/icons";
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import {
+    Alert,
+    AlertIcon,
+    Box,
+    Button,
+    Flex,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { MdList } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import BottomNavBar from "../../Components/BottomNavBar";
 import ExportModal from "../../Components/ExportModal";
 import ImportModal from "../../Components/ImportModal";
@@ -10,8 +17,10 @@ import { SongEdit } from "../../Components/SongEdit";
 import SongTable from "../../Components/SongTable";
 import SongTableElement from "../../Components/SongTableElement";
 import TopRightCorner from "../../Components/TopRightCorner";
+import useAuth from "../../Hooks/useAuth";
 
 function Manage() {
+    const { isLoggedIn } = useAuth();
     const [song, setSong] = useState<string | null>(null);
     const [params, setParams] = useSearchParams();
 
@@ -25,6 +34,26 @@ function Manage() {
         () => (moreThen1100 ? "100%" : "calc(100% - 4rem)"),
         [moreThen1100]
     );
+
+    if (!isLoggedIn()) {
+        return (
+            <Flex
+                h="100vh"
+                w="100vw"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+            >
+                <Alert status="error" borderRadius={5} w="fit-content">
+                    <AlertIcon />
+                    You must be logged in to manage songs.
+                </Alert>
+                <Link to="/">
+                    <Button mt={5}>Go back</Button>
+                </Link>
+            </Flex>
+        );
+    }
 
     return (
         <>

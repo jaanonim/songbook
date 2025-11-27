@@ -104,13 +104,18 @@ async function login(args: any) {
 
 async function register(args: any) {
     const url = `${config.apiUrl}/auth/register`;
-    return processRequest(url, {
-        method: "POST",
-        body: JSON.stringify(args),
-        headers: {
-            "Content-Type": "application/json",
+    return processRequest(
+        url,
+        {
+            method: "POST",
+            body: JSON.stringify(args),
+            headers: {
+                "Content-Type": "application/json",
+            },
         },
-    });
+        false,
+        true
+    );
 }
 
 async function logout() {

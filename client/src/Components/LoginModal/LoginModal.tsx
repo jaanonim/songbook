@@ -1,6 +1,7 @@
 import {
     Button,
     FormControl,
+    FormErrorMessage,
     FormLabel,
     Input,
     Modal,
@@ -13,7 +14,7 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
 import { firstUpper } from "../../Utilities/text";
 function LoginModal() {
@@ -23,7 +24,11 @@ function LoginModal() {
     const [password, setPassword] = useState("");
     const { isLoggedIn, user, login, logout } = useAuth();
 
-    console.log(user);
+    const emailValid = useMemo(
+        () => email.length > 0 && email.includes("@") && email.includes("."),
+        [email]
+    );
+    const passwordValid = useMemo(() => password.length >= 8, [password]);
 
     if (isLoggedIn()) {
         return (
@@ -62,18 +67,29 @@ function LoginModal() {
                     <ModalHeader>Login</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                        <FormControl isRequired>
+                        <FormControl
+                            isRequired
+                            isInvalid={!emailValid && email.length > 0}
+                        >
                             <FormLabel>Email</FormLabel>
                             <Input
                                 ref={initialRef}
                                 placeholder="email@mail.cool"
+                                type="email"
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                 }}
                             />
+                            <FormErrorMessage>
+                                Email is invalid.
+                            </FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired mt={3}>
+                        <FormControl
+                            isRequired
+                            mt={3}
+                            isInvalid={!passwordValid && password.length > 0}
+                        >
                             <FormLabel>Password</FormLabel>
                             <Input
                                 placeholder="hard password"
@@ -82,7 +98,16 @@ function LoginModal() {
                                 onChange={(e) => {
                                     setPassword(e.target.value);
                                 }}
+                                onKeyUp={(e) => {
+                                    if (e.key === "Enter") {
+                                        onClose();
+                                        login({ email, password });
+                                    }
+                                }}
                             />
+                            <FormErrorMessage>
+                                Password is too short.
+                            </FormErrorMessage>
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
@@ -90,6 +115,7 @@ function LoginModal() {
                             Cancel
                         </Button>
                         <Button
+                            isDisabled={!(emailValid && passwordValid)}
                             colorScheme="blue"
                             onClick={() => {
                                 onClose();

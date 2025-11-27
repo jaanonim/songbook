@@ -1,6 +1,7 @@
 import {
     Button,
     FormControl,
+    FormErrorMessage,
     FormLabel,
     Input,
     Modal,
@@ -11,9 +12,11 @@ import {
     ModalHeader,
     ModalOverlay,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
+import { register } from "../../Services/api";
 
 function RegisterModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,6 +26,18 @@ function RegisterModal() {
     const [password, setPassword] = useState("");
     const [passwordC, setPasswordC] = useState("");
     const { isLoggedIn } = useAuth();
+    const toast = useToast();
+
+    const emailValid = useMemo(
+        () => email.length > 0 && email.includes("@") && email.includes("."),
+        [email]
+    );
+    const passwordValid = useMemo(() => password.length >= 8, [password]);
+    const passwordsMatch = useMemo(
+        () => password === passwordC,
+        [password, passwordC]
+    );
+    const usernameValid = useMemo(() => username.length >= 3, [username]);
 
     if (isLoggedIn()) {
         return <></>;
@@ -47,7 +62,10 @@ function RegisterModal() {
                     <ModalHeader>Login</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                        <FormControl isRequired>
+                        <FormControl
+                            isRequired
+                            isInvalid={!usernameValid && username.length > 0}
+                        >
                             <FormLabel>Username</FormLabel>
                             <Input
                                 ref={initialRef}
@@ -57,8 +75,15 @@ function RegisterModal() {
                                     setUsername(e.target.value);
                                 }}
                             />
+                            <FormErrorMessage>
+                                Username must be at least 3 characters long.
+                            </FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired mt={3}>
+                        <FormControl
+                            isRequired
+                            mt={3}
+                            isInvalid={!emailValid && email.length > 0}
+                        >
                             <FormLabel>Email</FormLabel>
                             <Input
                                 ref={initialRef}
@@ -68,8 +93,15 @@ function RegisterModal() {
                                     setEmail(e.target.value);
                                 }}
                             />
+                            <FormErrorMessage>
+                                Email is invalid.
+                            </FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired mt={3}>
+                        <FormControl
+                            isRequired
+                            mt={3}
+                            isInvalid={!passwordValid && password.length > 0}
+                        >
                             <FormLabel>Password</FormLabel>
                             <Input
                                 placeholder="hard password"
@@ -79,8 +111,15 @@ function RegisterModal() {
                                     setPassword(e.target.value);
                                 }}
                             />
+                            <FormErrorMessage>
+                                Password must be at least 8 characters long.
+                            </FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired mt={3}>
+                        <FormControl
+                            isRequired
+                            mt={3}
+                            isInvalid={!passwordsMatch && passwordC.length > 0}
+                        >
                             <FormLabel>Confirm password</FormLabel>
                             <Input
                                 placeholder="same hard password"
@@ -91,15 +130,44 @@ function RegisterModal() {
                                 }}
                             />
                         </FormControl>
+                        <FormErrorMessage>
+                            Passwords do not match.
+                        </FormErrorMessage>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>
                             Cancel
                         </Button>
                         <Button
+                            isDisabled={
+                                !(
+                                    emailValid &&
+                                    passwordValid &&
+                                    passwordsMatch &&
+                                    usernameValid
+                                )
+                            }
                             colorScheme="blue"
-                            onClick={() => {
+                            onClick={async () => {
                                 onClose();
+                                try {
+                                    await register({
+                                        username,
+                                        email,
+                                        password,
+                                    });
+                                    toast({
+                                        title: "Registration successful.",
+                                        description:
+                                            "You can now log in with your credentials.",
+                                        status: "success",
+                                    });
+                                } catch (error) {
+                                    toast({
+                                        title: (error as Error).message,
+                                        status: "error",
+                                    });
+                                }
                             }}
                         >
                             Register
