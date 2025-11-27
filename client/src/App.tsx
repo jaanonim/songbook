@@ -9,6 +9,7 @@ import Loading from "./Components/Loading";
 import "./index.css";
 import theme from "./theme";
 import config from "./Config/config";
+import AuthProvider from "./Components/AuthProvider";
 
 const Manage = React.lazy(() => import("./Pages/Manage"));
 const Selection = React.lazy(() => import("./Pages/Selection"));
@@ -35,52 +36,64 @@ function App() {
                     initialColorMode={theme.config.initialColorMode}
                 />
                 <ChakraProvider theme={theme}>
-                    <DndProvider backend={HTML5Backend}>
-                        <BrowserRouter>
-                            <Routes>
-                                <Route
-                                    path="/"
-                                    element={
-                                        <React.Suspense fallback={<Loading />}>
-                                            <Selection />
-                                        </React.Suspense>
-                                    }
-                                />
-                                <Route
-                                    path="/manage"
-                                    element={
-                                        <React.Suspense fallback={<Loading />}>
-                                            <Manage />
-                                        </React.Suspense>
-                                    }
-                                />
-                                <Route
-                                    path="/present"
-                                    element={
-                                        <React.Suspense fallback={<Loading />}>
-                                            <Present />
-                                        </React.Suspense>
-                                    }
-                                />
-                                <Route
-                                    path="/screen"
-                                    element={
-                                        <React.Suspense fallback={<Loading />}>
-                                            <ScreenCode />
-                                        </React.Suspense>
-                                    }
-                                />
-                                <Route
-                                    path="/screen/:code"
-                                    element={
-                                        <React.Suspense fallback={<Loading />}>
-                                            <Screen />
-                                        </React.Suspense>
-                                    }
-                                />
-                            </Routes>
-                        </BrowserRouter>
-                    </DndProvider>
+                    <AuthProvider>
+                        <DndProvider backend={HTML5Backend}>
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route
+                                        path="/"
+                                        element={
+                                            <React.Suspense
+                                                fallback={<Loading />}
+                                            >
+                                                <Selection />
+                                            </React.Suspense>
+                                        }
+                                    />
+                                    <Route
+                                        path="/manage"
+                                        element={
+                                            <React.Suspense
+                                                fallback={<Loading />}
+                                            >
+                                                <Manage />
+                                            </React.Suspense>
+                                        }
+                                    />
+                                    <Route
+                                        path="/present"
+                                        element={
+                                            <React.Suspense
+                                                fallback={<Loading />}
+                                            >
+                                                <Present />
+                                            </React.Suspense>
+                                        }
+                                    />
+                                    <Route
+                                        path="/screen"
+                                        element={
+                                            <React.Suspense
+                                                fallback={<Loading />}
+                                            >
+                                                <ScreenCode />
+                                            </React.Suspense>
+                                        }
+                                    />
+                                    <Route
+                                        path="/screen/:code"
+                                        element={
+                                            <React.Suspense
+                                                fallback={<Loading />}
+                                            >
+                                                <Screen />
+                                            </React.Suspense>
+                                        }
+                                    />
+                                </Routes>
+                            </BrowserRouter>
+                        </DndProvider>
+                    </AuthProvider>
                 </ChakraProvider>
             </QueryClientProvider>
         </React.StrictMode>

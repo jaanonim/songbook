@@ -138,3 +138,19 @@ exports.destroy = async function (req, res) {
         });
     }
 };
+
+// @route GET api/user/current
+// @desc Get current logged in user
+// @access Public
+exports.current = async function (req, res) {
+    try {
+        res.status(200).json({
+            user: req.user.serialize(),
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};

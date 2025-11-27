@@ -10,6 +10,8 @@ import ColorModeButton from "../../Components/ColorModeButton";
 import SelectionButton from "../../Components/SelectionButton";
 import TopRightCorner from "../../Components/TopRightCorner";
 import "./Selection.css";
+import LoginModal from "../../Components/LoginModal";
+import RegisterModal from "../../Components/RegisterModal";
 
 function Selection() {
     return (
@@ -59,6 +61,8 @@ function Selection() {
                 </AbsoluteCenter>
             </Container>
             <TopRightCorner>
+                <RegisterModal />
+                <LoginModal />
                 <ColorModeButton />
             </TopRightCorner>
         </>

@@ -86,6 +86,45 @@ async function getPhotos(args: any) {
     return processRequest(url);
 }
 
+async function login(args: any) {
+    const url = `${config.apiUrl}/auth/login`;
+    return processRequest(
+        url,
+        {
+            method: "POST",
+            body: JSON.stringify(args),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        },
+        false,
+        true
+    );
+}
+
+async function register(args: any) {
+    const url = `${config.apiUrl}/auth/register`;
+    return processRequest(url, {
+        method: "POST",
+        body: JSON.stringify(args),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+}
+
+async function logout() {
+    const url = `${config.apiUrl}/auth/logout`;
+    return processRequest(url, {
+        method: "POST",
+    });
+}
+
+async function getCurrentUser() {
+    const url = `${config.apiUrl}/user/current`;
+    return processRequest(url);
+}
+
 export {
     getSongs,
     delSong,
@@ -95,4 +134,8 @@ export {
     importSong,
     exportSong,
     getPhotos,
+    login,
+    register,
+    logout,
+    getCurrentUser,
 };

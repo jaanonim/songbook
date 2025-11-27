@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 // @route POST api/auth/register
 // @desc Register user
@@ -82,8 +83,7 @@ exports.login = async (req, res) => {
         }
 
         user.refreshToken = [...newRefreshTokenArray, refreshToken];
-        const result = await user.save();
-        console.log(result);
+        await user.save();
 
         res.cookie("jwt", refreshToken, {
             httpOnly: true,
@@ -132,17 +132,21 @@ exports.refresh = async (req, res) => {
         (rt) => rt !== refreshToken
     );
 
+    console.log(refreshToken);
     try {
         const decodedEmail = await validateRefreshToken(refreshToken);
 
         if (user.email !== decodedEmail) throw new Error("Email don't match");
 
         const accessToken = user.generateAccess();
-        const refreshToken = user.generateRefresh();
-        user.refreshToken = [...newRefreshTokenArray, refreshToken];
-        await user.save();
+        const newRefreshToken = user.generateRefresh();
 
-        res.cookie("jwt", refreshToken, {
+        await User.findOneAndUpdate(
+            { email: decodedEmail },
+            { refreshToken: [...newRefreshTokenArray, newRefreshToken] }
+        );
+
+        res.cookie("jwt", newRefreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: "None",
@@ -151,8 +155,10 @@ exports.refresh = async (req, res) => {
 
         res.json({ user: user.serialize(), accessToken });
     } catch (err) {
-        user.refreshToken = [...newRefreshTokenArray];
-        const result = await user.save();
+        await User.findOneAndUpdate(
+            { email: decodedEmail },
+            { refreshToken: [...newRefreshTokenArray] }
+        );
         return res.sendStatus(403);
     }
 };

@@ -12,7 +12,6 @@ const UserSchema = new mongoose.Schema(
             required: "Your email is required",
             trim: true,
         },
-
         username: {
             type: String,
             unique: true,
@@ -51,7 +50,7 @@ UserSchema.pre("save", function (next) {
 
 UserSchema.methods.serialize = function () {
     return {
-        id: this._id,
+        _id: this._id,
         email: this.email,
         username: this.username,
     };
